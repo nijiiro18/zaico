@@ -1,34 +1,40 @@
-<header>
-    <h1>にじいろ市場</h1>
-    <div id="logged-in-user" style="float: right; margin: 15px;"></div>
-    <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
-    <nav>
-        <ul style="list-style: none; display: flex; gap: 15px; padding: 0; margin: 0;">
-            <li><a href="inventory-search.html">在庫検索</a></li>
-            <li><a href="low-stock-search.html">在庫少検索</a></li>
-            <li><a href="stock-in.html">入庫</a></li>
-            <li><a href="stock-out1.html">出庫1</a></li>
-            <li><a href="stock-out2.html">出庫2</a></li>
-            <li><a href="inventory-check.html">棚卸</a></li>
-            <li><a href="best-sellers.html">売れ筋表示</a></li>
-            <li><a href="export-import.html">エクスポート・インポート</a></li>
-            <li><a href="order-alerts.html">発注アラート</a></li>
-            <li><a href="master-maintenance.html">マスタメンテ</a></li>
-            <li><a href="data-maintenance.html">データメンテ</a></li>
-        </ul>
-    </nav>
-    <script>
-        function logout() {
-            sessionStorage.removeItem('loggedInUser');
-            window.location.href = 'login.html';
+<header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+    <div style="display: flex; align-items: center;">
+        <img src="logo.png" alt="Logo" style="height: 50px; margin-right: 20px;">
+        <h1 style="margin: 0;">にじいろ市場</h1>
+    </div>
+    <div id="logged-in-user" style="margin-right: 15px; font-weight: bold;"></div>
+    <button id="logout-button" style="margin-right: 15px;">ログアウト</button>
+</header>
+
+<nav style="padding: 10px; background-color: #f8f8f8;">
+    <ul style="list-style: none; display: flex; gap: 15px; padding: 0; margin: 0;">
+        <li><a href="inventory-search.html">在庫検索</a></li>
+        <li><a href="low-stock-search.html">在庫少検索</a></li>
+        <li><a href="stock-in.html">入庫</a></li>
+        <li><a href="stock-out1.html">出庫1</a></li>
+        <li><a href="stock-out2.html">出庫2</a></li>
+        <li><a href="inventory-check.html">棚卸</a></li>
+        <li><a href="best-sellers.html">売れ筋表示</a></li>
+        <li><a href="export-import.html">エクスポート・インポート</a></li>
+        <li><a href="order-alerts.html">発注アラート</a></li>
+        <li><a href="master-maintenance.html">マスタメンテ</a></li>
+        <li><a href="data-maintenance.html">データメンテ</a></li>
+    </ul>
+</nav>
+
+<script>
+    function logout() {
+        sessionStorage.removeItem('loggedInUser');
+        window.location.href = 'login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const loggedInUser = sessionStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
         }
 
-        // ログインユーザーの表示処理
-        document.addEventListener('DOMContentLoaded', function () {
-            const loggedInUser = sessionStorage.getItem('loggedInUser');
-            if (loggedInUser) {
-                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
-            }
-        });
-    </script>
-</header>
+        document.getElementById('logout-button').addEventListener('click', logout);
+    });
+</script>
