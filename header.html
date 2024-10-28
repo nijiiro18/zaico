@@ -1,39 +1,33 @@
-<!-- header.html -->
 <header>
-    <div style="display: flex; align-items: center;">
-        <img src="logo.png" alt="にじいろ市場ロゴ" style="height: 40px; margin-right: 15px;">
-        <h1>にじいろ市場</h1>
-    </div>
+    <h1>にじいろ市場</h1>
     <div id="logged-in-user" style="float: right; margin: 15px;"></div>
     <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
+    <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
 </header>
-<nav>
-    <ul>
-        <li><a href="inventory-search.html">在庫検索</a></li>
-        <li><a href="low-stock-search.html">在庫少検索</a></li>
-        <li><a href="stock-in.html">入庫</a></li>
-        <li><a href="stock-out1.html">出庫1</a></li>
-        <li><a href="stock-out2.html">出庫2</a></li>
-        <li><a href="inventory-check.html">棚卸</a></li>
-        <li><a href="best-sellers.html">売れ筋表示</a></li>
-        <li><a href="export-import.html">エクスポート・インポート</a></li>
-        <li><a href="order-alerts.html">発注アラート</a></li>
-        <li><a href="master-maintenance.html">マスタメンテ</a></li>
-        <li><a href="data-maintenance.html">データメンテ</a></li>
-    </ul>
-</nav>
 <script>
-    function checkLogin() {
-        const loggedInUser = sessionStorage.getItem('loggedInUser');
-        if (!loggedInUser) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
-        }
-    }
-    
     function logout() {
         sessionStorage.removeItem('loggedInUser');
         window.location.href = 'login.html';
     }
+    // ログインユーザーの表示処理
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const loggedInUser = sessionStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+        }
+    });
 </script>
