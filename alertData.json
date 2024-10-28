@@ -1,0 +1,74 @@
+[
+    {
+        "id": "55601016",
+        "name": "商品A",
+        "category1": "和洋裁素材",
+        "category2": "同色シャッペスパン",
+        "quantity": 6,
+        "threshold": 5
+    },
+    {
+        "id": "55601017",
+        "name": "商品B",
+        "category1": "和洋裁素材",
+        "category2": "同色シャッペスパン",
+        "quantity": 3,
+        "threshold": 4
+    },
+    {
+        "id": "55580459",
+        "name": "商品C",
+        "category1": "和洋裁素材",
+        "category2": "ばらシャッペスパン",
+        "quantity": 1,
+        "threshold": 2
+    },
+    {
+        "id": "55601027",
+        "name": "商品D",
+        "category1": "和洋裁素材",
+        "category2": "同色シャッペスパン",
+        "quantity": 11,
+        "threshold": 10
+    },
+    {
+        "id": "47701139",
+        "name": "アクアブルー 544",
+        "category1": "和洋裁素材",
+        "category2": "玉付きゴールド25cm",
+        "quantity": 20,
+        "threshold": 15
+    },
+    {
+        "id": "55601030",
+        "name": "くまさん刺繍",
+        "category1": "ハンドメイド",
+        "category2": "Arcobaleno",
+        "quantity": 1,
+        "threshold": 3
+    },
+    {
+        "id": "55601031",
+        "name": "ぱんださん刺繍",
+        "category1": "ハンドメイド",
+        "category2": "Arcobaleno",
+        "quantity": 2,
+        "threshold": 5
+    },
+    {
+        "id": "55601032",
+        "name": "手作りお財布",
+        "category1": "ハンドメイド",
+        "category2": "Bibgyor",
+        "quantity": 1,
+        "threshold": 2
+    },
+    {
+        "id": "55601033",
+        "name": "手作り革製品",
+        "category1": "ハンドメイド",
+        "category2": "Bibgyor",
+        "quantity": 3,
+        "threshold": 5
+    }
+]

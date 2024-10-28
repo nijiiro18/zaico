@@ -28,6 +28,17 @@
         }
     </style>
     <script>
+        // 共通ヘッダーの読み込み関数
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
+
         const masterData = {
             product: [
                 { productCode: "P00001", productName: "商品1", category1Code: "C01", category2Code: "C02", alertCount1: 5, alertCount2: 2, lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
@@ -39,16 +50,6 @@
                 { userId: "U001", userName: "管理者1", password: "password1", userLevel: "1", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 08:00" }
             ]
         };
-        async function loadHeader() {
-            try {
-                const response = await fetch('header.html');
-                const headerContent = await response.text();
-                document.getElementById('header').innerHTML = headerContent;
-            } catch (error) {
-                console.error('ヘッダーの読み込みに失敗しました:', error);
-            }
-        }
-
 
         let currentMaster = 'product';
         let editingIndex = null;
@@ -85,7 +86,7 @@
                 newItem[input.name] = input.value;
             });
             newItem.lastUpdatedAt = new Date().toLocaleString();
-            newItem.lastUpdatedBy = "admin"; // ログインユーザー名を設定
+            newItem.lastUpdatedBy = "admin";
             masterData[currentMaster].push(newItem);
             renderTable();
             clearForm('new');
@@ -119,28 +120,14 @@
             document.querySelectorAll(`#${currentMaster}-${type}-section input`).forEach(input => input.value = '');
         }
 
-        window.onload = function() {
+        window.onload = async function() {
+            await loadHeader();
             switchMaster(currentMaster);
         };
     </script>
 </head>
 <body>
     <div id="header"></div> <!-- ヘッダー読み込み場所 -->
-       <nav>
-        <ul>
-            <li><a href="inventory-search.html">在庫検索</a></li>
-            <li><a href="low-stock-search.html">在庫少検索</a></li>
-            <li><a href="stock-in.html">入庫</a></li>
-            <li><a href="stock-out1.html">出庫1</a></li>
-            <li><a href="stock-out2.html">出庫2</a></li>
-            <li><a href="inventory-check.html">棚卸</a></li>
-            <li><a href="best-sellers.html">売れ筋表示</a></li>
-            <li><a href="export-import.html">エクスポート・インポート</a></li>
-            <li><a href="order-alerts.html">発注アラート</a></li>
-            <li><a href="master-maintenance.html">マスタメンテ</a></li>
-            <li><a href="data-maintenance.html">データメンテ</a></li>
-        </ul>
-    </nav>
     <main>
         <section id="master-menu">
             <button onclick="switchMaster('product')">商品マスタ</button>

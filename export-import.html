@@ -12,7 +12,7 @@
         }
     </style>
 </head>
-<body onload="checkLogin()">
+<body onload="initializePage()">
     <div id="header"></div> <!-- ヘッダー読み込み場所 -->
     <main>
         <section class="export-section">
@@ -32,16 +32,18 @@
     </main>
 
     <script>
-    	// ヘッダーを読み込む関数
+        // ヘッダーを読み込む関数
         async function loadHeader() {
             try {
                 const response = await fetch('header.html');
                 const headerContent = await response.text();
                 document.getElementById('header').innerHTML = headerContent;
+                checkLogin();
             } catch (error) {
                 console.error('ヘッダーの読み込みに失敗しました:', error);
             }
         }
+
         function exportCSV() {
             alert('CSVエクスポートが実行されました！');
             // 実際のCSV生成とダウンロードのロジックをここに追加
@@ -59,6 +61,10 @@
         function logout() {
             sessionStorage.removeItem('loggedInUser');
             window.location.href = 'login.html';
+        }
+
+        function initializePage() {
+            loadHeader();
         }
     </script>
 </body>
