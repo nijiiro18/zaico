@@ -6,6 +6,28 @@
     <title>にじいろ市場 - 入庫</title>
     <link rel="stylesheet" href="styles.css">
     <script>
+    	    <script>
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
+
+        async function loadInventoryData() {
+            try {
+                const response = await fetch('inventoryData.json');
+                const data = await response.json();
+                window.inventoryData = data;  // データをグローバルに保存
+                populateFilters();
+                renderTable();
+            } catch (error) {
+                console.error('在庫データの読み込みに失敗しました:', error);
+            }
+        }
         function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
@@ -34,26 +56,6 @@
     </script>
 </head>
 <body>
-    <header>
-        <h1>にじいろ市場</h1>
-        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
-        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="inventory-search.html">在庫検索</a></li>
-            <li><a href="low-stock-search.html">在庫少検索</a></li>
-            <li><a href="stock-in.html">入庫</a></li>
-            <li><a href="stock-out1.html">出庫1</a></li>
-            <li><a href="stock-out2.html">出庫2</a></li>
-            <li><a href="inventory-check.html">棚卸</a></li>
-            <li><a href="best-sellers.html">売れ筋表示</a></li>
-            <li><a href="export-import.html">エクスポート・インポート</a></li>
-            <li><a href="order-alerts.html">発注アラート</a></li>
-            <li><a href="master-maintenance.html">マスタメンテ</a></li>
-            <li><a href="data-maintenance.html">データメンテ</a></li>
-        </ul>
-    </nav>
     <main>
         <section id="stock-in">
             <h2>入庫</h2>
