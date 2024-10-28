@@ -17,13 +17,10 @@
             <li><a href="data-maintenance.html">データメンテ</a></li>
         </ul>
     </nav>
-</header>
-<script>
-    // ログインユーザーの表示処理
-    window.addEventListener('DOMContentLoaded', (event) => {
-        const loggedInUser = sessionStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+    <script>
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
         }
-    });
-</script>
+    </script>
+</header>
