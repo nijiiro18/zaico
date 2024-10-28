@@ -1,4 +1,3 @@
-// inventoryData.json
 [
     { "id": "55601016", "name": "2", "category1": "和洋裁素材", "category2": "同色シャッペスパン", "quantity": 6, "status": "欠品" },
     { "id": "55601017", "name": "3", "category1": "和洋裁素材", "category2": "同色シャッペスパン", "quantity": 6, "status": "欠品" },
