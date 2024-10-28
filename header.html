@@ -19,10 +19,6 @@
     </nav>
 </header>
 <script>
-    function logout() {
-        sessionStorage.removeItem('loggedInUser');
-        window.location.href = 'login.html';
-    }
     // ログインユーザーの表示処理
     window.addEventListener('DOMContentLoaded', (event) => {
         const loggedInUser = sessionStorage.getItem('loggedInUser');
