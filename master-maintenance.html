@@ -39,6 +39,16 @@
                 { userId: "U001", userName: "管理者1", password: "password1", userLevel: "1", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 08:00" }
             ]
         };
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
+
 
         let currentMaster = 'product';
         let editingIndex = null;
@@ -115,9 +125,7 @@
     </script>
 </head>
 <body>
-    <header>
-        <h1>にじいろ市場 - マスタメンテナンス</h1>
-    </header>
+    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
        <nav>
         <ul>
             <li><a href="inventory-search.html">在庫検索</a></li>

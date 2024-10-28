@@ -6,17 +6,31 @@
     <title>にじいろ市場 - 棚卸</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        const inventoryData = [
-            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品", actualQuantity: null },
-            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品", actualQuantity: null },
-            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, status: "欠品", actualQuantity: null },
-            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, status: "在庫少", actualQuantity: null },
-            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, status: "在庫少", actualQuantity: null },
-            { id: "55601030", name: "くまさん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 1, status: "欠品", actualQuantity: null },
-            { id: "55601031", name: "ぱんださん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 2, status: "欠品", actualQuantity: null },
-            { id: "55601032", name: "手作りお財布", category1: "ハンドメイド", category2: "Bibgyor", quantity: 1, status: "欠品", actualQuantity: null },
-            { id: "55601033", name: "手作り革製品", category1: "ハンドメイド", category2: "Bibgyor", quantity: 3, status: "欠品", actualQuantity: null }
-        ];
+        let inventoryData = [];
+
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+                document.getElementById('logout-button').onclick = logout;
+                checkLogin();
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
+
+        async function loadInventoryData() {
+            try {
+                const response = await fetch('inventoryData.json');
+                inventoryData = await response.json();
+                inventoryData.forEach(item => item.actualQuantity = null); // 初期状態の actualQuantity を設定
+                populateCategory1();
+                updateTable();
+            } catch (error) {
+                console.error('在庫データの読み込みに失敗しました:', error);
+            }
+        }
 
         function populateCategory1() {
             const category1Select = document.getElementById('category1');
@@ -101,23 +115,13 @@
             updateTable();
         }
 
-        window.onload = function() {
-            populateCategory1();
-            populateCategory2();
-            updateTable();
-            document.getElementById('category1').addEventListener('change', populateCategory2);
-            document.getElementById('category1').addEventListener('change', updateTable);
-            document.getElementById('category2').addEventListener('change', updateTable);
-            document.getElementById('search-box').addEventListener('input', updateTable);
-            checkLogin();
-        };
-
         function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
                 window.location.href = 'login.html';
             } else {
-                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+                const userElement = document.getElementById('logged-in-user');
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
             }
         }
 
@@ -125,48 +129,34 @@
             sessionStorage.removeItem('loggedInUser');
             window.location.href = 'login.html';
         }
+
+        window.onload = function() {
+            loadHeader();
+            loadInventoryData();
+        };
     </script>
 </head>
 <body>
-    <header>
-        <h1>にじいろ市場</h1>
-        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
-        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="inventory-search.html">在庫検索</a></li>
-            <li><a href="low-stock-search.html">在庫少検索</a></li>
-            <li><a href="stock-in.html">入庫</a></li>
-            <li><a href="stock-out1.html">出庫1</a></li>
-            <li><a href="stock-out2.html">出庫2</a></li>
-            <li><a href="inventory-check.html">棚卸</a></li>
-            <li><a href="best-sellers.html">売れ筋表示</a></li>
-            <li><a href="export-import.html">エクスポート・インポート</a></li>
-            <li><a href="order-alerts.html">発注アラート</a></li>
-            <li><a href="master-maintenance.html">マスタメンテ</a></li>
-            <li><a href="data-maintenance.html">データメンテ</a></li>
-        </ul>
-    </nav>
+    <div id="header"></div> <!-- ヘッダーが読み込まれる場所 -->
     <main>
         <section id="inventory-check">
             <h2>棚卸</h2>
             <div class="search-container">
                 <div>
                     <label for="category1">カテゴリ1:</label>
-                    <select id="category1">
+                    <select id="category1" onchange="populateCategory2(); updateTable();">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
                 <div>
                     <label for="category2">カテゴリ2:</label>
-                    <select id="category2">
+                    <select id="category2" onchange="updateTable();">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
                 <div>
                     <label for="search-box">物品名検索:</label>
-                    <input type="text" id="search-box" placeholder="物品名で検索">
+                    <input type="text" id="search-box" placeholder="物品名で検索" oninput="updateTable();">
                 </div>
             </div>
             <table>

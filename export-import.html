@@ -13,26 +13,7 @@
     </style>
 </head>
 <body onload="checkLogin()">
-    <header>
-        <h1>にじいろ市場</h1>
-        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
-        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="inventory-search.html">在庫検索</a></li>
-            <li><a href="low-stock-search.html">在庫少検索</a></li>
-            <li><a href="stock-in.html">入庫</a></li>
-            <li><a href="stock-out1.html">出庫1</a></li>
-            <li><a href="stock-out2.html">出庫2</a></li>
-            <li><a href="inventory-check.html">棚卸</a></li>
-            <li><a href="best-sellers.html">売れ筋表示</a></li>
-            <li><a href="export-import.html">エクスポート・インポート</a></li>
-            <li><a href="order-alerts.html">発注アラート</a></li>
-            <li><a href="master-maintenance.html">マスタメンテ</a></li>
-            <li><a href="data-maintenance.html">データメンテ</a></li>
-        </ul>
-    </nav>
+    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
     <main>
         <section class="export-section">
             <h2>CSVエクスポート</h2>
@@ -51,6 +32,16 @@
     </main>
 
     <script>
+    	// ヘッダーを読み込む関数
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
         function exportCSV() {
             alert('CSVエクスポートが実行されました！');
             // 実際のCSV生成とダウンロードのロジックをここに追加

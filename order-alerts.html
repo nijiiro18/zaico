@@ -6,17 +6,16 @@
     <title>にじいろ市場 - 発注アラート</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        const alertData = [
-            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 120, threshold: 5 },
-            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 85, threshold: 5 },
-            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, sales: 60, threshold: 3 },
-            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, sales: 140, threshold: 8 },
-            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, sales: 75, threshold: 10 },
-            { id: "55601030", name: "くまさん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 1, sales: 30, threshold: 2 },
-            { id: "55601031", name: "ぱんださん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 2, sales: 50, threshold: 2 },
-            { id: "55601032", name: "手作りお財布", category1: "ハンドメイド", category2: "Bibgyor", quantity: 1, sales: 45, threshold: 3 },
-            { id: "55601033", name: "手作り革製品", category1: "ハンドメイド", category2: "Bibgyor", quantity: 3, sales: 65, threshold: 5 }
-        ];
+        // ヘッダーを読み込む関数
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
 
         function populateCategory1() {
             const category1Select = document.getElementById('category1');
@@ -124,11 +123,7 @@
     </script>
 </head>
 <body>
-    <header>
-        <h1>にじいろ市場</h1>
-        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
-        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
-    </header>
+    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
     <nav>
         <ul>
             <li><a href="inventory-search.html">在庫検索</a></li>
