@@ -30,11 +30,16 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+        // ログイン中のユーザー名を取得し表示する
         const loggedInUser = sessionStorage.getItem('loggedInUser');
         if (loggedInUser) {
             document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+        } else {
+            // 未ログインの場合はログインページにリダイレクト
+            window.location.href = 'login.html';
         }
 
-        document.getElementById('logout-button').addEventListener('click', logout);
+        // ログアウトボタンにイベントリスナーを追加
+        document.getElementById('logout-button').onclick = logout;
     });
 </script>
