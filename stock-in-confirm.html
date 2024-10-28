@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 入庫確認</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // 仮の商品データ
+        let stockInItems = [
+            { id: "55601016", name: "商品A", currentQuantity: 10, quantityToAdd: 5 },
+            { id: "55601017", name: "商品B", currentQuantity: 20, quantityToAdd: 10 },
+            { id: "55580459", name: "商品C", currentQuantity: 15, quantityToAdd: 3 },
+            { id: "55601027", name: "商品D", currentQuantity: 8, quantityToAdd: 8 },
+            { id: "47701139", name: "商品E", currentQuantity: 12, quantityToAdd: 15 },
+            { id: "55601030", name: "商品F", currentQuantity: 5, quantityToAdd: 4 },
+            { id: "55601031", name: "商品G", currentQuantity: 7, quantityToAdd: 6 }
+        ];
+
+        function displayStockInDetails() {
+            const company = sessionStorage.getItem('selectedCompany');
+            const content = sessionStorage.getItem('stockInContent');
+            document.getElementById('company-name').textContent = company === 'chuko' ? 'チューコー' : 'ウィングス';
+            document.getElementById('email-content').textContent = content;
+
+            const tableBody = document.getElementById('stock-in-table-body');
+            stockInItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.currentQuantity}</td>
+                    <td>${item.quantityToAdd}</td>
+                    <td>${item.currentQuantity + item.quantityToAdd}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function completeStockIn() {
+            alert("入庫が完了しました。");
+            window.location.href = 'stock-in.html';
+        }
+
+        window.onload = function() {
+            displayStockInDetails();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場 - 入庫確認</h1>
+    </header>
+    <main>
+        <section>
+            <h2>入庫内容を確認してください</h2>
+            <p><strong>会社名:</strong> <span id="company-name"></span></p>
+            <p><strong>メール内容:</strong></p>
+            <pre id="email-content" style="border: 1px solid #ddd; padding: 10px;"></pre>
+            <h3>入庫する商品一覧</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>商品名</th>
+                        <th>入庫前の個数</th>
+                        <th>入庫する個数</th>
+                        <th>入庫後の個数</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-in-table-body">
+                    <!-- 商品リストをここに表示 -->
+                </tbody>
+            </table>
+            <button onclick="completeStockIn()" style="margin-top: 10px;">入庫完了</button>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - ログイン</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>ログイン</h2>
+        <div class="error" id="error-message"></div>
+        <input type="text" id="username" placeholder="ユーザーID">
+        <input type="password" id="password" placeholder="パスワード">
+        <button onclick="login()">ログイン</button>
+    </div>
+
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 簡易的なIDとパスワードのチェック
+            if (username === 'admin' && password === '1234') {
+                // ログイン成功時にセッションストレージに保存
+                sessionStorage.setItem('loggedInUser', username);
+                window.location.href = 'inventory-search.html'; // ログイン成功後のリダイレクト先
+            } else {
+                document.getElementById('error-message').textContent = 'IDまたはパスワードが正しくありません';
+            }
+        }
+
+        // ログイン状態をチェックして、既にログインしている場合はリダイレクト
+        if (sessionStorage.getItem('loggedInUser')) {
+            window.location.href = 'inventory-search.html';
+        }
+    </script>
+</body>
+</html>

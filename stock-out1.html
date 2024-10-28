@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 出庫</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        const inventoryData = [
+            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品" },
+            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品" },
+            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, status: "欠品" },
+            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, status: "在庫少" },
+            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, status: "在庫少" }
+        ];
+
+        let selectedItems = [];
+
+        function populateCategory1() {
+            const category1Select = document.getElementById('category1');
+            const uniqueCategories1 = [...new Set(inventoryData.map(item => item.category1))];
+
+            category1Select.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueCategories1.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                category1Select.appendChild(option);
+            });
+        }
+
+        function populateCategory2() {
+            const category1 = document.getElementById('category1').value;
+            const category2Select = document.getElementById('category2');
+            const filteredData = inventoryData.filter(item => item.category1 === category1 || category1 === "");
+            const uniqueCategories2 = [...new Set(filteredData.map(item => item.category2))];
+
+            category2Select.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueCategories2.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                category2Select.appendChild(option);
+            });
+        }
+
+        function updateTable() {
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+            const tableBody = document.getElementById('stock-out-table-body');
+
+            const filteredData = inventoryData.filter(item => {
+                const matchesCategory1 = category1 === "" || item.category1 === category1;
+                const matchesCategory2 = category2 === "" || item.category2 === category2;
+                const matchesKeyword = searchKeyword === "" || item.name.toLowerCase().includes(searchKeyword);
+
+                return matchesCategory1 && matchesCategory2 && matchesKeyword;
+            });
+
+            tableBody.innerHTML = "";
+            filteredData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.quantity}</td>
+                    <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
+                    <td><button onclick="addToStockOut('${item.id}')">出庫</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addToStockOut(itemId) {
+            const item = inventoryData.find(i => i.id === itemId);
+            if (!selectedItems.some(i => i.id === itemId)) {
+                selectedItems.push({ ...item, quantityToRemove: 0 });
+                updateSelectedItems();
+            }
+        }
+
+        function updateSelectedItems() {
+            const selectedItemsContainer = document.getElementById('selected-items');
+            selectedItemsContainer.innerHTML = "";
+
+            selectedItems.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "selected-item";
+                div.innerHTML = `
+                    <span>${item.name} (${item.category1} - ${item.category2})</span>
+                    <input type="number" min="1" max="${item.quantity}" placeholder="数量" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)">
+                    <button onclick="removeFromStockOut(${index})">削除</button>
+                `;
+                selectedItemsContainer.appendChild(div);
+            });
+        }
+
+        function updateQuantity(index, value) {
+            selectedItems[index].quantityToRemove = parseInt(value, 10) || 0;
+        }
+
+        function removeFromStockOut(index) {
+            selectedItems.splice(index, 1);
+            updateSelectedItems();
+        }
+
+        function proceedToConfirmation() {
+            sessionStorage.setItem('selectedStockOutItems', JSON.stringify(selectedItems));
+            window.location.href = 'stock-out-confirm.html';
+        }
+
+        window.onload = function() {
+            populateCategory1();
+            populateCategory2();
+            updateTable();
+            document.getElementById('category1').addEventListener('change', populateCategory2);
+            document.getElementById('category1').addEventListener('change', updateTable);
+            document.getElementById('category2').addEventListener('change', updateTable);
+            document.getElementById('search-box').addEventListener('input', updateTable);
+            checkLogin();
+        };
+
+        function checkLogin() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場 - 出庫</h1>
+        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
+        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
+    </header>
+        <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="stock-out">
+            <h2>出庫する商品を選択</h2>
+            <div class="search-container">
+                <div>
+                    <label for="category1">カテゴリ1:</label>
+                    <select id="category1">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="category2">カテゴリ2:</label>
+                    <select id="category2">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="search-box">商品名検索:</label>
+                    <input type="text" id="search-box" placeholder="商品名で検索">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>商品名</th>
+                        <th>カテゴリ1</th>
+                        <th>カテゴリ2</th>
+                        <th>数量</th>
+                        <th>ステータス</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-out-table-body"></tbody>
+            </table>
+            <h3>選択されたアイテム</h3>
+            <div id="selected-items"></div>
+            <button onclick="proceedToConfirmation()" style="margin-top: 20px;">確認画面に進む</button>
+        </section>
+    </main>
+</body>
+</html>

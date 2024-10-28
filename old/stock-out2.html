@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 出庫2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="stock-out2">
+            <h2>出庫2 (バーコード読み取り処理)</h2>
+            <form>
+                <label for="barcode">バーコードをスキャン:</label>
+                <input type="text" id="barcode" name="barcode" placeholder="バーコードをスキャンしてください" required>
+
+                <div class="product-info" id="product-info">
+                    商品情報がここに表示されます。
+                </div>
+
+                <label for="quantity">出庫する数量:</label>
+                <input type="number" id="quantity" name="quantity" placeholder="数量を入力" min="1" required>
+
+                <button type="submit">出庫</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 にじいろ市場</p>
+    </footer>
+
+    <script>
+        // バーコード入力時に商品情報を自動表示するスクリプト
+        document.getElementById('barcode').addEventListener('input', function() {
+            const barcode = this.value;
+            const productInfoDiv = document.getElementById('product-info');
+
+            // 仮のデータを使用して商品情報を表示
+            const products = {
+                '123456789': { name: 'にじいろボールペン', stock: 30 },
+                '987654321': { name: 'にじいろノート', stock: 50 },
+                '555555555': { name: 'にじいろファイル', stock: 40 },
+                '111111111': { name: 'にじいろマグカップ', stock: 60 }
+            };
+
+            if (products[barcode]) {
+                const product = products[barcode];
+                productInfoDiv.textContent = `商品名: ${product.name} / 現在の在庫: ${product.stock} 個`;
+            } else {
+                productInfoDiv.textContent = '該当する商品が見つかりません。バーコードを確認してください。';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - マスタメンテナンス</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #master-menu, #operation-section {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .form-section, .data-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: inline-block;
+            width: 140px;
+        }
+        .form-group input {
+            width: 200px;
+            padding: 5px;
+        }
+    </style>
+    <script>
+        const masterData = {
+            product: [
+                { productCode: "P00001", productName: "商品1", category1Code: "C01", category2Code: "C02", alertCount1: 5, alertCount2: 2, lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
+            ],
+            category: [
+                { categoryCode: "C01", categoryName: "カテゴリ1", categoryDivision: "1", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
+            ],
+            user: [
+                { userId: "U001", userName: "管理者1", password: "password1", userLevel: "1", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 08:00" }
+            ]
+        };
+
+        let currentMaster = 'product';
+        let editingIndex = null;
+
+        function switchMaster(master) {
+            currentMaster = master;
+            document.querySelectorAll('.form-section').forEach(section => section.style.display = 'none');
+            document.querySelector(`#${master}-section`).style.display = 'block';
+            renderTable();
+        }
+
+        function renderTable() {
+            const tableBody = document.getElementById(`${currentMaster}-table-body`);
+            tableBody.innerHTML = '';
+            masterData[currentMaster].forEach((item, index) => {
+                const row = document.createElement('tr');
+                let rowData = '';
+                Object.values(item).forEach(value => {
+                    rowData += `<td>${value}</td>`;
+                });
+                row.innerHTML = `
+                    ${rowData}
+                    <td>
+                        <button onclick="editItem(${index})">編集</button>
+                        <button onclick="deleteItem(${index})">削除</button>
+                    </td>`;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addItem() {
+            const newItem = {};
+            document.querySelectorAll(`#${currentMaster}-section .new-item`).forEach(input => {
+                newItem[input.name] = input.value;
+            });
+            newItem.lastUpdatedAt = new Date().toLocaleString();
+            newItem.lastUpdatedBy = "admin"; // ログインユーザー名を設定
+            masterData[currentMaster].push(newItem);
+            renderTable();
+            clearForm('new');
+        }
+
+        function editItem(index) {
+            editingIndex = index;
+            const item = masterData[currentMaster][index];
+            document.querySelectorAll(`#${currentMaster}-section .edit-item`).forEach(input => {
+                input.value = item[input.name];
+            });
+            document.getElementById(`${currentMaster}-edit-section`).style.display = 'block';
+        }
+
+        function updateItem() {
+            document.querySelectorAll(`#${currentMaster}-section .edit-item`).forEach(input => {
+                masterData[currentMaster][editingIndex][input.name] = input.value;
+            });
+            masterData[currentMaster][editingIndex].lastUpdatedAt = new Date().toLocaleString();
+            renderTable();
+            clearForm('edit');
+            document.getElementById(`${currentMaster}-edit-section`).style.display = 'none';
+        }
+
+        function deleteItem(index) {
+            masterData[currentMaster].splice(index, 1);
+            renderTable();
+        }
+
+        function clearForm(type) {
+            document.querySelectorAll(`#${currentMaster}-${type}-section input`).forEach(input => input.value = '');
+        }
+
+        window.onload = function() {
+            switchMaster(currentMaster);
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場 - マスタメンテナンス</h1>
+    </header>
+       <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="master-menu">
+            <button onclick="switchMaster('product')">商品マスタ</button>
+            <button onclick="switchMaster('category')">カテゴリマスタ</button>
+            <button onclick="switchMaster('user')">ユーザーマスタ</button>
+        </section>
+
+        <!-- 商品マスタセクション -->
+        <section id="product-section" class="form-section">
+            <h2>商品マスタ</h2>
+            <div id="product-new-section">
+                <h3>新規登録</h3>
+                <div class="form-group"><label>商品CD:</label><input type="text" class="new-item" name="productCode"></div>
+                <div class="form-group"><label>商品名:</label><input type="text" class="new-item" name="productName"></div>
+                <div class="form-group"><label>カテゴリ1CD:</label><input type="text" class="new-item" name="category1Code"></div>
+                <div class="form-group"><label>カテゴリ2CD:</label><input type="text" class="new-item" name="category2Code"></div>
+                <div class="form-group"><label>アラート件数1:</label><input type="number" class="new-item" name="alertCount1"></div>
+                <div class="form-group"><label>アラート件数2:</label><input type="number" class="new-item" name="alertCount2"></div>
+                <button onclick="addItem()">追加</button>
+            </div>
+            <div id="product-edit-section" style="display:none;">
+                <h3>編集</h3>
+                <div class="form-group"><label>商品CD:</label><input type="text" class="edit-item" name="productCode" disabled></div>
+                <div class="form-group"><label>商品名:</label><input type="text" class="edit-item" name="productName"></div>
+                <div class="form-group"><label>カテゴリ1CD:</label><input type="text" class="edit-item" name="category1Code"></div>
+                <div class="form-group"><label>カテゴリ2CD:</label><input type="text" class="edit-item" name="category2Code"></div>
+                <div class="form-group"><label>アラート件数1:</label><input type="number" class="edit-item" name="alertCount1"></div>
+                <div class="form-group"><label>アラート件数2:</label><input type="number" class="edit-item" name="alertCount2"></div>
+                <button onclick="updateItem()">更新</button>
+            </div>
+            <h3>商品マスタ一覧</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品CD</th>
+                        <th>商品名</th>
+                        <th>カテゴリ1CD</th>
+                        <th>カテゴリ2CD</th>
+                        <th>アラート件数1</th>
+                        <th>アラート件数2</th>
+                        <th>最終更新者</th>
+                        <th>最終更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="product-table-body"></tbody>
+            </table>
+        </section>
+
+        <!-- カテゴリマスタセクション -->
+        <section id="category-section" class="form-section">
+            <h2>カテゴリマスタ</h2>
+            <div id="category-new-section">
+                <h3>新規登録</h3>
+                <div class="form-group"><label>カテゴリCD:</label><input type="text" class="new-item" name="categoryCode"></div>
+                <div class="form-group"><label>カテゴリ名:</label><input type="text" class="new-item" name="categoryName"></div>
+                <div class="form-group"><label>カテゴリ区分:</label><input type="text" class="new-item" name="categoryDivision"></div>
+                <button onclick="addItem()">追加</button>
+            </div>
+            <div id="category-edit-section" style="display:none;">
+                <h3>編集</h3>
+                <div class="form-group"><label>カテゴリCD:</label><input type="text" class="edit-item" name="categoryCode" disabled></div>
+                <div class="form-group"><label>カテゴリ名:</label><input type="text" class="edit-item" name="categoryName"></div>
+                <div class="form-group"><label>カテゴリ区分:</label><input type="text" class="edit-item" name="categoryDivision"></div>
+                <button onclick="updateItem()">更新</button>
+            </div>
+            <h3>カテゴリマスタ一覧</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>カテゴリCD</th>
+                        <th>カテゴリ名</th>
+                        <th>カテゴリ区分</th>
+                        <th>最終更新者</th>
+                        <th>最終更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="category-table-body"></tbody>
+            </table>
+        </section>
+
+        <!-- ユーザーマスタセクション -->
+        <section id="user-section" class="form-section">
+            <h2>ユーザーマスタ</h2>
+            <div id="user-new-section">
+                <h3>新規登録</h3>
+                <div class="form-group"><label>ユーザーID:</label><input type="text" class="new-item" name="userId"></div>
+                <div class="form-group"><label>ユーザー名:</label><input type="text" class="new-item" name="userName"></div>
+                <div class="form-group"><label>パスワード:</label><input type="password" class="new-item" name="password"></div>
+                <div class="form-group"><label>ユーザーレベル:</label><input type="text" class="new-item" name="userLevel"></div>
+                <button onclick="addItem()">追加</button>
+            </div>
+            <div id="user-edit-section" style="display:none;">
+                <h3>編集</h3>
+                <div class="form-group"><label>ユーザーID:</label><input type="text" class="edit-item" name="userId" disabled></div>
+                <div class="form-group"><label>ユーザー名:</label><input type="text" class="edit-item" name="userName"></div>
+                <div class="form-group"><label>パスワード:</label><input type="password" class="edit-item" name="password"></div>
+                <div class="form-group"><label>ユーザーレベル:</label><input type="text" class="edit-item" name="userLevel"></div>
+                <button onclick="updateItem()">更新</button>
+            </div>
+            <h3>ユーザーマスタ一覧</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ユーザーID</th>
+                        <th>ユーザー名</th>
+                        <th>パスワード</th>
+                        <th>ユーザーレベル</th>
+                        <th>最終更新者</th>
+                        <th>最終更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body"></tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

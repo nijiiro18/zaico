@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 棚卸</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        const inventoryData = [
+            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品", actualQuantity: null },
+            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品", actualQuantity: null },
+            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, status: "欠品", actualQuantity: null },
+            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, status: "在庫少", actualQuantity: null },
+            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, status: "在庫少", actualQuantity: null },
+            { id: "55601030", name: "くまさん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 1, status: "欠品", actualQuantity: null },
+            { id: "55601031", name: "ぱんださん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 2, status: "欠品", actualQuantity: null },
+            { id: "55601032", name: "手作りお財布", category1: "ハンドメイド", category2: "Bibgyor", quantity: 1, status: "欠品", actualQuantity: null },
+            { id: "55601033", name: "手作り革製品", category1: "ハンドメイド", category2: "Bibgyor", quantity: 3, status: "欠品", actualQuantity: null }
+        ];
+
+        function populateCategory1() {
+            const category1Select = document.getElementById('category1');
+            const uniqueCategories1 = [...new Set(inventoryData.map(item => item.category1))];
+
+            category1Select.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueCategories1.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                category1Select.appendChild(option);
+            });
+        }
+
+        function populateCategory2() {
+            const category1 = document.getElementById('category1').value;
+            const category2Select = document.getElementById('category2');
+            const filteredData = inventoryData.filter(item => item.category1 === category1 || category1 === "");
+            const uniqueCategories2 = [...new Set(filteredData.map(item => item.category2))];
+
+            category2Select.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueCategories2.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                category2Select.appendChild(option);
+            });
+        }
+
+        function updateTable() {
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+            const tableBody = document.getElementById('inventory-check-table-body');
+
+            const filteredData = inventoryData.filter(item => {
+                const matchesCategory1 = category1 === "" || item.category1 === category1;
+                const matchesCategory2 = category2 === "" || item.category2 === category2;
+                const matchesKeyword = searchKeyword === "" || item.name.toLowerCase().includes(searchKeyword);
+
+                return matchesCategory1 && matchesCategory2 && matchesKeyword;
+            });
+
+            tableBody.innerHTML = "";
+            filteredData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.quantity}</td>
+                    <td>
+                        <input type="number" min="0" placeholder="実際の数量" value="${item.actualQuantity !== null ? item.actualQuantity : ''}" 
+                        onchange="updateActualQuantity(${index}, this.value)">
+                    </td>
+                    <td id="difference-${index}">${item.actualQuantity !== null ? item.actualQuantity - item.quantity : ''}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateActualQuantity(index, value) {
+            const actualQuantity = parseInt(value, 10);
+            inventoryData[index].actualQuantity = actualQuantity;
+            document.getElementById(`difference-${index}`).textContent = actualQuantity - inventoryData[index].quantity;
+        }
+
+        function saveInventoryCheck() {
+            let changes = [];
+            inventoryData.forEach(item => {
+                if (item.actualQuantity !== null && item.actualQuantity !== item.quantity) {
+                    changes.push(`${item.name} - 実際: ${item.actualQuantity}, システム: ${item.quantity}`);
+                    item.quantity = item.actualQuantity; // システム上の在庫を更新
+                }
+            });
+            if (changes.length > 0) {
+                alert("以下の在庫が更新されました:\n" + changes.join("\n"));
+            } else {
+                alert("差異がないため、更新は行われませんでした。");
+            }
+            updateTable();
+        }
+
+        window.onload = function() {
+            populateCategory1();
+            populateCategory2();
+            updateTable();
+            document.getElementById('category1').addEventListener('change', populateCategory2);
+            document.getElementById('category1').addEventListener('change', updateTable);
+            document.getElementById('category2').addEventListener('change', updateTable);
+            document.getElementById('search-box').addEventListener('input', updateTable);
+            checkLogin();
+        };
+
+        function checkLogin() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場</h1>
+        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
+        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="inventory-check">
+            <h2>棚卸</h2>
+            <div class="search-container">
+                <div>
+                    <label for="category1">カテゴリ1:</label>
+                    <select id="category1">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="category2">カテゴリ2:</label>
+                    <select id="category2">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="search-box">物品名検索:</label>
+                    <input type="text" id="search-box" placeholder="物品名で検索">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>物品名</th>
+                        <th>カテゴリ1</th>
+                        <th>カテゴリ2</th>
+                        <th>システム上の数量</th>
+                        <th>実際の数量</th>
+                        <th>差異</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-check-table-body">
+                    <!-- JavaScriptで動的に行を生成します -->
+                </tbody>
+            </table>
+            <button onclick="saveInventoryCheck()" style="margin-top: 20px;">在庫更新</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 にじいろ市場</p>
+    </footer>
+</body>
+</html>

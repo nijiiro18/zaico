@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - データメンテナンス</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #data-menu, #operation-menu {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .form-section, .data-section {
+            display: none;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: inline-block;
+            width: 140px;
+        }
+        .form-group input {
+            width: 200px;
+            padding: 5px;
+        }
+    </style>
+    <script>
+        const dataStorage = {
+            stock: [
+                { productCode: "P00001", stockCount: 100, lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
+            ],
+            stockIn: [
+                { productCode: "P00001", stockInCount: 20, stockInType: "1", stockInDate: "2024-10-01", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
+            ],
+            stockOut: [
+                { productCode: "P00001", stockOutCount: 10, stockOutType: "2", stockOutDate: "2024-10-02", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-02 14:00" }
+            ],
+            inventory: [
+                { productCode: "P00001", productCount: 90, preInventoryCount: 100, inventoryDate: "2024-10-03", lastUpdatedBy: "user", lastUpdatedAt: "2024-10-03 09:00" }
+            ]
+        };
+
+        let currentData = 'stock';
+
+        function switchData(type) {
+            currentData = type;
+            document.querySelectorAll('.form-section').forEach(section => section.style.display = 'none');
+            document.querySelector(`#${type}-section`).style.display = 'block';
+            renderTable();
+        }
+
+        function renderTable() {
+            const tableBody = document.getElementById(`${currentData}-table-body`);
+            tableBody.innerHTML = '';
+            dataStorage[currentData].forEach((item, index) => {
+                const row = document.createElement('tr');
+                let rowData = '';
+                Object.values(item).forEach(value => {
+                    rowData += `<td>${value}</td>`;
+                });
+                row.innerHTML = `
+                    ${rowData}
+                    <td>
+                        <button onclick="editItem(${index})">編集</button>
+                        <button onclick="deleteItem(${index})">削除</button>
+                    </td>`;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addItem() {
+            const newItem = {};
+            document.querySelectorAll(`#${currentData}-section .form-group input`).forEach(input => {
+                newItem[input.id.replace('new-', '')] = input.value;
+            });
+            newItem.lastUpdatedAt = new Date().toLocaleString();
+            dataStorage[currentData].push(newItem);
+            renderTable();
+            clearForm('new');
+        }
+
+        function editItem(index) {
+            const item = dataStorage[currentData][index];
+            document.querySelectorAll(`#${currentData}-section .form-group input`).forEach(input => {
+                input.value = item[input.id.replace('edit-', '')];
+            });
+            document.getElementById(`${currentData}-edit-section`).style.display = 'block';
+        }
+
+        function updateItem(index) {
+            document.querySelectorAll(`#${currentData}-section .form-group input`).forEach(input => {
+                dataStorage[currentData][index][input.id.replace('edit-', '')] = input.value;
+            });
+            dataStorage[currentData][index].lastUpdatedAt = new Date().toLocaleString();
+            renderTable();
+            clearForm('edit');
+            document.getElementById(`${currentData}-edit-section`).style.display = 'none';
+        }
+
+        function deleteItem(index) {
+            dataStorage[currentData].splice(index, 1);
+            renderTable();
+        }
+
+        function clearForm(type) {
+            document.querySelectorAll(`#${currentData}-${type}-section .form-group input`).forEach(input => input.value = '');
+        }
+
+        window.onload = function() {
+            switchData(currentData);
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場 - データメンテナンス</h1>
+    </header>
+        <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="data-menu">
+            <button onclick="switchData('stock')">在庫データ</button>
+            <button onclick="switchData('stockIn')">入庫データ</button>
+            <button onclick="switchData('stockOut')">出庫データ</button>
+            <button onclick="switchData('inventory')">棚卸データ</button>
+        </section>
+
+        <!-- 在庫データセクション -->
+        <section id="stock-section" class="form-section">
+            <h2>在庫データ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品CD</th>
+                        <th>在庫数</th>
+                        <th>最終更新者</th>
+                        <th>最終更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-table-body"></tbody>
+            </table>
+        </section>
+
+        <!-- 入庫データセクション -->
+        <section id="stockIn-section" class="form-section">
+            <h2>入庫データ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品CD</th>
+                        <th>入庫数</th>
+                        <th>入庫区分</th>
+                        <th>入庫日</th>
+                        <th>最終更新者</th>
+                        <th>最終更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="stockIn-table-body"></tbody>
+            </table>
+        </section>
+
+        <!-- 出庫データセクション -->
+        <section id="stockOut-section" class="form-section">
+            <h2>出庫データ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品CD</th>
+                        <th>出庫数</th>
+                        <th>出庫区分</th>
+                        <th>出庫日</th>
+                        <th>最終更新者</th>
+                        <th>最終更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="stockOut-table-body"></tbody>
+            </table>
+        </section>
+
+        <!-- 棚卸データセクション -->
+        <section id="inventory-section" class="form-section">
+            <h2>棚卸データ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品CD</th>
+                        <th>商品数</th>
+                        <th>棚卸前商品数</th>
+                        <th>棚卸日</th>
+                        <th>最終更新者</th>
+                        <th>最終更新日</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-table-body"></tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 にじいろ市場</p>
+    </footer>
+</body>
+</html>

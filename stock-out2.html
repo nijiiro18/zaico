@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 出庫2</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        const inventoryData = [
+            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品" },
+            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品" },
+            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, status: "欠品" },
+            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, status: "在庫少" },
+            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, status: "在庫少" },
+            { id: "55601030", name: "くまさん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 1, status: "欠品" },
+            { id: "55601031", name: "ぱんださん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 2, status: "欠品" },
+            { id: "55601032", name: "手作りお財布", category1: "ハンドメイド", category2: "Bibgyor", quantity: 1, status: "欠品" },
+            { id: "55601033", name: "手作り革製品", category1: "ハンドメイド", category2: "Bibgyor", quantity: 3, status: "欠品" }
+        ];
+
+        let selectedItems = [];
+
+        function searchByBarcode() {
+            const barcode = document.getElementById('barcode-input').value;
+            const item = inventoryData.find(i => i.id === barcode);
+            if (item) {
+                if (!selectedItems.some(i => i.id === barcode)) {
+                    selectedItems.push({ ...item, quantityToRemove: 1 });
+                    updateSelectedItems();
+                }
+            } else {
+                alert("該当する商品が見つかりません。");
+            }
+            document.getElementById('barcode-input').value = '';
+        }
+
+        function updateSelectedItems() {
+            const selectedItemsContainer = document.getElementById('selected-items');
+            selectedItemsContainer.innerHTML = "";
+
+            selectedItems.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "selected-item";
+                div.innerHTML = `
+                    <span>${item.name} (${item.category1} - ${item.category2})</span>
+                    <input type="number" min="1" max="${item.quantity}" placeholder="数量" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)">
+                    <button onclick="removeFromStockOut(${index})">削除</button>
+                `;
+                selectedItemsContainer.appendChild(div);
+            });
+        }
+
+        function updateQuantity(index, value) {
+            selectedItems[index].quantityToRemove = parseInt(value, 10) || 0;
+        }
+
+        function removeFromStockOut(index) {
+            selectedItems.splice(index, 1);
+            updateSelectedItems();
+        }
+
+        function completeStockOut() {
+            sessionStorage.setItem('selectedStockOutItems', JSON.stringify(selectedItems));
+            window.location.href = 'stock-out-confirm.html';
+        }
+
+        window.onload = function() {
+            updateSelectedItems();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場</h1>
+        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
+        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="stock-out">
+            <h2>出庫2 - バーコードで検索</h2>
+            <div class="barcode-container">
+                <label for="barcode-input">バーコード入力:</label>
+                <input type="text" id="barcode-input" placeholder="バーコードを入力" onkeypress="if(event.key === 'Enter') searchByBarcode()">
+                <button onclick="searchByBarcode()">検索</button>
+            </div>
+            <h3>選択されたアイテム</h3>
+            <div id="selected-items"></div>
+            <button onclick="completeStockOut()" style="margin-top: 20px;">出庫確認へ</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 にじいろ市場</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - システム</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    <section id="master-maintenance">
+            <h2>マスタメンテ</h2>
+            <form>
+                <label for="category-maintenance">カテゴリ:</label>
+                <input type="text" id="category-maintenance" name="category-maintenance" placeholder="カテゴリ名を入力">
+                <button type="submit">更新</button>
+            </form>
+            <form>
+                <label for="product-maintenance">商品:</label>
+                <input type="text" id="product-maintenance" name="product-maintenance" placeholder="商品名を入力">
+                <button type="submit">更新</button>
+            </form>
+        </section>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 発注アラート</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        const alertData = [
+            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 120, threshold: 5 },
+            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 85, threshold: 5 },
+            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, sales: 60, threshold: 3 },
+            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, sales: 140, threshold: 8 },
+            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, sales: 75, threshold: 10 },
+            { id: "55601030", name: "くまさん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 1, sales: 30, threshold: 2 },
+            { id: "55601031", name: "ぱんださん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 2, sales: 50, threshold: 2 },
+            { id: "55601032", name: "手作りお財布", category1: "ハンドメイド", category2: "Bibgyor", quantity: 1, sales: 45, threshold: 3 },
+            { id: "55601033", name: "手作り革製品", category1: "ハンドメイド", category2: "Bibgyor", quantity: 3, sales: 65, threshold: 5 }
+        ];
+
+        function populateCategory1() {
+            const category1Select = document.getElementById('category1');
+            const uniqueCategories1 = [...new Set(alertData.map(item => item.category1))];
+
+            category1Select.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueCategories1.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                category1Select.appendChild(option);
+            });
+        }
+
+        function populateCategory2() {
+            const category1 = document.getElementById('category1').value;
+            const category2Select = document.getElementById('category2');
+            const filteredData = alertData.filter(item => item.category1 === category1 || category1 === "");
+            const uniqueCategories2 = [...new Set(filteredData.map(item => item.category2))];
+
+            category2Select.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueCategories2.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                category2Select.appendChild(option);
+            });
+        }
+
+        function updateTable() {
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+            const tableBody = document.getElementById('alert-table-body');
+
+            const filteredData = alertData.filter(item => {
+                const matchesCategory1 = category1 === "" || item.category1 === category1;
+                const matchesCategory2 = category2 === "" || item.category2 === category2;
+                const matchesKeyword = searchKeyword === "" || item.name.toLowerCase().includes(searchKeyword);
+
+                return matchesCategory1 && matchesCategory2 && matchesKeyword;
+            });
+
+            tableBody.innerHTML = "";
+            filteredData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.quantity}</td>
+                    <td>
+                        <input type="number" min="0" placeholder="閾値" value="${item.threshold}" 
+                        onchange="updateThreshold(${index}, this.value)">
+                    </td>
+                    <td>
+                        ${item.quantity <= item.threshold ? '<span style="color: red;">発注必要</span>' : '在庫十分'}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateThreshold(index, value) {
+            const threshold = parseInt(value, 10);
+            alertData[index].threshold = threshold;
+            updateTable();
+        }
+
+        function registerEmail() {
+            const emailInput = document.getElementById('email-input').value;
+            if (emailInput) {
+                alert(`メールアドレス ${emailInput} を登録しました。今後、発注アラートが通知されます。`);
+                document.getElementById('email-input').value = '';
+            } else {
+                alert('有効なメールアドレスを入力してください。');
+            }
+        }
+
+        window.onload = function() {
+            populateCategory1();
+            populateCategory2();
+            updateTable();
+            document.getElementById('category1').addEventListener('change', populateCategory2);
+            document.getElementById('category1').addEventListener('change', updateTable);
+            document.getElementById('category2').addEventListener('change', updateTable);
+            document.getElementById('search-box').addEventListener('input', updateTable);
+            checkLogin();
+        };
+
+        function checkLogin() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場</h1>
+        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
+        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="inventory-search.html">在庫検索</a></li>
+            <li><a href="low-stock-search.html">在庫少検索</a></li>
+            <li><a href="stock-in.html">入庫</a></li>
+            <li><a href="stock-out1.html">出庫1</a></li>
+            <li><a href="stock-out2.html">出庫2</a></li>
+            <li><a href="inventory-check.html">棚卸</a></li>
+            <li><a href="best-sellers.html">売れ筋表示</a></li>
+            <li><a href="export-import.html">エクスポート・インポート</a></li>
+            <li><a href="order-alerts.html">発注アラート</a></li>
+            <li><a href="master-maintenance.html">マスタメンテ</a></li>
+            <li><a href="data-maintenance.html">データメンテ</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="order-alerts">
+            <h2>発注アラート設定</h2>
+            <div>
+                <label for="email-input">通知先メールアドレス:</label>
+                <input type="email" id="email-input" placeholder="メールアドレスを入力">
+                <button onclick="registerEmail()">メールアドレス登録</button>
+            </div>
+            <div class="search-container">
+                <div>
+                    <label for="category1">カテゴリ1:</label>
+                    <select id="category1">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="category2">カテゴリ2:</label>
+                    <select id="category2">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="search-box">物品名検索:</label>
+                    <input type="text" id="search-box" placeholder="物品名で検索">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>物品名</th>
+                        <th>カテゴリ1</th>
+                        <th>カテゴリ2</th>
+                        <th>在庫数</th>
+                        <th>閾値設定</th>
+                        <th>ステータス</th>
+                    </tr>
+                </thead>
+                <tbody id="alert-table-body">
+                    <!-- JavaScriptで動的に行を生成します -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 にじいろ市場</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 出庫確認</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        let selectedItems = [];
+
+        function loadSelectedItems() {
+            const storedItems = sessionStorage.getItem('selectedStockOutItems');
+            if (storedItems) {
+                selectedItems = JSON.parse(storedItems);
+                displayConfirmationTable();
+            }
+        }
+
+        function displayConfirmationTable() {
+            const tableBody = document.getElementById('confirmation-table-body');
+            tableBody.innerHTML = '';
+
+            selectedItems.forEach(item => {
+                const row = document.createElement('tr');
+                const remainingStock = item.quantity - item.quantityToRemove;
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.quantityToRemove}</td>
+                    <td>${remainingStock < 0 ? 0 : remainingStock}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function confirmStockOut() {
+            const summary = selectedItems.map(item => {
+                const remainingStock = item.quantity - item.quantityToRemove;
+                return `${item.name} - 出庫: ${item.quantityToRemove}個, 残り在庫: ${remainingStock < 0 ? 0 : remainingStock}個`;
+            }).join("\n");
+
+            const confirmation = confirm(`以下の出庫を確定しますか？\n\n${summary}`);
+            if (confirmation) {
+                alert("出庫処理が完了しました！");
+                sessionStorage.removeItem('selectedStockOutItems');
+                window.location.href = 'stock-out1.html';
+            }
+        }
+
+        window.onload = function() {
+            loadSelectedItems();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場 - 出庫確認</h1>
+    </header>
+    <main>
+        <section>
+            <h2>出庫内容の確認</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>商品名</th>
+                        <th>カテゴリ1</th>
+                        <th>カテゴリ2</th>
+                        <th>現在の在庫</th>
+                        <th>出庫予定数</th>
+                        <th>出庫後の在庫</th>
+                    </tr>
+                </thead>
+                <tbody id="confirmation-table-body"></tbody>
+            </table>
+            <button onclick="confirmStockOut()" style="margin-top: 20px;">出庫を確定</button>
+        </section>
+    </main>
+</body>
+</html>
