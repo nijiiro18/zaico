@@ -6,20 +6,36 @@
     <title>にじいろ市場 - 出庫</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        const inventoryData = [
-            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品" },
-            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, status: "欠品" },
-            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, status: "欠品" },
-            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, status: "在庫少" },
-            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, status: "在庫少" }
-        ];
-
+        let inventoryData = [];
         let selectedItems = [];
+
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+                document.getElementById('logout-button').onclick = logout;
+                checkLogin();
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
+
+        async function loadInventoryData() {
+            try {
+                const response = await fetch('inventoryData.json');
+                inventoryData = await response.json();
+                populateCategory1();
+                populateCategory2();
+                updateTable();
+            } catch (error) {
+                console.error('在庫データの読み込みに失敗しました:', error);
+            }
+        }
 
         function populateCategory1() {
             const category1Select = document.getElementById('category1');
             const uniqueCategories1 = [...new Set(inventoryData.map(item => item.category1))];
-
             category1Select.innerHTML = '<option value="">すべてを選択</option>';
             uniqueCategories1.forEach(category => {
                 const option = document.createElement('option');
@@ -34,7 +50,6 @@
             const category2Select = document.getElementById('category2');
             const filteredData = inventoryData.filter(item => item.category1 === category1 || category1 === "");
             const uniqueCategories2 = [...new Set(filteredData.map(item => item.category2))];
-
             category2Select.innerHTML = '<option value="">すべてを選択</option>';
             uniqueCategories2.forEach(category => {
                 const option = document.createElement('option');
@@ -49,13 +64,10 @@
             const category2 = document.getElementById('category2').value;
             const searchKeyword = document.getElementById('search-box').value.toLowerCase();
             const tableBody = document.getElementById('stock-out-table-body');
-
             const filteredData = inventoryData.filter(item => {
-                const matchesCategory1 = category1 === "" || item.category1 === category1;
-                const matchesCategory2 = category2 === "" || item.category2 === category2;
-                const matchesKeyword = searchKeyword === "" || item.name.toLowerCase().includes(searchKeyword);
-
-                return matchesCategory1 && matchesCategory2 && matchesKeyword;
+                return (!category1 || item.category1 === category1) &&
+                       (!category2 || item.category2 === category2) &&
+                       (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
             });
 
             tableBody.innerHTML = "";
@@ -85,7 +97,6 @@
         function updateSelectedItems() {
             const selectedItemsContainer = document.getElementById('selected-items');
             selectedItemsContainer.innerHTML = "";
-
             selectedItems.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = "selected-item";
@@ -112,23 +123,13 @@
             window.location.href = 'stock-out-confirm.html';
         }
 
-        window.onload = function() {
-            populateCategory1();
-            populateCategory2();
-            updateTable();
-            document.getElementById('category1').addEventListener('change', populateCategory2);
-            document.getElementById('category1').addEventListener('change', updateTable);
-            document.getElementById('category2').addEventListener('change', updateTable);
-            document.getElementById('search-box').addEventListener('input', updateTable);
-            checkLogin();
-        };
-
         function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
                 window.location.href = 'login.html';
             } else {
-                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+                const userElement = document.getElementById('logged-in-user');
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
             }
         }
 
@@ -136,49 +137,35 @@
             sessionStorage.removeItem('loggedInUser');
             window.location.href = 'login.html';
         }
+
+        window.onload = function() {
+            loadHeader();
+            loadInventoryData();
+        };
     </script>
 </head>
 <body>
-    <header>
-        <h1>にじいろ市場 - 出庫</h1>
-        <div id="logged-in-user" style="float: right; margin: 15px;"></div>
-        <button onclick="logout()" style="float: right; margin: 15px;">ログアウト</button>
-    </header>
-        <nav>
-        <ul>
-            <li><a href="inventory-search.html">在庫検索</a></li>
-            <li><a href="low-stock-search.html">在庫少検索</a></li>
-            <li><a href="stock-in.html">入庫</a></li>
-            <li><a href="stock-out1.html">出庫1</a></li>
-            <li><a href="stock-out2.html">出庫2</a></li>
-            <li><a href="inventory-check.html">棚卸</a></li>
-            <li><a href="best-sellers.html">売れ筋表示</a></li>
-            <li><a href="export-import.html">エクスポート・インポート</a></li>
-            <li><a href="order-alerts.html">発注アラート</a></li>
-            <li><a href="master-maintenance.html">マスタメンテ</a></li>
-            <li><a href="data-maintenance.html">データメンテ</a></li>
-        </ul>
-    </nav>
-    
+    <div id="header"></div> <!-- ヘッダーが読み込まれる場所 -->
+
     <main>
         <section id="stock-out">
             <h2>出庫する商品を選択</h2>
             <div class="search-container">
                 <div>
                     <label for="category1">カテゴリ1:</label>
-                    <select id="category1">
+                    <select id="category1" onchange="populateCategory2(); updateTable();">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
                 <div>
                     <label for="category2">カテゴリ2:</label>
-                    <select id="category2">
+                    <select id="category2" onchange="updateTable();">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
                 <div>
                     <label for="search-box">商品名検索:</label>
-                    <input type="text" id="search-box" placeholder="商品名で検索">
+                    <input type="text" id="search-box" placeholder="商品名で検索" oninput="updateTable();">
                 </div>
             </div>
             <table>
