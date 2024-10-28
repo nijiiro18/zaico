@@ -11,29 +11,28 @@
                 const response = await fetch('header.html');
                 const headerContent = await response.text();
                 document.getElementById('header').innerHTML = headerContent;
+
+                // ログインチェックとログアウトボタン設定
+                checkLogin();
+                document.getElementById('logout-button').onclick = logout;
             } catch (error) {
                 console.error('ヘッダーの読み込みに失敗しました:', error);
             }
         }
 
-        async function loadInventoryData() {
-            try {
-                const response = await fetch('inventoryData.json');
-                const data = await response.json();
-                window.inventoryData = data;  // データをグローバルに保存
-                populateFilters();
-                renderTable();
-            } catch (error) {
-                console.error('在庫データの読み込みに失敗しました:', error);
-            }
-        }
         function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
                 window.location.href = 'login.html';
             } else {
-                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+                const userElement = document.getElementById('logged-in-user');
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
             }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
         }
 
         function handleStockIn() {
@@ -45,16 +44,15 @@
         }
 
         window.onload = function() {
-            checkLogin();
+            loadHeader();
         };
-
-        function logout() {
-            sessionStorage.removeItem('loggedInUser');
-            window.location.href = 'login.html';
-        }
     </script>
 </head>
 <body>
+    <!-- 共通ヘッダー読み込みエリア -->
+    <div id="header"></div>
+
+    <!-- メインコンテンツ -->
     <main>
         <section id="stock-in">
             <h2>入庫</h2>
@@ -73,6 +71,8 @@
             <button onclick="handleStockIn()" style="margin-top: 10px;">登録</button>
         </section>
     </main>
+
+    <!-- フッター -->
     <footer>
         <p>&copy; 2024 にじいろ市場</p>
     </footer>
