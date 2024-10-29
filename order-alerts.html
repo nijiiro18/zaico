@@ -84,9 +84,6 @@
                         <input type="number" min="0" placeholder="閾値" value="${item.threshold}" 
                         onchange="updateThreshold(${index}, this.value)">
                     </td>
-                    <td>
-                        ${item.quantity <= item.threshold ? '<span style="color: red;">発注必要</span>' : '在庫十分'}
-                    </td>
                 `;
                 tableBody.appendChild(row);
             });
