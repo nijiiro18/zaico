@@ -77,6 +77,18 @@
 		    });
 
 		    tableBody.innerHTML = "";
+		    filteredData.forEach(item => {
+		        const row = document.createElement('tr');
+		        row.innerHTML = `
+		            <td>${item.id}</td>
+		            <td>${item.name}</td>
+		            <td>${item.category1}</td>
+		            <td>${item.category2}</td>
+		            <td>${item.quantity}</td>
+		            <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
+		        `;
+		        tableBody.appendChild(row);
+		    });
 		}
 
         function addToStockOut(itemId) {
