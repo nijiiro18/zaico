@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>にじいろ市場 - 出庫</title>
+    <title>にじいろ市場 - 出庫（お客様登録）</title>
     <link rel="stylesheet" href="styles.css">
     <script>
         let inventoryData = [];
@@ -80,7 +80,7 @@
                     <td>${item.category2}</td>
                     <td>${item.quantity}</td>
                     <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
-                    <td><button onclick="addToStockOut('${item.id}')">出庫</button></td>
+                    <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
                 `;
                 tableBody.appendChild(row);
             });
