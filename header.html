@@ -1,42 +1,41 @@
 <!-- header.html -->
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>にじいろ市場 - 共通ヘッダー</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- ロゴとタイトル部分 -->
-    <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
-        <div style="display: flex; align-items: center;">
-            <img src="logo.png" alt="Logo" style="height: 50px; margin-right: 20px;">
-            <h1 style="margin: 0;">にじいろ市場</h1>
-        </div>
-        <div id="logged-in-user" style="margin-right: 15px; font-weight: bold;">ログイン中: ユーザー名</div>
-        
-        <!-- ログアウトボタンを含むフォーム -->
-        <form action="logout.html" method="get" style="display: inline;">
-            <button type="submit" style="margin-right: 15px;">ログアウト</button>
-        </form>
-    </header>
+<header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+    <div style="display: flex; align-items: center;">
+        <img src="logo.png" alt="Logo" style="height: 50px; margin-right: 20px;">
+        <h1 style="margin: 0;">にじいろ市場</h1>
+    </div>
+    <div id="logged-in-user" style="margin-right: 15px; font-weight: bold;"></div>
+    <!-- ログアウトボタンを含むフォーム -->
+    <form action="logout.html" method="get" style="display: inline;">
+        <button type="submit" id="logout-button" style="margin-right: 15px;">ログアウト</button>
+    </form>
+</header>
 
-    <!-- ナビゲーションメニュー -->
-    <nav style="padding: 10px; background-color: #f8f8f8;">
-        <ul style="list-style: none; display: flex; gap: 15px; padding: 0; margin: 0;">
-            <li><a href="inventory-search.html">在庫検索</a></li>
-            <li><a href="low-stock-search.html">在庫少検索</a></li>
-            <li><a href="stock-in.html">入庫</a></li>
-            <li><a href="stock-out1.html">出庫（お客様登録）</a></li>
-            <li><a href="stock-out2.html">出庫（発送時）</a></li>
-            <li><a href="inventory-check.html">棚卸</a></li>
-            <li><a href="best-sellers.html">売れ筋表示</a></li>
-            <li><a href="export-import.html">エクスポート・インポート</a></li>
-            <li><a href="order-alerts.html">発注アラート</a></li>
-            <li><a href="master-maintenance.html">マスタメンテ</a></li>
-            <li><a href="data-maintenance.html">データメンテ</a></li>
-        </ul>
-    </nav>
-</body>
-</html>
+<nav style="padding: 10px; background-color: #f8f8f8;">
+    <ul style="list-style: none; display: flex; gap: 15px; padding: 0; margin: 0;">
+        <li><a href="inventory-search.html">在庫検索</a></li>
+        <li><a href="low-stock-search.html">在庫少検索</a></li>
+        <li><a href="stock-in.html">入庫</a></li>
+        <li><a href="stock-out1.html">出庫（お客様登録）</a></li>
+        <li><a href="stock-out2.html">出庫（発送時）</a></li>
+        <li><a href="inventory-check.html">棚卸</a></li>
+        <li><a href="best-sellers.html">売れ筋表示</a></li>
+        <li><a href="export-import.html">エクスポート・インポート</a></li>
+        <li><a href="order-alerts.html">発注アラート</a></li>
+        <li><a href="master-maintenance.html">マスタメンテ</a></li>
+        <li><a href="data-maintenance.html">データメンテ</a></li>
+    </ul>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ログイン中のユーザー名を取得し表示する
+        const loggedInUser = sessionStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+        } else {
+            // 未ログインの場合はログインページにリダイレクト
+            window.location.href = 'login.html';
+        }
+    });
+</script>
