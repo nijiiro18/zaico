@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログアウト中...</title>
+    <script>
+        // セッションをクリアしてからリダイレクト
+        sessionStorage.clear();
+        window.location.href = 'login.html';
+    </script>
+</head>
+<body>
+    <p>ログアウト中です。しばらくお待ちください...</p>
+</body>
+</html>
