@@ -13,8 +13,7 @@
             <h1 style="margin: 0;">にじいろ市場</h1>
         </div>
         <div id="logged-in-user" style="margin-right: 15px; font-weight: bold;"></div>
-        <!-- logout 関数を直接呼び出し -->
-        <button onclick="logout()" style="margin-right: 15px;">ログアウト</button>
+        <button id="logout-button" style="margin-right: 15px;">ログアウト</button>
     </header>
 
     <nav style="padding: 10px; background-color: #f8f8f8;">
@@ -37,20 +36,26 @@
         <!-- コンテンツがここに入ります -->
     </main>
 
-    <!-- スクリプトをヘッダー直下か、body の最後に追加 -->
     <script>
+        // ログアウト関数の定義
         function logout() {
-            sessionStorage.removeItem('loggedInUser'); // セッション削除
-            window.location.href = 'login.html'; // ログインページに遷移
-        }
-
-        const loggedInUser = sessionStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
-        } else {
-            // 未ログインの場合はログインページにリダイレクト
+            sessionStorage.removeItem('loggedInUser');
             window.location.href = 'login.html';
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // ログイン中のユーザー名を取得して表示
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+            } else {
+                // 未ログインの場合はログインページにリダイレクト
+                window.location.href = 'login.html';
+            }
+
+            // ログアウトボタンにイベントリスナーを設定
+            document.getElementById('logout-button').addEventListener('click', logout);
+        });
     </script>
 </body>
 </html>
