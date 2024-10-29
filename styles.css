@@ -1,3 +1,4 @@
+/* 全体の基本スタイル */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,6 +7,7 @@ body {
     color: #333;
 }
 
+/* ヘッダーのスタイル */
 header {
     background-color: #2196f3;
     color: white;
@@ -16,18 +18,21 @@ header {
     position: relative;
 }
 
+/* ログインユーザー名のスタイル */
 #logged-in-user {
     color: #fff;
     font-weight: bold;
     margin-right: 10px;
 }
 
+/* ログアウトボタンとログインユーザー名の並びを調整 */
 .logout-container {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
+/* ボタンのスタイル */
 button {
     background-color: #1976d2;
     color: white;
@@ -42,6 +47,7 @@ button:hover {
     background-color: #155a9a;
 }
 
+/* ナビゲーションバーのスタイル */
 nav {
     background-color: #e3f2fd;
     padding: 10px;
@@ -70,16 +76,71 @@ nav a:hover {
     background-color: #ddd;
 }
 
+/* メインコンテンツのスタイル */
 main {
     padding: 20px;
 }
 
+/* 見出しのスタイル */
 h2 {
     color: #2196f3;
     border-bottom: 2px solid #2196f3;
     padding-bottom: 5px;
 }
 
+/* テーブルのスタイル */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #2196f3;
+    color: white;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+/* テーブルの行の背景色 */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* ステータス列のスタイル */
+.status-low {
+    background-color: #fff8c4;
+    color: #666;
+    font-weight: bold;
+}
+
+.status-out {
+    background-color: #ffcccc;
+    color: #b20000;
+    font-weight: bold;
+}
+
+/* フッターのスタイル */
+footer {
+    background-color: #e3f2fd;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+/* 検索コンテナのスタイル */
 .search-container {
     display: flex;
     gap: 10px;
@@ -113,193 +174,7 @@ h2 {
     box-sizing: border-box;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-thead {
-    background-color: #2196f3;
-    color: white;
-}
-
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tbody tr:hover {
-    background-color: #f1f1f1;
-}
-
-footer {
-    background-color: #e3f2fd;
-    text-align: center;
-    padding: 10px;
-    margin-top: 20px;
-}
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-    color: #333;
-}
-
-header {
-    background-color: #2196f3;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    position: relative;
-}
-
-#logged-in-user {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-}
-
-button {
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #155a9a;
-}
-
-nav {
-    background-color: #e3f2fd;
-    padding: 10px;
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-nav a {
-    text-decoration: none;
-    color: #333;
-    padding: 5px 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav a:hover {
-    background-color: #ddd;
-}
-
-main {
-    padding: 20px;
-}
-
-h2 {
-    color: #2196f3;
-    border-bottom: 2px solid #2196f3;
-    padding-bottom: 5px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-thead {
-    background-color: #2196f3;
-    color: white;
-}
-
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tbody tr:hover {
-    background-color: #f1f1f1;
-}
-
-.status-low {
-    background-color: #fff8c4;
-    color: #666;
-    font-weight: bold;
-}
-
-.status-out {
-    background-color: #ffcccc;
-    color: #b20000;
-    font-weight: bold;
-}
-
-footer {
-    background-color: #e3f2fd;
-    text-align: center;
-    padding: 10px;
-    margin-top: 20px;
-}
-.radio-group {
-    margin: 15px 0;
-}
-
-.radio-group label {
-    margin-right: 20px;
-    font-size: 16px;
-}
-
-textarea {
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 16px;
-    resize: vertical;
-}
-
-button {
-    background-color: #2196f3;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #1976d2;
-}
+/* 選択アイテムのスタイル */
 .selected-item {
     display: flex;
     align-items: center;
@@ -330,6 +205,7 @@ button:hover {
     background-color: #d32f2f;
 }
 
+/* フォームのスタイル */
 form {
     background: white;
     padding: 20px;
@@ -368,15 +244,16 @@ form select {
     margin-top: 10px;
 }
 
-button2 {
+/* ボタンの基本スタイル */
+button {
     background-color: #2196f3;
     color: white;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
     border-radius: 5px;
-    width: 100%;
     margin-top: 10px;
+    width: 100%;
 }
 
 button:hover {
@@ -386,62 +263,41 @@ button:hover {
 #add-button {
     margin-top: 15px;
 }
-#search-term, #filter-category1, #filter-category2 {
-            padding: 8px;
-            margin-bottom: 10px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+/* テーブル編集セクションのスタイル */
+#edit-section {
+    display: none;
+    margin-top: 20px;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+#edit-section input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: calc(100% - 20px);
+}
 
-        table th {
-            background-color: #f4f4f4;
-        }
+#edit-section button {
+    padding: 10px 15px;
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-        #edit-section {
-            display: none;
-            margin-top: 20px;
-            background: #fff;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+#edit-section button:hover {
+    background-color: #1976d2;
+}
 
-        #edit-section input {
-            margin-bottom: 10px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: calc(100% - 20px);
-        }
-
-        #edit-section button {
-            padding: 10px 15px;
-            background-color: #2196f3;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #edit-section button:hover {
-            background-color: #1976d2;
-        }
-        table th {
-    background-color: #2196f3; /* 他の部分と統一する色 */
+/* テーブル見出しスタイル */
+table th {
+    background-color: #2196f3;
     color: #fff;
     padding: 8px;
     text-align: left;
