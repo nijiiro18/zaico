@@ -7,13 +7,16 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         #logged-in-user {
-            color: #fff;
+            color: #333; /* テキストカラー */
             font-weight: bold;
+            margin-top: 5px; /* ログアウトボタンからの距離を少し調整 */
+            display: block; /* 下に表示するためのブロック表示 */
         }
     </style>
 </head>
 <body onload="initializePage()">
     <div id="header"></div> <!-- ヘッダー読み込み場所 -->
+    
     <main>
         <section class="export-section">
             <h2>CSVエクスポート</h2>
@@ -54,7 +57,11 @@
             if (!loggedInUser) {
                 window.location.href = 'login.html';
             } else {
-                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+                // ログインユーザー名をログアウトボタンの下に表示
+                const userDisplay = document.createElement('span');
+                userDisplay.id = 'logged-in-user';
+                userDisplay.textContent = `ログイン中: ${loggedInUser}`;
+                document.getElementById('logout-button').after(userDisplay);
             }
         }
 
