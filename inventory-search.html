@@ -8,13 +8,14 @@
     <script>
         let inventoryData = [];
 
-        // 共通ヘッダーを読み込む
         async function loadHeader() {
-            const headerElement = document.getElementById("header");
-            const response = await fetch("header.html");
-            headerElement.innerHTML = await response.text();
-        }
+        const headerElement = document.getElementById("header");
+        const response = await fetch("header.html");
+        headerElement.innerHTML = await response.text();
+        checkLoginStatus(); // ヘッダー読み込み後に実行
+   		 }
 
+   		 window.onload = loadHeader;
         // JSONファイルから在庫データを読み込む
         async function loadInventoryData() {
             try {
