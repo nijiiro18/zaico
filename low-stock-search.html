@@ -11,6 +11,8 @@
                 const response = await fetch('header.html');
                 const headerContent = await response.text();
                 document.getElementById('header').innerHTML = headerContent;
+                document.getElementById('logout-button').onclick = logout;
+                checkLogin();
             } catch (error) {
                 console.error('ヘッダーの読み込みに失敗しました:', error);
             }
