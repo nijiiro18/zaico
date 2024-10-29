@@ -3,10 +3,8 @@
         <img src="logo.png" alt="Logo" style="height: 50px; margin-right: 20px;">
         <h1 style="margin: 0;">にじいろ市場</h1>
     </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 15px;">
-        <button id="logout-button" style="margin-bottom: 5px;">ログアウト</button>
-        <div id="logged-in-user" style="font-weight: bold;"></div>
-    </div>
+    <div id="logged-in-user" style="margin-right: 15px; font-weight: bold;"></div>
+    <button onclick="logout()" style="margin-right: 15px;">ログアウト</button>
 </header>
 
 <nav style="padding: 10px; background-color: #f8f8f8;">
@@ -26,22 +24,18 @@
 </nav>
 
 <script>
+    // ログアウト関数を直接 onclick 属性で呼び出す
     function logout() {
-        sessionStorage.removeItem('loggedInUser');
-        window.location.href = 'login.html';
+        sessionStorage.removeItem('loggedInUser'); // セッション削除
+        window.location.href = 'login.html'; // ログイン画面へ遷移
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // ログイン中のユーザー名を取得し表示する
-        const loggedInUser = sessionStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
-        } else {
-            // 未ログインの場合はログインページにリダイレクト
-            window.location.href = 'login.html';
-        }
-
-        // ログアウトボタンにイベントリスナーを追加
-        document.getElementById('logout-button').addEventListener('click', logout);
-    });
+    // DOMContentLoaded イベントを使わずにログイン中のユーザー表示
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+    if (loggedInUser) {
+        document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
+    } else {
+        // 未ログインの場合はログインページにリダイレクト
+        window.location.href = 'login.html';
+    }
 </script>
