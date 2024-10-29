@@ -1,3 +1,5 @@
+<!-- inventory-search.php -->
+<?php include 'header.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,13 +9,6 @@
     <link rel="stylesheet" href="styles.css">
     <script>
         let inventoryData = [];
-
-        // 共通ヘッダーを読み込む
-        async function loadHeader() {
-            const headerElement = document.getElementById("header");
-            const response = await fetch("header.html");
-            headerElement.innerHTML = await response.text();
-        }
 
         // JSONファイルから在庫データを読み込む
         async function loadInventoryData() {
@@ -54,16 +49,10 @@
             });
         }
 
-        window.onload = function() {
-            loadHeader();        // ヘッダーの読み込み
-            loadInventoryData();  // 在庫データの読み込み
-        };
+        window.onload = loadInventoryData;  // 在庫データの読み込み
     </script>
 </head>
 <body>
-    <!-- inventory-search.php -->
-	<?php include 'header.php'; ?>
-
     <main>
         <section id="inventory-search">
             <h2>在庫検索</h2>
