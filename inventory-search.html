@@ -60,31 +60,37 @@
         }
 
         function updateTable() {
-            const category1 = document.getElementById('category1').value;
-            const category2 = document.getElementById('category2').value;
-            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
-            const tableBody = document.getElementById('stock-out-table-body');
-            const filteredData = inventoryData.filter(item => {
-                return (!category1 || item.category1 === category1) &&
-                       (!category2 || item.category2 === category2) &&
-                       (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
-            });
+		    const tableBody = document.getElementById('inventory-table-body');
+		    if (!tableBody) {
+		        console.error('Table body not found.');
+		        return; // テーブルがまだ存在しない場合は終了
+		    }
+		    
+		    const category1 = document.getElementById('category1').value;
+		    const category2 = document.getElementById('category2').value;
+		    const searchKeyword = document.getElementById('search-box').value.toLowerCase();
 
-            tableBody.innerHTML = "";
-            filteredData.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.id}</td>
-                    <td>${item.name}</td>
-                    <td>${item.category1}</td>
-                    <td>${item.category2}</td>
-                    <td>${item.quantity}</td>
-                    <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
-                    <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
+		    const filteredData = inventoryData.filter(item => {
+		        return (!category1 || item.category1 === category1) &&
+		               (!category2 || item.category2 === category2) &&
+		               (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
+		    });
+
+		    tableBody.innerHTML = "";
+		    filteredData.forEach(item => {
+		        const row = document.createElement('tr');
+		        row.innerHTML = `
+		            <td>${item.id}</td>
+		            <td>${item.name}</td>
+		            <td>${item.category1}</td>
+		            <td>${item.category2}</td>
+		            <td>${item.quantity}</td>
+		            <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
+		            <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
+		        `;
+		        tableBody.appendChild(row);
+		    });
+		}
 
         function addToStockOut(itemId) {
             const item = inventoryData.find(i => i.id === itemId);
