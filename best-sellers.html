@@ -7,17 +7,17 @@
     <link rel="stylesheet" href="styles.css">
     <script>
         // ヘッダーを読み込む関数
-        async function loadHeader() {
+       async function loadHeader() {
             try {
                 const response = await fetch('header.html');
                 const headerContent = await response.text();
                 document.getElementById('header').innerHTML = headerContent;
-                checkLogin(); // ヘッダー読み込み後にログインチェック
+                document.getElementById('logout-button').onclick = logout;
+                checkLogin();
             } catch (error) {
                 console.error('ヘッダーの読み込みに失敗しました:', error);
             }
         }
-
         const salesData = [
             { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 120, date: "2024-01-10" },
             { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 85, date: "2024-02-05" },
@@ -57,6 +57,21 @@
                     tableBody.appendChild(row);
                 });
         }
+         function checkLogin() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                window.location.href = 'login.html';
+            } else {
+                const userElement = document.getElementById('logged-in-user');
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        }
+
 
         window.onload = function() {
             loadHeader(); // 共通ヘッダーを読み込む

@@ -41,6 +41,7 @@
                 const response = await fetch('header.html');
                 const headerContent = await response.text();
                 document.getElementById('header').innerHTML = headerContent;
+                document.getElementById('logout-button').onclick = logout;
                 checkLogin();
             } catch (error) {
                 console.error('ヘッダーの読み込みに失敗しました:', error);
@@ -57,11 +58,8 @@
             if (!loggedInUser) {
                 window.location.href = 'login.html';
             } else {
-                // ログインユーザー名をログアウトボタンの下に表示
-                const userDisplay = document.createElement('span');
-                userDisplay.id = 'logged-in-user';
-                userDisplay.textContent = `ログイン中: ${loggedInUser}`;
-                document.getElementById('logout-button').after(userDisplay);
+                const userElement = document.getElementById('logged-in-user');
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
             }
         }
 

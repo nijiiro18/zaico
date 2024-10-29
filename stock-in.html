@@ -11,12 +11,20 @@
                 const response = await fetch('header.html');
                 const headerContent = await response.text();
                 document.getElementById('header').innerHTML = headerContent;
-
-                // ログインチェックとログアウトボタン設定
-                checkLogin();
                 document.getElementById('logout-button').onclick = logout;
+                checkLogin();
             } catch (error) {
                 console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
+
+        function checkLogin() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                window.location.href = 'login.html';
+            } else {
+                const userElement = document.getElementById('logged-in-user');
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
             }
         }
 
