@@ -9,8 +9,13 @@
         #logged-in-user {
             color: #333; /* テキストカラー */
             font-weight: bold;
-            margin-top: 5px; /* ログアウトボタンからの距離を少し調整 */
-            display: block; /* 下に表示するためのブロック表示 */
+            margin-right: 10px; /* ログアウトボタンとのスペース */
+        }
+        #header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
         }
     </style>
 </head>
@@ -49,7 +54,6 @@
 
         function exportCSV() {
             alert('CSVエクスポートが実行されました！');
-            // 実際のCSV生成とダウンロードのロジックをここに追加
         }
 
         function checkLogin() {
@@ -57,11 +61,7 @@
             if (!loggedInUser) {
                 window.location.href = 'login.html';
             } else {
-                // ログインユーザー名をログアウトボタンの下に表示
-                const userDisplay = document.createElement('span');
-                userDisplay.id = 'logged-in-user';
-                userDisplay.textContent = `ログイン中: ${loggedInUser}`;
-                document.getElementById('logout-button').after(userDisplay);
+                document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
             }
         }
 
