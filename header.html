@@ -27,7 +27,8 @@
     // ログアウト関数
     function logout() {
         sessionStorage.removeItem('loggedInUser');
-        window.location.href = 'login.html';
+        // GET通信でログイン画面に遷移
+        window.location.href = 'login.html?logout=true';
     }
 
     // ヘッダーの読み込み後に実行する初期化処理
