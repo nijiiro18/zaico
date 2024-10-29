@@ -5,10 +5,8 @@
         <h1 style="margin: 0;">にじいろ市場</h1>
     </div>
     <div style="text-align: right;">
-        <form action="logout.html" method="get" style="display: flex; align-items: center;">
-            <div id="logged-in-user" style="margin-right: 15px; font-weight: bold;"></div>
-            <button type="submit" id="logout-button" style="padding: 5px 10px; font-size: 1rem;">ログアウト</button>
-        </form>
+        <span id="logged-in-user" style="margin-right: 15px; font-weight: bold;"></span>
+        <a href="login.html" id="logout-button" style="padding: 5px 10px; text-decoration: none; background-color: #f8f8f8; border-radius: 5px;">ログアウト</a>
     </div>
 </header>
 
@@ -27,16 +25,3 @@
         <li><a href="data-maintenance.html">データメンテ</a></li>
     </ul>
 </nav>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // ログイン中のユーザー名を取得し表示する
-        const loggedInUser = sessionStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            document.getElementById('logged-in-user').textContent = `ログイン中: ${loggedInUser}`;
-        } else {
-            // 未ログインの場合はログインページにリダイレクト
-            window.location.href = 'login.html';
-        }
-    });
-</script>
