@@ -17,8 +17,15 @@ header {
 }
 
 #logged-in-user {
-    color: #fff; /* ”’•¶š‚É•ÏX */
-    font-weight: bold; /* ‹­’²•\¦‚É‚µ‚½‚¢ê‡ */
+    color: #fff;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.logout-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 button {
