@@ -8,8 +8,8 @@
     <script>
         let inventoryData = [];
         let selectedItems = [];
-        let currentPage = 1;  // 現在のページ
-        const itemsPerPage = 10;  // 1ページあたりの表示件数
+        let currentPage = 1; // 現在のページ
+        const itemsPerPage = 10; // 1ページあたりの表示件数
 
         async function loadHeader() {
             try {
@@ -61,7 +61,7 @@
             });
         }
 
-        function updateTable(page = 1) {
+        function updateTable() {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
             const searchKeyword = document.getElementById('search-box').value.toLowerCase();
@@ -73,7 +73,7 @@
             });
 
             // ページごとに表示するデータ
-            const startIndex = (page - 1) * itemsPerPage;
+            const startIndex = (currentPage - 1) * itemsPerPage;
             const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
             // テーブルの更新
@@ -93,7 +93,6 @@
             });
 
             generatePagination(filteredData.length);
-            currentPage = page;
         }
 
         function generatePagination(totalItems) {
@@ -101,13 +100,30 @@
             pagination.innerHTML = "";
 
             const totalPages = Math.ceil(totalItems / itemsPerPage);
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.className = i === currentPage ? 'active' : '';
-                pageButton.onclick = () => updateTable(i);
-                pagination.appendChild(pageButton);
-            }
+
+            // 前ページボタン
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '前ページ';
+            prevButton.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateTable();
+                }
+            };
+            prevButton.disabled = currentPage === 1;
+            pagination.appendChild(prevButton);
+
+            // 次ページボタン
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '次ページ';
+            nextButton.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updateTable();
+                }
+            };
+            nextButton.disabled = currentPage === totalPages;
+            pagination.appendChild(nextButton);
         }
 
         function addToStockOut(itemId) {
