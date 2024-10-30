@@ -247,17 +247,6 @@ form select {
     margin-top: 10px;
 }
 
-/* ボタンの基本スタイル */
-button {
-    background-color: #2196f3;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
-    width: 100%;
-}
 
 button:hover {
     background-color: #1976d2;
