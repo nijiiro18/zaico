@@ -79,14 +79,14 @@
 		    tableBody.innerHTML = "";
 		    filteredData.forEach(item => {
 		        const row = document.createElement('tr');
-		        row.innerHTML = 
+		        row.innerHTML = `
 		            <td>${item.id}</td>
 		            <td>${item.name}</td>
 		            <td>${item.category1}</td>
 		            <td>${item.category2}</td>
 		            <td>${item.quantity}</td>
 		            <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
-		        ;
+		        `;
 		        tableBody.appendChild(row);
 		    });
 		}
@@ -105,11 +105,11 @@
             selectedItems.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = "selected-item";
-                div.innerHTML = 
+                div.innerHTML = `
                     <span>${item.name} (${item.category1} - ${item.category2})</span>
                     <input type="number" min="1" max="${item.quantity}" placeholder="数量" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)">
                     <button onclick="removeFromStockOut(${index})">削除</button>
-                ;
+                `;
                 selectedItemsContainer.appendChild(div);
             });
         }
@@ -134,7 +134,7 @@
                 window.location.href = 'login.html';
             } else {
                 const userElement = document.getElementById('logged-in-user');
-                if (userElement) userElement.textContent = ログイン中: ${loggedInUser};
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
             }
         }
 
