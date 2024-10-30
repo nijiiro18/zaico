@@ -8,8 +8,6 @@
     <script>
         let inventoryData = [];
         let selectedItems = [];
-        let currentPage = 1;  // 現在のページ番号
-        const itemsPerPage = 10;  // 1ページあたりのアイテム数
 
         async function loadHeader() {
             try {
@@ -61,59 +59,73 @@
             });
         }
 
-        function updateTable(page = 1) {
-            const category1 = document.getElementById('category1').value;
-            const category2 = document.getElementById('category2').value;
-            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
-            const tableBody = document.getElementById('inventory-table-body');
-            if (!tableBody) {
-                console.error('Table body not found.');
-                return;
+        function updateTable() {
+		    const tableBody = document.getElementById('inventory-table-body');
+		    if (!tableBody) {
+		        console.error('Table body not found.');
+		        return; // テーブルがまだ存在しない場合は終了
+		    }
+		    
+		    const category1 = document.getElementById('category1').value;
+		    const category2 = document.getElementById('category2').value;
+		    const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+
+		    const filteredData = inventoryData.filter(item => {
+		        return (!category1 || item.category1 === category1) &&
+		               (!category2 || item.category2 === category2) &&
+		               (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
+		    });
+
+		    tableBody.innerHTML = "";
+		    filteredData.forEach(item => {
+		        const row = document.createElement('tr');
+		        row.innerHTML = 
+		            <td>${item.id}</td>
+		            <td>${item.name}</td>
+		            <td>${item.category1}</td>
+		            <td>${item.category2}</td>
+		            <td>${item.quantity}</td>
+		            <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
+		        ;
+		        tableBody.appendChild(row);
+		    });
+		}
+
+        function addToStockOut(itemId) {
+            const item = inventoryData.find(i => i.id === itemId);
+            if (!selectedItems.some(i => i.id === itemId)) {
+                selectedItems.push({ ...item, quantityToRemove: 0 });
+                updateSelectedItems();
             }
-
-            // データのフィルタリング
-            const filteredData = inventoryData.filter(item => {
-                return (!category1 || item.category1 === category1) &&
-                       (!category2 || item.category2 === category2) &&
-                       (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
-            });
-
-            // ページごとに表示するデータを取得
-            const startIndex = (page - 1) * itemsPerPage;
-            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
-
-            // テーブルを更新
-            tableBody.innerHTML = "";
-            paginatedData.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.id}</td>
-                    <td>${item.name}</td>
-                    <td>${item.category1}</td>
-                    <td>${item.category2}</td>
-                    <td>${item.quantity}</td>
-                    <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
-                `;
-                tableBody.appendChild(row);
-            });
-
-            // ページネーションを生成
-            generatePagination(filteredData.length);
-            currentPage = page;
         }
 
-        function generatePagination(totalItems) {
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = "";
+        function updateSelectedItems() {
+            const selectedItemsContainer = document.getElementById('selected-items');
+            selectedItemsContainer.innerHTML = "";
+            selectedItems.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "selected-item";
+                div.innerHTML = 
+                    <span>${item.name} (${item.category1} - ${item.category2})</span>
+                    <input type="number" min="1" max="${item.quantity}" placeholder="数量" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)">
+                    <button onclick="removeFromStockOut(${index})">削除</button>
+                ;
+                selectedItemsContainer.appendChild(div);
+            });
+        }
 
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.className = i === currentPage ? 'active' : '';
-                pageButton.onclick = () => updateTable(i);
-                pagination.appendChild(pageButton);
-            }
+        function updateQuantity(index, value) {
+            selectedItems[index].quantityToRemove = parseInt(value, 10) || 0;
+        }
+
+        function removeFromStockOut(index) {
+            selectedItems.splice(index, 1);
+            updateSelectedItems();
+        }
+
+        function proceedToConfirmation() {
+            sessionStorage.setItem('selectedStockOutItems', JSON.stringify(selectedItems));
+            window.location.href = 'stock-out-confirm.html';
         }
 
         function checkLogin() {
@@ -122,7 +134,7 @@
                 window.location.href = 'login.html';
             } else {
                 const userElement = document.getElementById('logged-in-user');
-                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
+                if (userElement) userElement.textContent = ログイン中: ${loggedInUser};
             }
         }
 
@@ -148,12 +160,19 @@
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1" onchange="updateTable()">
                         <option value="">すべてを選択</option>
+                        <option value="和洋裁素材">和洋裁素材</option>
+                        <option value="ハンドメイド">ハンドメイド</option>
                     </select>
                 </div>
                 <div>
                     <label for="category2">カテゴリ2:</label>
                     <select id="category2" onchange="updateTable()">
                         <option value="">すべてを選択</option>
+                        <option value="同色シャッペスパン">同色シャッペスパン</option>
+                        <option value="ばらシャッペスパン">ばらシャッペスパン</option>
+                        <option value="玉付きゴールド25cm">玉付きゴールド25cm</option>
+                        <option value="Arcobaleno">Arcobaleno</option>
+                        <option value="Bibgyor">Bibgyor</option>
                     </select>
                 </div>
                 <div>
@@ -176,9 +195,6 @@
                     <!-- データが JavaScript で動的に生成されます -->
                 </tbody>
             </table>
-            <div id="pagination" style="text-align:center; margin-top:10px;">
-                <!-- ページネーションボタンがここに生成されます -->
-            </div>
         </section>
     </main>
 </body>

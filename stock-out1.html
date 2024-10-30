@@ -8,6 +8,8 @@
     <script>
         let inventoryData = [];
         let selectedItems = [];
+        let currentPage = 1;  // 現在のページ
+        const itemsPerPage = 10;  // 1ページあたりの表示件数
 
         async function loadHeader() {
             try {
@@ -59,7 +61,7 @@
             });
         }
 
-        function updateTable() {
+        function updateTable(page = 1) {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
             const searchKeyword = document.getElementById('search-box').value.toLowerCase();
@@ -70,8 +72,13 @@
                        (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
             });
 
+            // ページごとに表示するデータ
+            const startIndex = (page - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+            // テーブルの更新
             tableBody.innerHTML = "";
-            filteredData.forEach(item => {
+            paginatedData.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
@@ -84,6 +91,23 @@
                 `;
                 tableBody.appendChild(row);
             });
+
+            generatePagination(filteredData.length);
+            currentPage = page;
+        }
+
+        function generatePagination(totalItems) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = "";
+
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = i === currentPage ? 'active' : '';
+                pageButton.onclick = () => updateTable(i);
+                pagination.appendChild(pageButton);
+            }
         }
 
         function addToStockOut(itemId) {
@@ -145,7 +169,7 @@
     </script>
 </head>
 <body>
-    <div id="header"></div> <!-- ヘッダーが読み込まれる場所 -->
+    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
 
     <main>
         <section id="stock-out">
@@ -182,6 +206,9 @@
                 </thead>
                 <tbody id="stock-out-table-body"></tbody>
             </table>
+            <div id="pagination" style="text-align: center; margin-top: 10px;">
+                <!-- ページネーションボタンがここに生成されます -->
+            </div>
             <h3>選択されたアイテム</h3>
             <div id="selected-items"></div>
             <button onclick="proceedToConfirmation()" style="margin-top: 20px;">確認画面に進む</button>
