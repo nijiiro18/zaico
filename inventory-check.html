@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <script>
         let inventoryData = [];
+        const today = new Date().toISOString().split('T')[0]; // 今日の日付
 
         async function loadHeader() {
             try {
@@ -26,7 +27,7 @@
                 inventoryData = await response.json();
                 inventoryData.forEach(item => {
                     item.actualQuantity = null; // 初期状態の actualQuantity を設定
-                    item.lastInventoryDate = "2024-09-30"; // ダミーの前回棚卸日
+                    item.lastInventoryDate = item.lastInventoryDate || "2024-09-30"; // ダミーの前回棚卸日
                 });
                 populateCategory1();
                 updateTable();
@@ -63,7 +64,7 @@
             });
         }
 
-        function updateTable() {
+        function updateTable(filterByIncomplete = false) {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
             const searchKeyword = document.getElementById('search-box').value.toLowerCase();
@@ -73,8 +74,9 @@
                 const matchesCategory1 = category1 === "" || item.category1 === category1;
                 const matchesCategory2 = category2 === "" || item.category2 === category2;
                 const matchesKeyword = searchKeyword === "" || item.name.toLowerCase().includes(searchKeyword);
+                const isIncomplete = !filterByIncomplete || item.lastInventoryDate !== today;
 
-                return matchesCategory1 && matchesCategory2 && matchesKeyword;
+                return matchesCategory1 && matchesCategory2 && matchesKeyword && isIncomplete;
             });
 
             tableBody.innerHTML = "";
@@ -101,6 +103,9 @@
             const actualQuantity = parseInt(value, 10);
             inventoryData[index].actualQuantity = actualQuantity;
             document.getElementById(`difference-${index}`).textContent = actualQuantity - inventoryData[index].quantity;
+
+            // 棚卸日を今日の日付に更新
+            inventoryData[index].lastInventoryDate = today;
         }
 
         function saveInventoryCheck() {
@@ -117,6 +122,10 @@
                 alert("差異がないため、更新は行われませんでした。");
             }
             updateTable();
+        }
+
+        function checkIncompleteInventory() {
+            updateTable(true);
         }
 
         function checkLogin() {
@@ -181,6 +190,7 @@
                 </tbody>
             </table>
             <button onclick="saveInventoryCheck()" style="margin-top: 20px;">棚卸実施</button>
+            <button onclick="checkIncompleteInventory()" style="margin-top: 20px;">棚卸状況確認</button>
         </section>
     </main>
     <footer>
