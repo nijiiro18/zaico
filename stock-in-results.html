@@ -7,32 +7,32 @@
     <link rel="stylesheet" href="styles.css">
     <script>
         function displayStockInResults() {
-            // 入庫処理の結果データを取得
-            const stockInResults = JSON.parse(sessionStorage.getItem('stockInResults'));
-            const company = sessionStorage.getItem('selectedCompany');
-            const tableBody = document.getElementById('stock-in-result-table-body');
+            // sessionStorageから入庫データを取得
+            const stockInItems = JSON.parse(sessionStorage.getItem('stockInResults'));
 
-            document.getElementById('company-name').textContent = company === 'chuko' ? 'チューコー' : 'ウィングス';
+            if (!stockInItems) {
+                alert("入庫データがありません。");
+                return;
+            }
 
-            stockInResults.forEach(item => {
+            // テーブルにデータを表示
+            const tableBody = document.getElementById('stock-in-results-table-body');
+            stockInItems.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
                     <td>${item.name}</td>
-                    <td>${item.previousQuantity}</td>
-                    <td>${item.addedQuantity}</td>
-                    <td>${item.newQuantity}</td>
-                    <td>${item.status}</td>
+                    <td>${item.currentQuantity}</td>
+                    <td>${item.quantityToAdd}</td>
+                    <td>${item.currentQuantity + item.quantityToAdd}</td>
                 `;
                 tableBody.appendChild(row);
             });
         }
 
-        function returnToStockIn() {
-            window.location.href = 'stock-in.html';
-        }
-
-        window.onload = displayStockInResults;
+        window.onload = function() {
+            displayStockInResults();
+        };
     </script>
 </head>
 <body>
@@ -41,8 +41,7 @@
     </header>
     <main>
         <section>
-            <h2>入庫処理が完了しました</h2>
-            <p><strong>会社名:</strong> <span id="company-name"></span></p>
+            <h2>入庫が完了しました</h2>
             <h3>入庫結果一覧</h3>
             <table>
                 <thead>
@@ -52,14 +51,12 @@
                         <th>入庫前の個数</th>
                         <th>入庫数</th>
                         <th>入庫後の個数</th>
-                        <th>ステータス</th>
                     </tr>
                 </thead>
-                <tbody id="stock-in-result-table-body">
-                    <!-- 入庫結果リストがここに表示されます -->
+                <tbody id="stock-in-results-table-body">
+                    <!-- 入庫結果データをここに表示 -->
                 </tbody>
             </table>
-            <button onclick="returnToStockIn()" style="margin-top: 10px;">入庫画面に戻る</button>
         </section>
     </main>
 </body>
