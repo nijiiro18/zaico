@@ -24,7 +24,10 @@
             try {
                 const response = await fetch('inventoryData.json');
                 inventoryData = await response.json();
-                inventoryData.forEach(item => item.actualQuantity = null); // 初期状態の actualQuantity を設定
+                inventoryData.forEach(item => {
+                    item.actualQuantity = null; // 初期状態の actualQuantity を設定
+                    item.lastInventoryDate = "2024-09-30"; // ダミーの前回棚卸日
+                });
                 populateCategory1();
                 updateTable();
             } catch (error) {
@@ -78,10 +81,11 @@
             filteredData.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${item.id}</td>
-                    <td>${item.name}</td>
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.lastInventoryDate}</td>
                     <td>${item.quantity}</td>
                     <td>
                         <input type="number" min="0" placeholder="実際の数量" value="${item.actualQuantity !== null ? item.actualQuantity : ''}" 
@@ -156,18 +160,19 @@
                 </div>
                 <div>
                     <label for="search-box">商品名検索:</label>
-                    <input type="text" id="search-box" placeholder="物品名で検索" oninput="updateTable();">
+                    <input type="text" id="search-box" placeholder="商品名で検索" oninput="updateTable();">
                 </div>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>商品ID</th>
-                        <th>商品名</th>
                         <th>カテゴリ1</th>
                         <th>カテゴリ2</th>
-                        <th>システム上の数量</th>
-                        <th>実際の数量</th>
+                        <th>商品名</th>
+                        <th>種類（色）</th>
+                        <th>前回棚卸日</th>
+                        <th>登録されている在庫数</th>
+                        <th>棚卸数</th>
                         <th>差異</th>
                     </tr>
                 </thead>
@@ -175,7 +180,7 @@
                     <!-- JavaScriptで動的に行を生成します -->
                 </tbody>
             </table>
-            <button onclick="saveInventoryCheck()" style="margin-top: 20px;">在庫更新</button>
+            <button onclick="saveInventoryCheck()" style="margin-top: 20px;">棚卸実施</button>
         </section>
     </main>
     <footer>
