@@ -6,7 +6,6 @@
     <title>にじいろ市場 - 発注アラート</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        // ヘッダーを読み込む関数
         async function loadHeader() {
             try {
                 const response = await fetch('header.html');
@@ -19,7 +18,6 @@
             }
         }
 
-        // alertDataを取得し、発注アラートの設定を管理
         let alertData = [];
 
         async function loadAlertData() {
@@ -86,6 +84,7 @@
                         <input type="number" min="0" placeholder="閾値" value="${item.threshold}" 
                         onchange="updateThreshold(${index}, this.value)">
                     </td>
+                    <td>${item.color}</td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -106,6 +105,7 @@
                 alert('有効なメールアドレスを入力してください。');
             }
         }
+
         function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
@@ -165,6 +165,7 @@
                         <th>カテゴリ2</th>
                         <th>在庫数</th>
                         <th>閾値</th>
+                        <th>種類（色）</th>
                     </tr>
                 </thead>
                 <tbody id="alert-table-body">
