@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 入庫結果</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function displayStockInResults() {
+            // 入庫処理の結果データを取得
+            const stockInResults = JSON.parse(sessionStorage.getItem('stockInResults'));
+            const company = sessionStorage.getItem('selectedCompany');
+            const tableBody = document.getElementById('stock-in-result-table-body');
+
+            document.getElementById('company-name').textContent = company === 'chuko' ? 'チューコー' : 'ウィングス';
+
+            stockInResults.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.previousQuantity}</td>
+                    <td>${item.addedQuantity}</td>
+                    <td>${item.newQuantity}</td>
+                    <td>${item.status}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function returnToStockIn() {
+            window.location.href = 'stock-in.html';
+        }
+
+        window.onload = displayStockInResults;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場 - 入庫結果</h1>
+    </header>
+    <main>
+        <section>
+            <h2>入庫処理が完了しました</h2>
+            <p><strong>会社名:</strong> <span id="company-name"></span></p>
+            <h3>入庫結果一覧</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>商品名</th>
+                        <th>入庫前の個数</th>
+                        <th>入庫数</th>
+                        <th>入庫後の個数</th>
+                        <th>ステータス</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-in-result-table-body">
+                    <!-- 入庫結果リストがここに表示されます -->
+                </tbody>
+            </table>
+            <button onclick="returnToStockIn()" style="margin-top: 10px;">入庫画面に戻る</button>
+        </section>
+    </main>
+</body>
+</html>
