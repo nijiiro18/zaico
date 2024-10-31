@@ -8,8 +8,8 @@
     <script>
         let inventoryData = [];
         let selectedItems = [];
-        let currentPage = 1; // 現在のページ
-        const itemsPerPage = 10; // 1ページあたりの表示件数
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         async function loadHeader() {
             try {
@@ -72,11 +72,9 @@
                        (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
             });
 
-            // ページごとに表示するデータ
             const startIndex = (currentPage - 1) * itemsPerPage;
             const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-            // テーブルの更新
             tableBody.innerHTML = "";
             paginatedData.forEach(item => {
                 const row = document.createElement('tr');
@@ -101,7 +99,6 @@
 
             const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-            // 前ページボタン
             const prevButton = document.createElement('button');
             prevButton.textContent = '前ページ';
             prevButton.onclick = () => {
@@ -113,7 +110,6 @@
             prevButton.disabled = currentPage === 1;
             pagination.appendChild(prevButton);
 
-            // 次ページボタン
             const nextButton = document.createElement('button');
             nextButton.textContent = '次ページ';
             nextButton.onclick = () => {
@@ -135,17 +131,20 @@
         }
 
         function updateSelectedItems() {
-            const selectedItemsContainer = document.getElementById('selected-items');
-            selectedItemsContainer.innerHTML = "";
+            const selectedItemsTableBody = document.getElementById('selected-items-table-body');
+            selectedItemsTableBody.innerHTML = "";
             selectedItems.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = "selected-item";
-                div.innerHTML = `
-                    <span>${item.name} (${item.category1} - ${item.category2})</span>
-                    <input type="number" min="1" max="${item.quantity}" placeholder="数量" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)">
-                    <button onclick="removeFromStockOut(${index})">削除</button>
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.quantity}</td>
+                    <td><input type="number" min="1" max="${item.quantity}" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)"></td>
+                    <td><button onclick="removeFromStockOut(${index})">削除</button></td>
                 `;
-                selectedItemsContainer.appendChild(div);
+                selectedItemsTableBody.appendChild(row);
             });
         }
 
@@ -185,7 +184,7 @@
     </script>
 </head>
 <body>
-    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
+    <div id="header"></div>
 
     <main>
         <section id="stock-out">
@@ -223,10 +222,23 @@
                 <tbody id="stock-out-table-body"></tbody>
             </table>
             <div id="pagination" style="text-align: center; margin-top: 10px;">
-                <!-- ページネーションボタンがここに生成されます -->
             </div>
+
             <h3>選択されたアイテム</h3>
-            <div id="selected-items"></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品ID</th>
+                        <th>商品名</th>
+                        <th>カテゴリ1</th>
+                        <th>カテゴリ2</th>
+                        <th>数量</th>
+                        <th>出庫数量</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="selected-items-table-body"></tbody>
+            </table>
             <button onclick="proceedToConfirmation()" style="margin-top: 20px;">確認画面に進む</button>
         </section>
     </main>
