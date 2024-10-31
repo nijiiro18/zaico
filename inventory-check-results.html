@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>にじいろ市場 - 棚卸結果</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function displayResults() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const viewIncomplete = urlParams.get('view') === 'incomplete';
+            const results = viewIncomplete 
+                ? JSON.parse(sessionStorage.getItem('incompleteInventoryItems'))
+                : JSON.parse(sessionStorage.getItem('inventoryCheckChanges'));
+
+            if (!results) {
+                alert("表示する棚卸データがありません。");
+                return;
+            }
+
+            const tableBody = document.getElementById('results-table-body');
+            tableBody.innerHTML = ""; // クリア
+
+            results.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.actualQuantity || ''}</td>
+                    <td>${item.actualQuantity !== null ? item.actualQuantity - item.quantity : ''}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function goBackToInventoryCheck() {
+            window.location.href = 'inventory-check.html';
+        }
+
+        window.onload = displayResults;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>にじいろ市場 - 棚卸結果</h1>
+    </header>
+    <main>
+        <section>
+            <h2>${viewIncomplete ? '未実施の棚卸品目一覧' : '棚卸差異一覧'}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>カテゴリ1</th>
+                        <th>カテゴリ2</th>
+                        <th>商品名</th>
+                        <th>種類（色）</th>
+                        <th>登録されている在庫数</th>
+                        <th>実際の在庫数</th>
+                        <th>差異</th>
+                    </tr>
+                </thead>
+                <tbody id="results-table-body">
+                    <!-- JavaScriptで動的に行を生成 -->
+                </tbody>
+            </table>
+            <button onclick="goBackToInventoryCheck()" style="margin-top: 20px;">棚卸画面へ戻る</button>
+        </section>
+    </main>
+</body>
+</html>

@@ -109,23 +109,15 @@
         }
 
         function saveInventoryCheck() {
-            let changes = [];
-            inventoryData.forEach(item => {
-                if (item.actualQuantity !== null && item.actualQuantity !== item.quantity) {
-                    changes.push(`${item.name} - 実際: ${item.actualQuantity}, システム: ${item.quantity}`);
-                    item.quantity = item.actualQuantity; // システム上の在庫を更新
-                }
-            });
-            if (changes.length > 0) {
-                alert("以下の在庫が更新されました:\n" + changes.join("\n"));
-            } else {
-                alert("差異がないため、更新は行われませんでした。");
-            }
-            updateTable();
+            const changes = inventoryData.filter(item => item.actualQuantity !== null && item.actualQuantity !== item.quantity);
+            sessionStorage.setItem('inventoryCheckChanges', JSON.stringify(changes));
+            window.location.href = 'inventory-check-results.html';
         }
 
         function checkIncompleteInventory() {
-            updateTable(true);
+            const incompleteItems = inventoryData.filter(item => item.lastInventoryDate !== today);
+            sessionStorage.setItem('incompleteInventoryItems', JSON.stringify(incompleteItems));
+            window.location.href = 'inventory-check-results.html?view=incomplete';
         }
 
         function checkLogin() {
