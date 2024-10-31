@@ -173,6 +173,18 @@
             <h2>在庫検索</h2>
             <div class="search-container">
                 <div>
+                    <div>
+                        <label for="product-id">商品ID:</label>
+                        <select id="product-id" onchange="updateTable()">
+                            <option value="">すべてを選択</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="product-name">商品名:</label>
+                        <select id="product-name" onchange="updateTable()">
+                            <option value="">すべてを選択</option>
+                        </select>
+                    </div>
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1" onchange="updateTable()">
                         <option value="">すべてを選択</option>
@@ -181,18 +193,6 @@
                 <div>
                     <label for="category2">カテゴリ2:</label>
                     <select id="category2" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="product-id">商品ID:</label>
-                    <select id="product-id" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="product-name">商品名:</label>
-                    <select id="product-name" onchange="updateTable()">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
