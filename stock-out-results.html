@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>にじいろ市場 - 出庫確認</title>
+    <title>にじいろ市場 - 出庫結果</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        function displayStockOutDetails() {
-            const selectedItems = JSON.parse(sessionStorage.getItem('selectedStockOutItems'));
+        function displayStockOutResults() {
+            const confirmedItems = JSON.parse(sessionStorage.getItem('confirmedStockOutItems'));
 
-            if (!selectedItems || selectedItems.length === 0) {
-                alert("出庫する商品が選択されていません。");
+            if (!confirmedItems) {
+                alert("出庫データがありません。");
                 window.location.href = 'inventory-search.html';
                 return;
             }
 
-            const tableBody = document.getElementById('stock-out-confirm-table-body');
-            selectedItems.forEach(item => {
+            const tableBody = document.getElementById('stock-out-results-table-body');
+            confirmedItems.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
@@ -31,23 +31,25 @@
             });
         }
 
-        function confirmStockOut() {
-            sessionStorage.setItem('confirmedStockOutItems', sessionStorage.getItem('selectedStockOutItems'));
-            window.location.href = 'stock-out-results.html';
+        function goToTop() {
+            sessionStorage.removeItem('selectedStockOutItems');
+            sessionStorage.removeItem('confirmedStockOutItems');
+            window.location.href = 'inventory-search.html';
         }
 
         window.onload = function() {
-            displayStockOutDetails();
+            displayStockOutResults();
         };
     </script>
 </head>
 <body>
     <header>
-        <h1>にじいろ市場 - 出庫確認</h1>
+        <h1>にじいろ市場 - 出庫結果</h1>
     </header>
     <main>
         <section>
-            <h2>出庫内容を確認してください</h2>
+            <h2>出庫が完了しました</h2>
+            <h3>出庫結果一覧</h3>
             <table>
                 <thead>
                     <tr>
@@ -60,11 +62,11 @@
                         <th>出庫後の在庫数</th>
                     </tr>
                 </thead>
-                <tbody id="stock-out-confirm-table-body">
-                    <!-- 出庫商品リストをここに表示 -->
+                <tbody id="stock-out-results-table-body">
+                    <!-- 出庫結果データをここに表示 -->
                 </tbody>
             </table>
-            <button onclick="confirmStockOut()" style="margin-top: 20px;">出庫を確定する</button>
+            <button onclick="goToTop()" style="margin-top: 20px;">トップに戻る</button>
         </section>
     </main>
 </body>
