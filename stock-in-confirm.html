@@ -38,8 +38,8 @@
         }
 
         function completeStockIn() {
-            alert("入庫が完了しました。");
-            window.location.href = 'stock-in.html';
+            sessionStorage.setItem('stockInResults', JSON.stringify(stockInItems));
+            window.location.href = 'stock-in-results.html';
         }
 
         window.onload = function() {
