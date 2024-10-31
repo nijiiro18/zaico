@@ -6,8 +6,7 @@
     <title>にじいろ市場 - 売れ筋表示</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        // ヘッダーを読み込む関数
-       async function loadHeader() {
+        async function loadHeader() {
             try {
                 const response = await fetch('header.html');
                 const headerContent = await response.text();
@@ -18,16 +17,17 @@
                 console.error('ヘッダーの読み込みに失敗しました:', error);
             }
         }
+
         const salesData = [
-            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 120, date: "2024-01-10" },
-            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 6, sales: 85, date: "2024-02-05" },
-            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", quantity: 1, sales: 60, date: "2024-02-15" },
-            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", quantity: 11, sales: 140, date: "2024-03-02" },
-            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", quantity: 20, sales: 75, date: "2024-03-10" },
-            { id: "55601030", name: "くまさん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 1, sales: 30, date: "2024-03-15" },
-            { id: "55601031", name: "ぱんださん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", quantity: 2, sales: 50, date: "2024-03-20" },
-            { id: "55601032", name: "手作りお財布", category1: "ハンドメイド", category2: "Bibgyor", quantity: 1, sales: 45, date: "2024-03-25" },
-            { id: "55601033", name: "手作り革製品", category1: "ハンドメイド", category2: "Bibgyor", quantity: 3, sales: 65, date: "2024-03-30" }
+            { id: "55601016", name: "2", category1: "和洋裁素材", category2: "同色シャッペスパン", color: "ブルー", sales: 120, date: "2024-01-10" },
+            { id: "55601017", name: "3", category1: "和洋裁素材", category2: "同色シャッペスパン", color: "レッド", sales: 85, date: "2024-02-05" },
+            { id: "55580459", name: "5", category1: "和洋裁素材", category2: "ばらシャッペスパン", color: "イエロー", sales: 60, date: "2024-02-15" },
+            { id: "55601027", name: "103", category1: "和洋裁素材", category2: "同色シャッペスパン", color: "グリーン", sales: 140, date: "2024-03-02" },
+            { id: "47701139", name: "アクアブルー 544", category1: "和洋裁素材", category2: "玉付きゴールド25cm", color: "アクアブルー", sales: 75, date: "2024-03-10" },
+            { id: "55601030", name: "くまさん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", color: "ブラウン", sales: 30, date: "2024-03-15" },
+            { id: "55601031", name: "ぱんださん刺繍", category1: "ハンドメイド", category2: "Arcobaleno", color: "ホワイト", sales: 50, date: "2024-03-20" },
+            { id: "55601032", name: "手作りお財布", category1: "ハンドメイド", category2: "Bibgyor", color: "ブラック", sales: 45, date: "2024-03-25" },
+            { id: "55601033", name: "手作り革製品", category1: "ハンドメイド", category2: "Bibgyor", color: "レザー", sales: 65, date: "2024-03-30" }
         ];
 
         function sortSalesData() {
@@ -49,15 +49,16 @@
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${item.id}</td>
-                        <td>${item.name}</td>
                         <td>${item.category1}</td>
                         <td>${item.category2}</td>
+                        <td>${item.color}</td>
                         <td>${item.sales}</td>
                     `;
                     tableBody.appendChild(row);
                 });
         }
-         function checkLogin() {
+
+        function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
                 window.location.href = 'login.html';
@@ -72,9 +73,8 @@
             window.location.href = 'login.html';
         }
 
-
         window.onload = function() {
-            loadHeader(); // 共通ヘッダーを読み込む
+            loadHeader();
             sortSalesData();
             updateSalesTable();
         };
@@ -95,9 +95,9 @@
                 <thead>
                     <tr>
                         <th>商品ID</th>
-                        <th>商品名</th>
                         <th>カテゴリ1</th>
                         <th>カテゴリ2</th>
+                        <th>種類（色）</th>
                         <th>売上数</th>
                     </tr>
                 </thead>
