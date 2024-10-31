@@ -29,6 +29,8 @@
                 inventoryData = await response.json();
                 populateCategory1();
                 populateCategory2();
+                populateProductId();
+                populateProductName();
                 updateTable();
             } catch (error) {
                 console.error('在庫データの読み込みに失敗しました:', error);
@@ -61,10 +63,35 @@
             });
         }
 
+        function populateProductId() {
+            const productIdSelect = document.getElementById('product-id');
+            const uniqueProductIds = [...new Set(inventoryData.map(item => item.id))];
+            productIdSelect.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueProductIds.forEach(id => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = id;
+                productIdSelect.appendChild(option);
+            });
+        }
+
+        function populateProductName() {
+            const productNameSelect = document.getElementById('product-name');
+            const uniqueProductNames = [...new Set(inventoryData.map(item => item.name))];
+            productNameSelect.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueProductNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                productNameSelect.appendChild(option);
+            });
+        }
+
         function updateTable(page = 1) {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
-            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+            const selectedProductId = document.getElementById('product-id').value;
+            const selectedProductName = document.getElementById('product-name').value;
             const tableBody = document.getElementById('inventory-table-body');
             if (!tableBody) {
                 console.error('Table body not found.');
@@ -75,7 +102,8 @@
             const filteredData = inventoryData.filter(item => {
                 return (!category1 || item.category1 === category1) &&
                        (!category2 || item.category2 === category2) &&
-                       (!searchKeyword || item.name.toLowerCase().includes(searchKeyword));
+                       (!selectedProductId || item.id === selectedProductId) &&
+                       (!selectedProductName || item.name === selectedProductName);
             });
 
             // ページごとに表示するデータを取得
@@ -157,8 +185,16 @@
                     </select>
                 </div>
                 <div>
-                    <label for="search-box">商品名で検索:</label>
-                    <input type="text" id="search-box" placeholder="商品名を入力" oninput="updateTable()">
+                    <label for="product-id">商品ID:</label>
+                    <select id="product-id" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-name">商品名:</label>
+                    <select id="product-name" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
                 </div>
             </div>
             <table>
