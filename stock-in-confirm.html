@@ -38,7 +38,8 @@
         }
 
         function completeStockIn() {
-            sessionStorage.setItem('stockInResults', JSON.stringify(stockInItems));
+            // stockInItems をセッションストレージに保存
+            sessionStorage.setItem('stockInItems', JSON.stringify(stockInItems));
             window.location.href = 'stock-in-results.html';
         }
 
