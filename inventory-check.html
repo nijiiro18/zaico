@@ -29,54 +29,51 @@
                     item.actualQuantity = null; // 初期状態の actualQuantity を設定
                     item.lastInventoryDate = item.lastInventoryDate || "2024-09-30"; // ダミーの前回棚卸日
                 });
-                populateCategory1();
+                populateFilters();
                 updateTable();
             } catch (error) {
                 console.error('在庫データの読み込みに失敗しました:', error);
             }
         }
 
-        function populateCategory1() {
-            const category1Select = document.getElementById('category1');
-            const uniqueCategories1 = [...new Set(inventoryData.map(item => item.category1))];
+        function populateFilters() {
+            const category1Set = new Set(inventoryData.map(item => item.category1));
+            const category2Set = new Set(inventoryData.map(item => item.category2));
+            const productIdSet = new Set(inventoryData.map(item => item.id));
+            const productNameSet = new Set(inventoryData.map(item => item.name));
 
-            category1Select.innerHTML = '<option value="">すべてを選択</option>';
-            uniqueCategories1.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                category1Select.appendChild(option);
-            });
+            populateDropdown('category1', category1Set);
+            populateDropdown('category2', category2Set);
+            populateDropdown('product-id', productIdSet);
+            populateDropdown('product-name', productNameSet);
         }
 
-        function populateCategory2() {
-            const category1 = document.getElementById('category1').value;
-            const category2Select = document.getElementById('category2');
-            const filteredData = inventoryData.filter(item => item.category1 === category1 || category1 === "");
-            const uniqueCategories2 = [...new Set(filteredData.map(item => item.category2))];
-
-            category2Select.innerHTML = '<option value="">すべてを選択</option>';
-            uniqueCategories2.forEach(category => {
+        function populateDropdown(elementId, valuesSet) {
+            const selectElement = document.getElementById(elementId);
+            selectElement.innerHTML = '<option value="">すべてを選択</option>';
+            valuesSet.forEach(value => {
                 const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                category2Select.appendChild(option);
+                option.value = value;
+                option.textContent = value;
+                selectElement.appendChild(option);
             });
         }
 
         function updateTable(filterByIncomplete = false) {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
-            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+            const productId = document.getElementById('product-id').value;
+            const productName = document.getElementById('product-name').value.toLowerCase();
             const tableBody = document.getElementById('inventory-check-table-body');
 
             const filteredData = inventoryData.filter(item => {
-                const matchesCategory1 = category1 === "" || item.category1 === category1;
-                const matchesCategory2 = category2 === "" || item.category2 === category2;
-                const matchesKeyword = searchKeyword === "" || item.name.toLowerCase().includes(searchKeyword);
+                const matchesCategory1 = !category1 || item.category1 === category1;
+                const matchesCategory2 = !category2 || item.category2 === category2;
+                const matchesProductId = !productId || item.id === productId;
+                const matchesProductName = !productName || item.name.toLowerCase().includes(productName);
                 const isIncomplete = !filterByIncomplete || item.lastInventoryDate !== today;
 
-                return matchesCategory1 && matchesCategory2 && matchesKeyword && isIncomplete;
+                return matchesCategory1 && matchesCategory2 && matchesProductId && matchesProductName && isIncomplete;
             });
 
             tableBody.innerHTML = "";
@@ -103,8 +100,6 @@
             const actualQuantity = parseInt(value, 10);
             inventoryData[index].actualQuantity = actualQuantity;
             document.getElementById(`difference-${index}`).textContent = actualQuantity - inventoryData[index].quantity;
-
-            // 棚卸日を今日の日付に更新
             inventoryData[index].lastInventoryDate = today;
         }
 
@@ -142,11 +137,23 @@
     </script>
 </head>
 <body>
-    <div id="header"></div> <!-- ヘッダーが読み込まれる場所 -->
+    <div id="header"></div>
     <main>
         <section id="inventory-check">
             <h2>棚卸</h2>
             <div class="search-container">
+                <div>
+                    <label for="product-id">商品ID:</label>
+                    <select id="product-id" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-name">商品名:</label>
+                    <select id="product-name" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
                 <div>
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1" onchange="populateCategory2(); updateTable();">
@@ -158,10 +165,6 @@
                     <select id="category2" onchange="updateTable();">
                         <option value="">すべてを選択</option>
                     </select>
-                </div>
-                <div>
-                    <label for="search-box">商品名検索:</label>
-                    <input type="text" id="search-box" placeholder="商品名で検索" oninput="updateTable();">
                 </div>
             </div>
             <table>
@@ -178,7 +181,6 @@
                     </tr>
                 </thead>
                 <tbody id="inventory-check-table-body">
-                    <!-- JavaScriptで動的に行を生成します -->
                 </tbody>
             </table>
             <button onclick="saveInventoryCheck()" style="margin-top: 20px;">棚卸実施</button>

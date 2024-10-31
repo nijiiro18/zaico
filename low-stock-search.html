@@ -33,32 +33,49 @@
         function populateFilters() {
             const category1Set = new Set(inventoryData.map(item => item.category1));
             const category2Set = new Set(inventoryData.map(item => item.category2));
+            const productIdSet = new Set(inventoryData.map(item => item.id));
+            const productNameSet = new Set(inventoryData.map(item => item.name));
+
             const category1Select = document.getElementById('category1');
             const category2Select = document.getElementById('category2');
+            const productIdSelect = document.getElementById('product-id');
+            const productNameSelect = document.getElementById('product-name');
+
             category1Select.innerHTML = '<option value="">すべて</option>';
             category2Select.innerHTML = '<option value="">すべて</option>';
+            productIdSelect.innerHTML = '<option value="">すべて</option>';
+            productNameSelect.innerHTML = '<option value="">すべて</option>';
+
             category1Set.forEach(category => {
                 category1Select.innerHTML += `<option value="${category}">${category}</option>`;
             });
             category2Set.forEach(category => {
                 category2Select.innerHTML += `<option value="${category}">${category}</option>`;
             });
+            productIdSet.forEach(id => {
+                productIdSelect.innerHTML += `<option value="${id}">${id}</option>`;
+            });
+            productNameSet.forEach(name => {
+                productNameSelect.innerHTML += `<option value="${name}">${name}</option>`;
+            });
         }
 
         function renderTable() {
             const category1Filter = document.getElementById('category1').value;
             const category2Filter = document.getElementById('category2').value;
-            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+            const productIdFilter = document.getElementById('product-id').value;
+            const productNameFilter = document.getElementById('product-name').value;
             const statusFilter = document.querySelector('input[name="status-filter"]:checked').value;
             const tableBody = document.getElementById('low-stock-table-body');
 
             const filteredData = inventoryData.filter(item => {
                 const matchesCategory1 = !category1Filter || item.category1 === category1Filter;
                 const matchesCategory2 = !category2Filter || item.category2 === category2Filter;
-                const matchesKeyword = item.name.toLowerCase().includes(searchKeyword);
+                const matchesProductId = !productIdFilter || item.id === productIdFilter;
+                const matchesProductName = !productNameFilter || item.name === productNameFilter;
                 const matchesStatus = statusFilter === "すべて" || item.status === statusFilter;
 
-                return matchesCategory1 && matchesCategory2 && matchesKeyword && matchesStatus;
+                return matchesCategory1 && matchesCategory2 && matchesProductId && matchesProductName && matchesStatus;
             }).sort((a, b) => a.quantity - b.quantity);
 
             tableBody.innerHTML = '';
@@ -81,12 +98,13 @@
             loadInventoryData();
             document.getElementById('category1').addEventListener('change', renderTable);
             document.getElementById('category2').addEventListener('change', renderTable);
-            document.getElementById('search-box').addEventListener('input', renderTable);
+            document.getElementById('product-id').addEventListener('change', renderTable);
+            document.getElementById('product-name').addEventListener('change', renderTable);
             document.querySelectorAll('input[name="status-filter"]').forEach(radio => {
                 radio.addEventListener('change', renderTable);
             });
         };
-        
+
         function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
@@ -101,7 +119,6 @@
             sessionStorage.removeItem('loggedInUser');
             window.location.href = 'login.html';
         }
-
     </script>
 </head>
 <body>
@@ -111,6 +128,18 @@
         <section>
             <h2>在庫少の商品検索</h2>
             <div class="search-container">
+                <div>
+                    <label for="product-id">商品ID:</label>
+                    <select id="product-id">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-name">商品名:</label>
+                    <select id="product-name">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
                 <div>
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1">
@@ -122,10 +151,6 @@
                     <select id="category2">
                         <option value="">すべてを選択</option>
                     </select>
-                </div>
-                <div>
-                    <label for="search-box">商品名で検索:</label>
-                    <input type="text" id="search-box" placeholder="商品名を入力">
                 </div>
             </div>
             <div class="filter-group">

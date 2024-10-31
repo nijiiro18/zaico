@@ -24,51 +24,49 @@
             try {
                 const response = await fetch('alertData.json');
                 alertData = await response.json();
-                populateCategory1();
-                populateCategory2();
+                populateFilters();
                 updateTable();
             } catch (error) {
                 console.error('発注アラートデータの読み込みに失敗しました:', error);
             }
         }
 
-        function populateCategory1() {
-            const category1Select = document.getElementById('category1');
-            const uniqueCategories1 = [...new Set(alertData.map(item => item.category1))];
-            category1Select.innerHTML = '<option value="">すべてを選択</option>';
-            uniqueCategories1.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                category1Select.appendChild(option);
-            });
+        function populateFilters() {
+            const category1Set = new Set(alertData.map(item => item.category1));
+            const category2Set = new Set(alertData.map(item => item.category2));
+            const productIdSet = new Set(alertData.map(item => item.id));
+            const productNameSet = new Set(alertData.map(item => item.name));
+
+            populateDropdown('category1', category1Set);
+            populateDropdown('category2', category2Set);
+            populateDropdown('product-id', productIdSet);
+            populateDropdown('product-name', productNameSet);
         }
 
-        function populateCategory2() {
-            const category1 = document.getElementById('category1').value;
-            const category2Select = document.getElementById('category2');
-            const filteredData = alertData.filter(item => item.category1 === category1 || category1 === "");
-            const uniqueCategories2 = [...new Set(filteredData.map(item => item.category2))];
-            category2Select.innerHTML = '<option value="">すべてを選択</option>';
-            uniqueCategories2.forEach(category => {
+        function populateDropdown(elementId, valuesSet) {
+            const selectElement = document.getElementById(elementId);
+            selectElement.innerHTML = '<option value="">すべてを選択</option>';
+            valuesSet.forEach(value => {
                 const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                category2Select.appendChild(option);
+                option.value = value;
+                option.textContent = value;
+                selectElement.appendChild(option);
             });
         }
 
         function updateTable() {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
-            const searchKeyword = document.getElementById('search-box').value.toLowerCase();
+            const productId = document.getElementById('product-id').value;
+            const productName = document.getElementById('product-name').value.toLowerCase();
             const tableBody = document.getElementById('alert-table-body');
 
             const filteredData = alertData.filter(item => {
                 const matchesCategory1 = category1 === "" || item.category1 === category1;
                 const matchesCategory2 = category2 === "" || item.category2 === category2;
-                const matchesKeyword = searchKeyword === "" || item.name.toLowerCase().includes(searchKeyword);
-                return matchesCategory1 && matchesCategory2 && matchesKeyword;
+                const matchesProductId = productId === "" || item.id === productId;
+                const matchesProductName = productName === "" || item.name.toLowerCase().includes(productName);
+                return matchesCategory1 && matchesCategory2 && matchesProductId && matchesProductName;
             });
 
             tableBody.innerHTML = "";
@@ -129,7 +127,7 @@
     </script>
 </head>
 <body>
-    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
+    <div id="header"></div>
     <main>
         <section id="order-alerts">
             <h2>発注アラート設定</h2>
@@ -139,6 +137,18 @@
                 <button onclick="registerEmail()">メールアドレス登録</button>
             </div>
             <div class="search-container">
+                <div>
+                    <label for="product-id">商品ID:</label>
+                    <select id="product-id" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-name">商品名:</label>
+                    <select id="product-name" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
                 <div>
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1" onchange="populateCategory2(); updateTable();">
@@ -169,7 +179,6 @@
                     </tr>
                 </thead>
                 <tbody id="alert-table-body">
-                    <!-- JavaScriptで動的に行を生成します -->
                 </tbody>
             </table>
         </section>
