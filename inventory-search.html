@@ -7,9 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <script>
         let inventoryData = [];
-        let selectedItems = [];
-        let currentPage = 1;  // 現在のページ番号
-        const itemsPerPage = 10;  // 1ページあたりのアイテム数
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         async function loadHeader() {
             try {
@@ -93,12 +92,12 @@
             const selectedProductId = document.getElementById('product-id').value;
             const selectedProductName = document.getElementById('product-name').value;
             const tableBody = document.getElementById('inventory-table-body');
+
             if (!tableBody) {
                 console.error('Table body not found.');
                 return;
             }
 
-            // データのフィルタリング
             const filteredData = inventoryData.filter(item => {
                 return (!category1 || item.category1 === category1) &&
                        (!category2 || item.category2 === category2) &&
@@ -106,13 +105,13 @@
                        (!selectedProductName || item.name === selectedProductName);
             });
 
-            // ページごとに表示するデータを取得
             const startIndex = (page - 1) * itemsPerPage;
             const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-            // テーブルを更新
             tableBody.innerHTML = "";
             paginatedData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                                    item.status === '在庫少' ? 'status-low' : 'status-normal';
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
@@ -120,12 +119,11 @@
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
                     <td>${item.quantity}</td>
-                    <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
+                    <td class="${statusClass}">${item.status}</td>
                 `;
                 tableBody.appendChild(row);
             });
 
-            // ページネーションを生成
             generatePagination(filteredData.length);
             currentPage = page;
         }
@@ -166,7 +164,7 @@
     </script>
 </head>
 <body>
-    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
+    <div id="header"></div>
 
     <main>
         <section id="inventory-search">
@@ -208,13 +206,9 @@
                         <th>ステータス</th>
                     </tr>
                 </thead>
-                <tbody id="inventory-table-body">
-                    <!-- データが JavaScript で動的に生成されます -->
-                </tbody>
+                <tbody id="inventory-table-body"></tbody>
             </table>
-            <div id="pagination" style="text-align:center; margin-top:10px;">
-                <!-- ページネーションボタンがここに生成されます -->
-            </div>
+            <div id="pagination" style="text-align:center; margin-top:10px;"></div>
         </section>
     </main>
 </body>
