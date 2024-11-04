@@ -126,7 +126,6 @@ tbody tr:hover {
 /* CSSで各ステータスの色を定義 */
 .status-out { background-color: #ffcccc; }  /* 欠品: 赤 */
 .status-low { background-color: #fffacd; }  /* 在庫少: 黄色 */
-.status-normal { background-color: #ccf2ff; }  /* その他: 水色 */
 
 /* フッターのスタイル */
 footer {
