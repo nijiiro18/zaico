@@ -76,6 +76,8 @@
 
             tableBody.innerHTML = "";
             paginatedData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                                    item.status === '在庫少' ? 'status-low' : 'status-normal';
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
@@ -83,7 +85,7 @@
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
                     <td>${item.quantity}</td>
-                    <td class="${item.status === '欠品' ? 'status-out' : 'status-low'}">${item.status}</td>
+                    <td class="${statusClass}">${item.status}</td>
                     <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
                 `;
                 tableBody.appendChild(row);
@@ -239,7 +241,7 @@
                         <th>商品名</th>
                         <th>カテゴリ1</th>
                         <th>カテゴリ2</th>
-                        <th>数量</th>
+                        <th>在庫数</th>
                         <th>出庫数量</th>
                         <th>操作</th>
                     </tr>
