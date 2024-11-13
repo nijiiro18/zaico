@@ -212,9 +212,11 @@
 			        </select>
 			    </div>
 			    <div>
-			        <label for="color">種類（色）:</label>
-			        <input type="text" id="color" placeholder="種類（色）を入力" oninput="updateTable()">
-			    </div>
+				    <label for="color">種類（色）:</label>
+				    <select id="color" onchange="renderTable()">
+				        <option value="">すべてを選択</option>
+				    </select>
+				</div>
 			</div>
             <table>
                 <thead>
