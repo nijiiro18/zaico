@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>にじいろ市場 - 出庫（お客様登録）</title>
+    <title>にじいろ市場 - 出庫（カート機能）</title>
     <link rel="stylesheet" href="styles.css">
     <script>
         let inventoryData = [];
@@ -61,128 +61,79 @@
         }
 
         function updateTable() {
-    const category1 = document.getElementById('category1').value;
-    const category2 = document.getElementById('category2').value;
-    const productId = document.getElementById('product-id').value;
-    const productName = document.getElementById('product-name').value.toLowerCase();
-    const selectedColor = document.getElementById('color').value;
-    const tableBody = document.getElementById('selected-items-table-body');
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const productId = document.getElementById('product-id').value;
+            const productName = document.getElementById('product-name').value.toLowerCase();
+            const selectedColor = document.getElementById('color').value;
+            const tableBody = document.getElementById('stock-out-table-body');
 
-    const filteredData = inventoryData.filter(item => {
-        return (!category1 || item.category1 === category1) &&
-               (!category2 || item.category2 === category2) &&
-               (!productId || item.id === productId) &&
-               (!productName || item.name.toLowerCase().includes(productName)) &&
-               (!selectedColor || item.color === selectedColor);
-    });
+            const filteredData = inventoryData.filter(item => {
+                return (!category1 || item.category1 === category1) &&
+                       (!category2 || item.category2 === category2) &&
+                       (!productId || item.id === productId) &&
+                       (!productName || item.name.toLowerCase().includes(productName)) &&
+                       (!selectedColor || item.color === selectedColor);
+            });
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
-
-    tableBody.innerHTML = "";
-    paginatedData.forEach(item => {
-        const statusClass = item.status === '欠品' ? 'status-out' :
-                            item.status === '在庫少' ? 'status-low' : 'status-normal';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.category1}</td>
-            <td>${item.category2}</td>
-            <td>${item.name}</td>
-            <td>${item.color}</td>
-            <td>${item.quantity}</td>
-            <td class="${statusClass}">${item.status}</td>
-            <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
-        `;
-        tableBody.appendChild(row);
-    });
-
-    generatePagination(filteredData.length);
-}
-
-        function generatePagination(totalItems) {
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = "";
-
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-            const prevButton = document.createElement('button');
-            prevButton.textContent = '前ページ';
-            prevButton.onclick = () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateTable();
-                }
-            };
-            prevButton.disabled = currentPage === 1;
-            pagination.appendChild(prevButton);
-
-            const nextButton = document.createElement('button');
-            nextButton.textContent = '次ページ';
-            nextButton.onclick = () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    updateTable();
-                }
-            };
-            nextButton.disabled = currentPage === totalPages;
-            pagination.appendChild(nextButton);
+            tableBody.innerHTML = "";
+            filteredData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                                    item.status === '在庫少' ? 'status-low' : 'status-normal';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td class="${statusClass}">${item.status}</td>
+                    <td><button onclick="addToCart('${item.id}')">選択</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
         }
 
-        function addToStockOut(itemId) {
+        function addToCart(itemId) {
             const item = inventoryData.find(i => i.id === itemId);
             if (!selectedItems.some(i => i.id === itemId)) {
-                selectedItems.push({ ...item, quantityToRemove: 0 });
-                updateSelectedItems();
+                selectedItems.push({ ...item, quantityToRemove: 1 });
+                updateCart();
             }
         }
 
-        function updateSelectedItems() {
-    const selectedItemsTableBody = document.getElementById('selected-items-table-body');
-    selectedItemsTableBody.innerHTML = "";
-    selectedItems.forEach((item, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.category1}</td>
-            <td>${item.category2}</td>
-            <td>${item.name}</td>
-            <td>${item.color}</td>
-            <td>${item.quantity}</td>
-            <td><input type="number" min="1" max="${item.quantity}" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)"></td>
-            <td><button onclick="removeFromStockOut(${index})">削除</button></td>
-        `;
-        selectedItemsTableBody.appendChild(row);
-    });
-}
-
-        function updateQuantity(index, value) {
-            selectedItems[index].quantityToRemove = parseInt(value, 10) || 0;
+        function updateCart() {
+            const cartTableBody = document.getElementById('cart-table-body');
+            cartTableBody.innerHTML = "";
+            selectedItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td><input type="number" min="1" max="${item.quantity}" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)"></td>
+                    <td><button onclick="removeFromCart(${index})">削除</button></td>
+                `;
+                cartTableBody.appendChild(row);
+            });
         }
 
-        function removeFromStockOut(index) {
+        function updateQuantity(index, value) {
+            selectedItems[index].quantityToRemove = parseInt(value, 10) || 1;
+        }
+
+        function removeFromCart(index) {
             selectedItems.splice(index, 1);
-            updateSelectedItems();
+            updateCart();
         }
 
         function proceedToConfirmation() {
             sessionStorage.setItem('selectedStockOutItems', JSON.stringify(selectedItems));
             window.location.href = 'stock-out-confirm.html';
-        }
-
-        function checkLogin() {
-            const loggedInUser = sessionStorage.getItem('loggedInUser');
-            if (!loggedInUser) {
-                window.location.href = 'login.html';
-            } else {
-                const userElement = document.getElementById('logged-in-user');
-                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
-            }
-        }
-
-        function logout() {
-            sessionStorage.removeItem('loggedInUser');
-            window.location.href = 'login.html';
         }
 
         window.onload = function() {
@@ -204,32 +155,25 @@
                 <div><label for="product-name">商品名:</label><select id="product-name" onchange="updateTable()"></select></div>
                 <div><label for="color">種類（色）:</label><select id="color" onchange="updateTable()"></select></div>
             </div>
+
             <table>
                 <thead>
                     <tr>
                         <th>商品ID</th><th>カテゴリ1</th><th>カテゴリ2</th><th>商品名</th><th>種類（色）</th><th>数量</th><th>ステータス</th><th>操作</th>
                     </tr>
                 </thead>
-                <tbody id="selected-items-table-body"></tbody>
+                <tbody id="stock-out-table-body"></tbody>
             </table>
-            <div id="pagination"></div>
 
-            <h3>選択されたアイテム</h3>
-			<table>
-			    <thead>
-			        <tr>
-			            <th>商品ID</th>
-			            <th>カテゴリ1</th>
-			            <th>カテゴリ2</th>
-			            <th>商品名</th>
-			            <th>種類（色）</th>
-			            <th>数量</th>
-			            <th>出庫数量</th>
-			            <th>操作</th>
-			        </tr>
-			    </thead>
-			    <tbody id="selected-items-table-body"></tbody>
-			</table>
+            <h3>カート内の商品</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品ID</th><th>カテゴリ1</th><th>カテゴリ2</th><th>商品名</th><th>種類（色）</th><th>在庫数</th><th>出庫数量</th><th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-table-body"></tbody>
+            </table>
             <button onclick="proceedToConfirmation()">確認画面に進む</button>
         </section>
     </main>
