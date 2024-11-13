@@ -43,11 +43,14 @@
     const productNameSelect = document.getElementById('product-name');
     const colorSelect = document.getElementById('color');
 
+    // 初期化
     category1Select.innerHTML = '<option value="">すべて</option>';
     category2Select.innerHTML = '<option value="">すべて</option>';
     productIdSelect.innerHTML = '<option value="">すべて</option>';
     productNameSelect.innerHTML = '<option value="">すべて</option>';
+    colorSelect.innerHTML = '<option value="">すべて</option>'; // ← 修正ポイント
 
+    // オプション追加
     category1Set.forEach(category => {
         category1Select.innerHTML += `<option value="${category}">${category}</option>`;
     });
@@ -60,8 +63,10 @@
     productNameSet.forEach(name => {
         productNameSelect.innerHTML += `<option value="${name}">${name}</option>`;
     });
+    colorSet.forEach(color => { // 色のオプション追加
+        colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
+    });
 }
-
 function renderTable() {
     const category1Filter = document.getElementById('category1').value;
     const category2Filter = document.getElementById('category2').value;
