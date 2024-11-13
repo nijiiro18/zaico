@@ -36,11 +36,13 @@
             const category2Set = new Set(alertData.map(item => item.category2));
             const productIdSet = new Set(alertData.map(item => item.id));
             const productNameSet = new Set(alertData.map(item => item.name));
+            const colorSet = new Set(alertData.map(item => item.color));
 
             populateDropdown('category1', category1Set);
             populateDropdown('category2', category2Set);
             populateDropdown('product-id', productIdSet);
             populateDropdown('product-name', productNameSet);
+            populateDropdown('color', colorSet);
         }
 
         function populateDropdown(elementId, valuesSet) {
@@ -59,14 +61,15 @@
             const category2 = document.getElementById('category2').value;
             const productId = document.getElementById('product-id').value;
             const productName = document.getElementById('product-name').value.toLowerCase();
+            const color = document.getElementById('color').value;
             const tableBody = document.getElementById('alert-table-body');
 
             const filteredData = alertData.filter(item => {
-                const matchesCategory1 = category1 === "" || item.category1 === category1;
-                const matchesCategory2 = category2 === "" || item.category2 === category2;
-                const matchesProductId = productId === "" || item.id === productId;
-                const matchesProductName = productName === "" || item.name.toLowerCase().includes(productName);
-                return matchesCategory1 && matchesCategory2 && matchesProductId && matchesProductName;
+                return (category1 === "" || item.category1 === category1) &&
+                       (category2 === "" || item.category2 === category2) &&
+                       (productId === "" || item.id === productId) &&
+                       (productName === "" || item.name.toLowerCase().includes(productName)) &&
+                       (color === "" || item.color === color);
             });
 
             tableBody.innerHTML = "";
@@ -74,15 +77,15 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
-                    <td>${item.name}</td>
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
                     <td>${item.quantity}</td>
                     <td>
                         <input type="number" min="0" placeholder="閾値" value="${item.threshold}" 
                         onchange="updateThreshold(${index}, this.value)">
                     </td>
-                    <td>${item.color}</td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -123,7 +126,6 @@
             await loadHeader();
             await loadAlertData();
         };
-        
     </script>
 </head>
 <body>
@@ -139,43 +141,38 @@
             <div class="search-container">
                 <div>
                     <label for="product-id">商品ID:</label>
-                    <select id="product-id" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="product-name">商品名:</label>
-                    <select id="product-name" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
+                    <select id="product-id" onchange="updateTable()"></select>
                 </div>
                 <div>
                     <label for="category1">カテゴリ1:</label>
-                    <select id="category1" onchange="populateCategory2(); updateTable();">
-                        <option value="">すべてを選択</option>
-                    </select>
+                    <select id="category1" onchange="updateTable()"></select>
                 </div>
                 <div>
                     <label for="category2">カテゴリ2:</label>
-                    <select id="category2" onchange="updateTable();">
-                        <option value="">すべてを選択</option>
-                    </select>
+                    <select id="category2" onchange="updateTable()"></select>
+                </div>
+                <div>
+                    <label for="product-name">商品名:</label>
+                    <select id="product-name" onchange="updateTable()"></select>
+                </div>
+                <div>
+                    <label for="color">種類（色）:</label>
+                    <select id="color" onchange="updateTable()"></select>
                 </div>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>商品ID</th>
-                        <th>商品名</th>
                         <th>カテゴリ1</th>
                         <th>カテゴリ2</th>
+                        <th>商品名</th>
+                        <th>種類（色）</th>
                         <th>在庫数</th>
                         <th>閾値</th>
-                        <th>種類（色）</th>
                     </tr>
                 </thead>
-                <tbody id="alert-table-body">
-                </tbody>
+                <tbody id="alert-table-body"></tbody>
             </table>
         </section>
     </main>
