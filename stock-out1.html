@@ -84,7 +84,7 @@
                 const statusClass = item.status === '欠品' ? 'status-out' :
                                     item.status === '在庫少' ? 'status-low' : 'status-normal';
                 const row = document.createElement('tr');
-                row.innerHTML = 
+                row.innerHTML = `
                     <td>${item.id}</td>
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
@@ -93,7 +93,7 @@
                     <td>${item.quantity}</td>
                     <td class="${statusClass}">${item.status}</td>
                     <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
-                ;
+                `;
                 tableBody.appendChild(row);
             });
 
