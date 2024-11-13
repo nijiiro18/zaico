@@ -21,7 +21,10 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
                     <td>${item.name}</td>
+                    <td>${item.color}</td>
                     <td>${item.currentQuantity}</td>
                     <td>${item.quantityToAdd}</td>
                     <td>${item.currentQuantity + item.quantityToAdd}</td>
@@ -53,10 +56,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>商品ID</th>
+                        <th>カテゴリ1</th>
+                        <th>カテゴリ2</th>
                         <th>商品名</th>
+                        <th>種類（色）</th>
                         <th>入庫前の個数</th>
-                        <th>入庫数</th>
+                        <th>入庫する個数</th>
                         <th>入庫後の個数</th>
                     </tr>
                 </thead>
