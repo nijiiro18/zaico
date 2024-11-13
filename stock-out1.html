@@ -97,15 +97,15 @@
     });
 }
 
-
-			     function addToCart(itemId, buttonElement) {
+function addToCart(itemId, buttonElement) {
     const item = inventoryData.find(i => i.id === itemId);
     if (!selectedItems.some(i => i.id === itemId)) {
         selectedItems.push({ ...item, quantityToRemove: 1 });
         updateCart();
-        showCartImage(buttonElement);
+        showCartImage(buttonElement); // ボタン要素を渡してカート画像を表示
     }
 }
+
 
 function showCartImage(buttonElement) {
     // カート画像が存在しない場合は作成
@@ -123,11 +123,12 @@ function showCartImage(buttonElement) {
         document.body.appendChild(cartImage);
     }
 
-    // ボタンの位置を取得してカート画像を配置
+    // 選択ボタンの位置を取得してカート画像を配置
     const rect = buttonElement.getBoundingClientRect();
     const offsetX = 10; // ボタンから右に10pxずらす
-    const offsetY = 0;  // ボタンの高さと同じ位置
+    const offsetY = -10; // ボタンの高さと少し上に配置
 
+    // カート画像の位置を設定
     cartImage.style.left = `${rect.right + offsetX + window.scrollX}px`;
     cartImage.style.top = `${rect.top + offsetY + window.scrollY}px`;
     cartImage.style.display = "block";
