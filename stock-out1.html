@@ -61,29 +61,44 @@
         }
 
         function updateTable() {
-    const tableBody = document.getElementById('stock-out-table-body');
-    if (!tableBody) {
-        console.error('stock-out-table-body 要素が見つかりません。');
-        return;
-    }
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const productId = document.getElementById('product-id').value;
+            const productName = document.getElementById('product-name').value.toLowerCase();
+            const selectedColor = document.getElementById('color').value;
+            const tableBody = document.getElementById('stock-out-table-body');
 
-    tableBody.innerHTML = "";
-    const filteredData = inventoryData.filter(item => true); // フィルタは例として入れています。
-    filteredData.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.category1}</td>
-            <td>${item.category2}</td>
-            <td>${item.name}</td>
-            <td>${item.color}</td>
-            <td>${item.quantity}</td>
-            <td>${item.status}</td>
-            <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
+            const filteredData = inventoryData.filter(item => {
+                return (!category1 || item.category1 === category1) &&
+                       (!category2 || item.category2 === category2) &&
+                       (!productId || item.id === productId) &&
+                       (!productName || item.name.toLowerCase().includes(productName)) &&
+                       (!selectedColor || item.color === selectedColor);
+            });
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+            tableBody.innerHTML = "";
+            paginatedData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                                    item.status === '在庫少' ? 'status-low' : 'status-normal';
+                const row = document.createElement('tr');
+                row.innerHTML = 
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td class="${statusClass}">${item.status}</td>
+                    <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
+                ;
+                tableBody.appendChild(row);
+            });
+
+            generatePagination(filteredData.length);
+        }
 
         function generatePagination(totalItems) {
             const pagination = document.getElementById('pagination');
@@ -127,7 +142,7 @@
             selectedItemsTableBody.innerHTML = "";
             selectedItems.forEach((item, index) => {
                 const row = document.createElement('tr');
-                row.innerHTML = `
+                row.innerHTML = 
                     <td>${item.id}</td>
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
@@ -136,7 +151,7 @@
                     <td>${item.quantity}</td>
                     <td><input type="number" min="1" max="${item.quantity}" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)"></td>
                     <td><button onclick="removeFromStockOut(${index})">削除</button></td>
-                `;
+                ;
                 selectedItemsTableBody.appendChild(row);
             });
         }
@@ -161,7 +176,7 @@
                 window.location.href = 'login.html';
             } else {
                 const userElement = document.getElementById('logged-in-user');
-                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
+                if (userElement) userElement.textContent = ログイン中: ${loggedInUser};
             }
         }
 
