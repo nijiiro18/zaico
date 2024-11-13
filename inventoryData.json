@@ -40,38 +40,6 @@
 		"status": "在庫少"
 	},
 	{
-		"id": "55601030",
-		"name": "くまさん刺繍",
-		"category1": "ハンドメイド",
-		"category2": "Arcobaleno",
-		"quantity": 1,
-		"status": "欠品"
-	},
-	{
-		"id": "55601031",
-		"name": "ぱんださん刺繍",
-		"category1": "ハンドメイド",
-		"category2": "Arcobaleno",
-		"quantity": 2,
-		"status": "欠品"
-	},
-	{
-		"id": "55601032",
-		"name": "手作りお財布",
-		"category1": "ハンドメイド",
-		"category2": "Bibgyor",
-		"quantity": 1,
-		"status": "欠品"
-	},
-	{
-		"id": "55601033",
-		"name": "手作り革製品",
-		"category1": "ハンドメイド",
-		"category2": "Bibgyor",
-		"quantity": 3,
-		"status": "欠品"
-	},
-	{
 		"id": "47701139",
 		"name": "アクアブルー 544",
 		"category1": "和洋裁素材",

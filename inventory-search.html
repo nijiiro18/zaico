@@ -169,39 +169,44 @@
     <main>
         <section id="inventory-search">
             <h2>在庫検索</h2>
-            <div class="search-container">
-                <div>
-                    <label for="product-id">商品ID:</label>
-                    <select id="product-id" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="product-name">商品名:</label>
-                    <select id="product-name" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="category1">カテゴリ1:</label>
-                    <select id="category1" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="category2">カテゴリ2:</label>
-                    <select id="category2" onchange="updateTable()">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-            </div>
+           <div class="search-container">
+		    <div>
+					 <label for="product-id">商品ID:</label>
+			        <select id="product-id" onchange="updateTable()">
+			            <option value="">すべてを選択</option>
+			        </select>
+			    </div>
+			    <div>
+			        <label for="category1">カテゴリ1:</label>
+			        <select id="category1" onchange="updateTable()">
+			            <option value="">すべてを選択</option>
+			        </select>
+			    </div>
+			    <div>
+			        <label for="category2">カテゴリ2:</label>
+			        <select id="category2" onchange="updateTable()">
+			            <option value="">すべてを選択</option>
+			        </select>
+			    </div>
+			    <div>
+			        <label for="product-name">商品名:</label>
+			        <select id="product-name" onchange="updateTable()">
+			            <option value="">すべてを選択</option>
+			        </select>
+			    </div>
+			    <div>
+			        <label for="color">種類（色）:</label>
+			        <input type="text" id="color" placeholder="種類（色）を入力" oninput="updateTable()">
+			    </div>
+			</div>
             <table>
                 <thead>
                     <tr>
                         <th>商品ID</th>
-                        <th>商品名</th>
                         <th>カテゴリ1</th>
                         <th>カテゴリ2</th>
+                        <th>商品名</th>
+                        <th>種類（色）</th>
                         <th>数量</th>
                         <th>ステータス</th>
                     </tr>
