@@ -50,6 +50,7 @@
 
         function populateDropdown(elementId, valuesSet) {
             const selectElement = document.getElementById(elementId);
+            if (!selectElement) return;
             selectElement.innerHTML = '<option value="">すべてを選択</option>';
             valuesSet.forEach(value => {
                 const option = document.createElement('option');
@@ -60,45 +61,44 @@
         }
 
         function updateTable() {
-    const category1 = document.getElementById('category1').value;
-    const category2 = document.getElementById('category2').value;
-    const productId = document.getElementById('product-id').value;
-    const productName = document.getElementById('product-name').value.toLowerCase();
-    const selectedColor = document.getElementById('color').value;
-    const tableBody = document.getElementById('selected-items-table-body');
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const productId = document.getElementById('product-id').value;
+            const productName = document.getElementById('product-name').value.toLowerCase();
+            const selectedColor = document.getElementById('color').value;
+            const tableBody = document.getElementById('stock-out-table-body');
 
-    const filteredData = inventoryData.filter(item => {
-        return (!category1 || item.category1 === category1) &&
-               (!category2 || item.category2 === category2) &&
-               (!productId || item.id === productId) &&
-               (!productName || item.name.toLowerCase().includes(productName)) &&
-               (!selectedColor || item.color === selectedColor);
-    });
+            const filteredData = inventoryData.filter(item => {
+                return (!category1 || item.category1 === category1) &&
+                       (!category2 || item.category2 === category2) &&
+                       (!productId || item.id === productId) &&
+                       (!productName || item.name.toLowerCase().includes(productName)) &&
+                       (!selectedColor || item.color === selectedColor);
+            });
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-    tableBody.innerHTML = "";
-    paginatedData.forEach(item => {
-        const statusClass = item.status === '欠品' ? 'status-out' :
-                            item.status === '在庫少' ? 'status-low' : 'status-normal';
-        const row = document.createElement('tr');
-        row.innerHTML = 
-            <td>${item.id}</td>
-            <td>${item.category1}</td>
-            <td>${item.category2}</td>
-            <td>${item.name}</td>
-            <td>${item.color}</td>
-            <td>${item.quantity}</td>
-            <td class="${statusClass}">${item.status}</td>
-            <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
-        ;
-        tableBody.appendChild(row);
-    });
+            tableBody.innerHTML = "";
+            paginatedData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                                    item.status === '在庫少' ? 'status-low' : 'status-normal';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td class="${statusClass}">${item.status}</td>
+                    <td><button onclick="addToStockOut('${item.id}')">選択</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
 
-    generatePagination(filteredData.length);
-}
-
+            generatePagination(filteredData.length);
+        }
 
         function generatePagination(totalItems) {
             const pagination = document.getElementById('pagination');
@@ -142,16 +142,16 @@
             selectedItemsTableBody.innerHTML = "";
             selectedItems.forEach((item, index) => {
                 const row = document.createElement('tr');
-                row.innerHTML = 
+                row.innerHTML = `
                     <td>${item.id}</td>
-                    <td>${item.name}</td>
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
+                    <td>${item.name}</td>
                     <td>${item.color}</td>
                     <td>${item.quantity}</td>
                     <td><input type="number" min="1" max="${item.quantity}" value="${item.quantityToRemove}" onchange="updateQuantity(${index}, this.value)"></td>
                     <td><button onclick="removeFromStockOut(${index})">削除</button></td>
-                ;
+                `;
                 selectedItemsTableBody.appendChild(row);
             });
         }
@@ -176,7 +176,7 @@
                 window.location.href = 'login.html';
             } else {
                 const userElement = document.getElementById('logged-in-user');
-                if (userElement) userElement.textContent = ログイン中: ${loggedInUser};
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
             }
         }
 
@@ -198,60 +198,26 @@
         <section id="stock-out">
             <h2>出庫する商品を選択</h2>
             <div class="search-container">
-                <div>
-                    <label for="product-id">商品ID:</label>
-                    <select id="product-id" onchange="updateTable()"></select>
-                </div>
-                <div>
-                    <label for="category1">カテゴリ1:</label>
-                    <select id="category1" onchange="updateTable()"></select>
-                </div>
-                <div>
-                    <label for="category2">カテゴリ2:</label>
-                    <select id="category2" onchange="updateTable()"></select>
-                </div>
-                <div>
-                    <label for="product-name">商品名:</label>
-                    <select id="product-name" onchange="updateTable()"></select>
-                </div>
-                <div>
-                    <label for="color">種類（色）:</label>
-                    <select id="color" onchange="updateTable()"></select>
-                </div>
+                <div><label for="product-id">商品ID:</label><select id="product-id" onchange="updateTable()"></select></div>
+                <div><label for="category1">カテゴリ1:</label><select id="category1" onchange="updateTable()"></select></div>
+                <div><label for="category2">カテゴリ2:</label><select id="category2" onchange="updateTable()"></select></div>
+                <div><label for="product-name">商品名:</label><select id="product-name" onchange="updateTable()"></select></div>
+                <div><label for="color">種類（色）:</label><select id="color" onchange="updateTable()"></select></div>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <th>商品ID</th>
-			            <th>カテゴリ1</th>
-			            <th>カテゴリ2</th>
-			            <th>商品名</th>
-			            <th>種類（色）</th>
-			            <th>数量</th>
-			            <th>ステータス</th>
-			            <th>操作</th>
+                        <th>商品ID</th><th>カテゴリ1</th><th>カテゴリ2</th><th>商品名</th><th>種類（色）</th><th>数量</th><th>ステータス</th><th>操作</th>
                     </tr>
                 </thead>
-                <tbody id="selected-items-table-body"></tbody>
+                <tbody id="stock-out-table-body"></tbody>
             </table>
             <div id="pagination"></div>
 
             <h3>選択されたアイテム</h3>
             <table>
-			    <thead>
-			        <tr>
-			            <th>商品ID</th>
-			            <th>カテゴリ1</th>
-			            <th>カテゴリ2</th>
-			            <th>商品名</th>
-			            <th>種類（色）</th>
-			            <th>数量</th>
-			            <th>ステータス</th>
-			            <th>操作</th>
-			        </tr>
-			    </thead>
-			    <tbody id="stock-out-table-body"></tbody>
-			</table>
+                <tbody id="selected-items-table-body"></tbody>
+            </table>
             <button onclick="proceedToConfirmation()">確認画面に進む</button>
         </section>
     </main>
