@@ -210,14 +210,26 @@
                         <th>商品ID</th><th>カテゴリ1</th><th>カテゴリ2</th><th>商品名</th><th>種類（色）</th><th>数量</th><th>ステータス</th><th>操作</th>
                     </tr>
                 </thead>
-                <tbody id="stock-out-table"></tbody>
+                <tbody id="selected-items-table-body"></tbody>
             </table>
             <div id="pagination"></div>
 
             <h3>選択されたアイテム</h3>
-            <table>
-                <tbody id="selected-items-table-body"></tbody>
-            </table>
+			<table>
+			    <thead>
+			        <tr>
+			            <th>商品ID</th>
+			            <th>カテゴリ1</th>
+			            <th>カテゴリ2</th>
+			            <th>商品名</th>
+			            <th>種類（色）</th>
+			            <th>数量</th>
+			            <th>出庫数量</th>
+			            <th>操作</th>
+			        </tr>
+			    </thead>
+			    <tbody id="selected-items-table-body"></tbody>
+			</table>
             <button onclick="proceedToConfirmation()">確認画面に進む</button>
         </section>
     </main>
