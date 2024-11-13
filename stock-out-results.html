@@ -20,9 +20,10 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${item.id}</td>
-                    <td>${item.name}</td>
-                    <td>${item.category1}</td>
-                    <td>${item.category2}</td>
+		            <td>${item.category1}</td>
+		            <td>${item.category2}</td>
+		            <td>${item.name}</td>
+		            <td>${item.color}</td>
                     <td>${item.quantity}</td>
                     <td>${item.quantityToRemove}</td>
                     <td>${item.quantity - item.quantityToRemove}</td>
@@ -54,9 +55,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>商品名</th>
                         <th>カテゴリ1</th>
                         <th>カテゴリ2</th>
+                        <th>商品名</th>
+                        <th>種類（色）</th>
                         <th>在庫数</th>
                         <th>出庫数</th>
                         <th>出庫後の在庫数</th>
