@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カート画像表示デモ</title>
+    <style>
+        /* カート画像のスタイル */
+        #cart-image {
+            width: 80px;
+            height: 80px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: none;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 商品リスト -->
+<div>
+    <select id="product-select">
+        <option value="">商品を選択してください</option>
+        <option value="item1">商品1</option>
+        <option value="item2">商品2</option>
+        <option value="item3">商品3</option>
+    </select>
+</div>
+
+<!-- カート画像 -->
+<img id="cart-image" src="cart.png" alt="カート">
+
+<script>
+    // 商品選択セレクトボックスの取得
+    const productSelect = document.getElementById("product-select");
+    const cartImage = document.getElementById("cart-image");
+
+    // 商品が選択されたときの処理
+    productSelect.addEventListener("change", () => {
+        if (productSelect.value) {
+            // カート画像を表示
+            cartImage.style.display = "block";
+            cartImage.style.opacity = "1";
+
+            // 3秒後にカート画像を非表示にする
+            setTimeout(() => {
+                cartImage.style.opacity = "0";
+                // アニメーションが終わった後に非表示にする
+                setTimeout(() => {
+                    cartImage.style.display = "none";
+                }, 500);
+            }, 3000);
+        }
+    });
+</script>
+
+</body>
+</html>

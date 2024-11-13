@@ -140,10 +140,39 @@
             loadHeader();
             loadInventoryData();
         };
+			        function addToCart(itemId) {
+			    const item = inventoryData.find(i => i.id === itemId);
+			    if (!selectedItems.some(i => i.id === itemId)) {
+			        selectedItems.push({ ...item, quantityToRemove: 1 });
+			        updateCart();
+			        showCartImage(); // カート画像を表示
+			    }
+			}
+
+			// カート画像を表示する関数
+			function showCartImage() {
+			    const cartImage = document.getElementById("cart-image");
+
+			    // カート画像を表示してフェードイン
+			    cartImage.style.display = "block";
+			    cartImage.style.opacity = "1";
+
+			    // 3秒後にフェードアウトして非表示にする
+			    setTimeout(() => {
+			        cartImage.style.opacity = "0";
+			        // アニメーションが完了したら非表示にする
+			        setTimeout(() => {
+			            cartImage.style.display = "none";
+			        }, 500);
+			    }, 3000);
+			}
     </script>
 </head>
 <body>
     <div id="header"></div>
+	
+	<!-- カート画像の追加 -->
+<img id="cart-image" src="cart.png" alt="カート" style="width: 80px; height: 80px; position: fixed; top: 20px; right: 20px; display: none; opacity: 0; transition: opacity 0.5s ease;">
 
     <main>
         <section id="stock-out">
