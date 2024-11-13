@@ -154,7 +154,11 @@ footer {
     flex: 1;
     min-width: 200px;
 }
-
+#cart-image {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
 .search-container label {
     font-weight: bold;
     margin-bottom: 5px;
