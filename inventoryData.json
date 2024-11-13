@@ -1,11 +1,227 @@
 [
-	{
-		"id": "99999999",
-		"name": "玉付きゴールド25cm",
-		"category1": "和洋裁素材",
-		"category2": "ファスナー",
-		"color":"キナリ　801",
-		"quantity": 9,
-		"status": "欠品"
-	}
+    {
+        "id": "47701139",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "アクアブルー 544",
+        "quantity": 20,
+        "status": "在庫少"
+    },
+    {
+        "id": "47701152",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "イエロー 131",
+        "quantity": 21,
+        "status": ""
+    },
+    {
+        "id": "36038409",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "インディゴ 558",
+        "quantity": 14,
+        "status": "在庫少"
+    },
+    {
+        "id": "36038370",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "エンジ 520",
+        "quantity": 31,
+        "status": ""
+    },
+    {
+        "id": "36038353",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "オレンジ 849",
+        "quantity": 27,
+        "status": ""
+    },
+    {
+        "id": "36038426",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "カフェオレ 508",
+        "quantity": 20,
+        "status": "在庫少"
+    },
+    {
+        "id": "36038333",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "キナリ 801",
+        "quantity": 84,
+        "status": ""
+    },
+    {
+        "id": "36038442",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "ブラック 580",
+        "quantity": -47,
+        "status": "欠品"
+    },
+    {
+        "id": "36038400",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "スカイブルー 542",
+        "quantity": 17,
+        "status": "在庫少"
+    },
+    {
+        "id": "36038358",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "ピンク 513",
+        "quantity": 12,
+        "status": "在庫少"
+    },
+    {
+        "id": "36038327",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "ホワイト 501",
+        "quantity": 19,
+        "status": "在庫少"
+    },
+    {
+        "id": "47701163",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "マゼンタ 817",
+        "quantity": 20,
+        "status": "在庫少"
+    },
+    {
+        "id": "47701103",
+        "name": "玉付きゴールド25cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "ロイヤルパープル 285",
+        "quantity": 23,
+        "status": ""
+    },
+    {
+        "id": "47701141",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "アクアブルー 544",
+        "quantity": 21,
+        "status": ""
+    },
+    {
+        "id": "47701154",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "イエロー 131",
+        "quantity": 26,
+        "status": ""
+    },
+    {
+        "id": "36038545",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "インディゴ 558",
+        "quantity": 13,
+        "status": "在庫少"
+    },
+    {
+        "id": "36038521",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "エンジ 520",
+        "quantity": 28,
+        "status": ""
+    },
+    {
+        "id": "36038476",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "オレンジ 849",
+        "quantity": 18,
+        "status": "在庫少"
+    },
+    {
+        "id": "36038560",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "カーキ 566",
+        "quantity": 19,
+        "status": "在庫少"
+    },
+    {
+        "id": "36038465",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "キナリ 801",
+        "quantity": 52,
+        "status": ""
+    },
+    {
+        "id": "36038547",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "ネイビー 560",
+        "quantity": 3,
+        "status": "欠品"
+    },
+    {
+        "id": "36038481",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "ピンク 513",
+        "quantity": 2,
+        "status": "欠品"
+    },
+    {
+        "id": "36038569",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "ブラウン 568",
+        "quantity": 9,
+        "status": "欠品"
+    },
+    {
+        "id": "36038557",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "パープル 218",
+        "quantity": 26,
+        "status": ""
+    },
+    {
+        "id": "47701088",
+        "name": "玉付きゴールド30cm",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "color": "フォグブルー 104",
+        "quantity": 16,
+        "status": "在庫少"
+    }
 ]
