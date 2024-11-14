@@ -43,7 +43,18 @@
 
         const masterData = {
             product: [
-                { productCode: "P00001", productName: "商品1", category1Code: "C01", category2Code: "C02", alertCount1: 5, alertCount2: 2, lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
+                { 
+                    productCode: "P00001", 
+                    productName: "商品1", 
+                    productTypeDivision: "A",  
+                    productTypeCode: "T01",   
+                    category1Code: "C01", 
+                    category2Code: "C02", 
+                    alertCount1: 5, 
+                    alertCount2: 2, 
+                    lastUpdatedBy: "admin", 
+                    lastUpdatedAt: "2024-10-01 12:00" 
+                }
             ],
             category: [
                 { categoryCode: "C01", categoryName: "カテゴリ1", categoryDivision: "1", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
@@ -113,6 +124,11 @@
             document.getElementById(`${currentMaster}-edit-section`).style.display = 'none';
         }
 
+        function cancelEdit() {
+            clearForm('edit');
+            document.getElementById(`${currentMaster}-edit-section`).style.display = 'none';
+        }
+
         function deleteItem(index) {
             masterData[currentMaster].splice(index, 1);
             renderTable();
@@ -121,7 +137,8 @@
         function clearForm(type) {
             document.querySelectorAll(`#${currentMaster}-${type}-section input`).forEach(input => input.value = '');
         }
-         function checkLogin() {
+        
+        function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
                 window.location.href = 'login.html';
@@ -158,6 +175,8 @@
                 <h3>新規登録</h3>
                 <div class="form-group"><label>商品CD:</label><input type="text" class="new-item" name="productCode"></div>
                 <div class="form-group"><label>商品名:</label><input type="text" class="new-item" name="productName"></div>
+                <div class="form-group"><label>種類区分:</label><input type="text" class="new-item" name="productTypeDivision"></div>
+                <div class="form-group"><label>種類CD:</label><input type="text" class="new-item" name="productTypeCode"></div>
                 <div class="form-group"><label>カテゴリ1CD:</label><input type="text" class="new-item" name="category1Code"></div>
                 <div class="form-group"><label>カテゴリ2CD:</label><input type="text" class="new-item" name="category2Code"></div>
                 <div class="form-group"><label>アラート件数1:</label><input type="number" class="new-item" name="alertCount1"></div>
@@ -168,11 +187,14 @@
                 <h3>編集</h3>
                 <div class="form-group"><label>商品CD:</label><input type="text" class="edit-item" name="productCode" disabled></div>
                 <div class="form-group"><label>商品名:</label><input type="text" class="edit-item" name="productName"></div>
+                <div class="form-group"><label>種類区分:</label><input type="text" class="edit-item" name="productTypeDivision"></div>
+                <div class="form-group"><label>種類CD:</label><input type="text" class="edit-item" name="productTypeCode"></div>
                 <div class="form-group"><label>カテゴリ1CD:</label><input type="text" class="edit-item" name="category1Code"></div>
                 <div class="form-group"><label>カテゴリ2CD:</label><input type="text" class="edit-item" name="category2Code"></div>
                 <div class="form-group"><label>アラート件数1:</label><input type="number" class="edit-item" name="alertCount1"></div>
                 <div class="form-group"><label>アラート件数2:</label><input type="number" class="edit-item" name="alertCount2"></div>
                 <button onclick="updateItem()">更新</button>
+                <button onclick="cancelEdit()">キャンセル</button>
             </div>
             <h3>商品マスタ一覧</h3>
             <table>
@@ -180,12 +202,14 @@
                     <tr>
                         <th>商品ID</th>
                         <th>商品名</th>
+                        <th>種類区分</th>
+                        <th>種類CD</th>
                         <th>カテゴリ1CD</th>
                         <th>カテゴリ2CD</th>
                         <th>アラート件数1</th>
                         <th>アラート件数2</th>
-                        <th>最終更新者</th>
-                        <th>最終更新日</th>
+                        <th>更新者</th>
+                        <th>最終更新日時</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -209,6 +233,7 @@
                 <div class="form-group"><label>カテゴリ名:</label><input type="text" class="edit-item" name="categoryName"></div>
                 <div class="form-group"><label>カテゴリ区分:</label><input type="text" class="edit-item" name="categoryDivision"></div>
                 <button onclick="updateItem()">更新</button>
+                <button onclick="cancelEdit()">キャンセル</button>
             </div>
             <h3>カテゴリマスタ一覧</h3>
             <table>
@@ -217,8 +242,8 @@
                         <th>カテゴリCD</th>
                         <th>カテゴリ名</th>
                         <th>カテゴリ区分</th>
-                        <th>最終更新者</th>
-                        <th>最終更新日</th>
+                        <th>更新者</th>
+                        <th>最終更新日時</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -233,17 +258,18 @@
                 <h3>新規登録</h3>
                 <div class="form-group"><label>ユーザーID:</label><input type="text" class="new-item" name="userId"></div>
                 <div class="form-group"><label>ユーザー名:</label><input type="text" class="new-item" name="userName"></div>
-                <div class="form-group"><label>パスワード:</label><input type="password" class="new-item" name="password"></div>
-                <div class="form-group"><label>ユーザーレベル:</label><input type="text" class="new-item" name="userLevel"></div>
+                <div class="form-group"><label>パスワード:</label><input type="text" class="new-item" name="password"></div>
+                <div class="form-group"><label>ユーザーレベル:</label><input type="number" class="new-item" name="userLevel"></div>
                 <button onclick="addItem()">追加</button>
             </div>
             <div id="user-edit-section" style="display:none;">
                 <h3>編集</h3>
                 <div class="form-group"><label>ユーザーID:</label><input type="text" class="edit-item" name="userId" disabled></div>
                 <div class="form-group"><label>ユーザー名:</label><input type="text" class="edit-item" name="userName"></div>
-                <div class="form-group"><label>パスワード:</label><input type="password" class="edit-item" name="password"></div>
-                <div class="form-group"><label>ユーザーレベル:</label><input type="text" class="edit-item" name="userLevel"></div>
+                <div class="form-group"><label>パスワード:</label><input type="text" class="edit-item" name="password"></div>
+                <div class="form-group"><label>ユーザーレベル:</label><input type="number" class="edit-item" name="userLevel"></div>
                 <button onclick="updateItem()">更新</button>
+                <button onclick="cancelEdit()">キャンセル</button>
             </div>
             <h3>ユーザーマスタ一覧</h3>
             <table>
@@ -253,8 +279,8 @@
                         <th>ユーザー名</th>
                         <th>パスワード</th>
                         <th>ユーザーレベル</th>
-                        <th>最終更新者</th>
-                        <th>最終更新日</th>
+                        <th>更新者</th>
+                        <th>最終更新日時</th>
                         <th>操作</th>
                     </tr>
                 </thead>

@@ -37,43 +37,61 @@
         }
 
         function populateFilters() {
-            const category1Set = new Set(inventoryData.map(item => item.category1));
-            const category2Set = new Set(inventoryData.map(item => item.category2));
-            const productIdSet = new Set(inventoryData.map(item => item.id));
-            const productNameSet = new Set(inventoryData.map(item => item.name));
+    const category1Set = new Set(inventoryData.map(item => item.category1));
+    const category2Set = new Set(inventoryData.map(item => item.category2));
+    const productNameSet = new Set(inventoryData.map(item => item.name));
+    const colorSet = new Set(inventoryData.map(item => item.color));
 
-            populateDropdown('category1', category1Set);
-            populateDropdown('category2', category2Set);
-            populateDropdown('product-id', productIdSet);
-            populateDropdown('product-name', productNameSet);
-        }
+    populateDropdown('category1', category1Set, '和洋裁素材');
+    populateDropdown('category2', category2Set);
+    populateDropdown('product-name', productNameSet);
+    populateDropdown('color', colorSet);
 
-        function populateDropdown(elementId, valuesSet) {
-            const selectElement = document.getElementById(elementId);
-            selectElement.innerHTML = '<option value="">すべてを選択</option>';
-            valuesSet.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                selectElement.appendChild(option);
-            });
-        }
+    // Disable the category1 select dropdown (graying it out)
+    const category1Select = document.getElementById('category1');
+    if (category1Select) {
+        category1Select.disabled = true; // This line disables the dropdown
+    }
+}
 
-        function updateTable(filterByIncomplete = false) {
+function populateDropdown(elementId, valuesSet, defaultValue = '') {
+    const selectElement = document.getElementById(elementId);
+    if (!selectElement) return;
+
+    // Set the first option to a placeholder or a default value
+    selectElement.innerHTML = `<option value="">${defaultValue || "すべてを選択"}</option>`;
+    
+    // Add the values from the Set to the dropdown
+    valuesSet.forEach(value => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        selectElement.appendChild(option);
+    });
+
+    // If a default value is provided, ensure it is selected by default
+    if (defaultValue && !valuesSet.has(defaultValue)) {
+        const defaultOption = document.createElement('option');
+        defaultOption.value = defaultValue;
+        defaultOption.textContent = defaultValue;
+        selectElement.prepend(defaultOption); // Prepend to make it the first option
+        selectElement.value = defaultValue; // Set the value of the dropdown to the default
+    }
+}
+
+
+        function updateTable() {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
-            const productId = document.getElementById('product-id').value;
             const productName = document.getElementById('product-name').value.toLowerCase();
+            const selectedColor = document.getElementById('color').value;
             const tableBody = document.getElementById('inventory-check-table-body');
 
             const filteredData = inventoryData.filter(item => {
-                const matchesCategory1 = !category1 || item.category1 === category1;
-                const matchesCategory2 = !category2 || item.category2 === category2;
-                const matchesProductId = !productId || item.id === productId;
-                const matchesProductName = !productName || item.name.toLowerCase().includes(productName);
-                const isIncomplete = !filterByIncomplete || item.lastInventoryDate !== today;
-
-                return matchesCategory1 && matchesCategory2 && matchesProductId && matchesProductName && isIncomplete;
+                return (!category1 || item.category1 === category1) &&
+                    (!category2 || item.category2 === category2) &&
+                    (!productName || item.name.toLowerCase().includes(productName)) &&
+                    (!selectedColor || item.color === selectedColor);
             });
 
             tableBody.innerHTML = "";
@@ -143,8 +161,14 @@
             <h2>棚卸</h2>
             <div class="search-container">
                 <div>
-                    <label for="product-id">商品ID:</label>
-                    <select id="product-id" onchange="updateTable()">
+                    <label for="category1">カテゴリ1:</label>
+                    <select id="category1" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="category2">カテゴリ2:</label>
+                    <select id="category2" onchange="updateTable()">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
@@ -155,14 +179,8 @@
                     </select>
                 </div>
                 <div>
-                    <label for="category1">カテゴリ1:</label>
-                    <select id="category1" onchange="populateCategory2(); updateTable();">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="category2">カテゴリ2:</label>
-                    <select id="category2" onchange="updateTable();">
+                    <label for="color">種類（色）:</label>
+                    <select id="color" onchange="updateTable()">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>

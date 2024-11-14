@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>にじいろ市場 - 在庫検索</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 和洋裁素材のオプションに背景色をグレーに設定 */
+        #category1 option[value="和洋裁素材"] {
+            background-color: #d3d3d3; /* グレー背景 */
+            color: #000; /* 黒文字 */
+        }
+
+        /* もしグレーアウトが必要であれば、以下のようにdisabledオプションを利用しても良い */
+        #category1 option:disabled {
+            background-color: #d3d3d3;
+            color: #999;
+        }
+    </style>
     <script>
         let inventoryData = [];
         let currentPage = 1;
@@ -28,7 +41,6 @@
                 inventoryData = await response.json();
                 populateCategory1();
                 populateCategory2();
-                populateProductId();
                 populateProductName();
                 populateColor();
                 updateTable();
@@ -37,17 +49,32 @@
             }
         }
 
-        function populateCategory1() {
-            const category1Select = document.getElementById('category1');
-            const uniqueCategories1 = [...new Set(inventoryData.map(item => item.category1))];
-            category1Select.innerHTML = '<option value="">すべてを選択</option>';
-            uniqueCategories1.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                category1Select.appendChild(option);
-            });
+      function populateCategory1() {
+    const category1Select = document.getElementById('category1');
+    const uniqueCategories1 = [...new Set(inventoryData.map(item => item.category1))];
+    category1Select.innerHTML = '<option value="">すべてを選択</option>';
+
+    // 「和洋裁素材」をデフォルトで表示
+    const optionDefault = document.createElement('option');
+    optionDefault.value = "和洋裁素材";
+    optionDefault.textContent = "和洋裁素材";
+    category1Select.appendChild(optionDefault);
+
+    uniqueCategories1.forEach(category => {
+        if (category !== "和洋裁素材") { // 和洋裁素材以外のカテゴリ
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            category1Select.appendChild(option);
         }
+    });
+
+    // category1を無効化（グレーアウト）
+    category1Select.disabled = true; // この行で無効化します
+
+    // もしデフォルトで「和洋裁素材」を選択させる場合、値を設定
+    category1Select.value = "和洋裁素材";
+}
 
         function populateCategory2() {
             const category1 = document.getElementById('category1').value;
@@ -63,18 +90,6 @@
             });
         }
 
-        function populateProductId() {
-            const productIdSelect = document.getElementById('product-id');
-            const uniqueProductIds = [...new Set(inventoryData.map(item => item.id))];
-            productIdSelect.innerHTML = '<option value="">すべてを選択</option>';
-            uniqueProductIds.forEach(id => {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = id;
-                productIdSelect.appendChild(option);
-            });
-        }
-
         function populateProductName() {
             const productNameSelect = document.getElementById('product-name');
             const uniqueProductNames = [...new Set(inventoryData.map(item => item.name))];
@@ -86,64 +101,61 @@
                 productNameSelect.appendChild(option);
             });
         }
-        
-       function populateColor() {
-    const colorInput = document.getElementById('color');
-    const uniqueColors = [...new Set(inventoryData.map(item => item.color))];
-    colorInput.innerHTML = '<option value="">すべてを選択</option>';
-    uniqueColors.forEach(color => {
-        const option = document.createElement('option');
-        option.value = color;
-        option.textContent = color;
-        colorInput.appendChild(option);
-    });
-}
 
-       function updateTable(page = 1) {
-    const category1 = document.getElementById('category1').value;
-    const category2 = document.getElementById('category2').value;
-    const selectedProductId = document.getElementById('product-id').value;
-    const selectedProductName = document.getElementById('product-name').value;
-    const selectedColor = document.getElementById('color').value.toLowerCase();
-    const tableBody = document.getElementById('inventory-table-body');
+        function populateColor() {
+            const colorInput = document.getElementById('color');
+            const uniqueColors = [...new Set(inventoryData.map(item => item.color))];
+            colorInput.innerHTML = '<option value="">すべてを選択</option>';
+            uniqueColors.forEach(color => {
+                const option = document.createElement('option');
+                option.value = color;
+                option.textContent = color;
+                colorInput.appendChild(option);
+            });
+        }
 
-    if (!tableBody) {
-        console.error('Table body not found.');
-        return;
-    }
+        function updateTable(page = 1) {
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const selectedProductName = document.getElementById('product-name').value;
+            const selectedColor = document.getElementById('color').value.toLowerCase();
+            const tableBody = document.getElementById('inventory-table-body');
 
-    const filteredData = inventoryData.filter(item => {
-        return (!category1 || item.category1 === category1) &&
-               (!category2 || item.category2 === category2) &&
-               (!selectedProductId || item.id === selectedProductId) &&
-               (!selectedProductName || item.name === selectedProductName) &&
-               (!selectedColor || item.color.toLowerCase().includes(selectedColor));
-    });
+            if (!tableBody) {
+                console.error('Table body not found.');
+                return;
+            }
 
-    const startIndex = (page - 1) * itemsPerPage;
-    const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+            const filteredData = inventoryData.filter(item => {
+                return (!category1 || item.category1 === category1) &&
+                       (!category2 || item.category2 === category2) &&
+                       (!selectedProductName || item.name === selectedProductName) &&
+                       (!selectedColor || item.color.toLowerCase().includes(selectedColor));
+            });
 
-    tableBody.innerHTML = "";
-    paginatedData.forEach(item => {
-        const statusClass = item.status === '欠品' ? 'status-out' :
-                            item.status === '在庫少' ? 'status-low' : 'status-normal';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.category1}</td>
-            <td>${item.category2}</td>
-            <td>${item.name}</td>
-            <td>${item.color}</td>
-            <td>${item.quantity}</td>
-            <td class="${statusClass}">${item.status}</td>
-        `;
-        tableBody.appendChild(row);
-    });
+            const startIndex = (page - 1) * itemsPerPage;
+            const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
-    generatePagination(filteredData.length);
-    currentPage = page;
-}
+            tableBody.innerHTML = "";
+            paginatedData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                                    item.status === '在庫少' ? 'status-low' : 'status-normal';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td class="${statusClass}">${item.status}</td>
+                `;
+                tableBody.appendChild(row);
+            });
 
+            generatePagination(filteredData.length);
+            currentPage = page;
+        }
 
         function generatePagination(totalItems) {
             const pagination = document.getElementById('pagination');
@@ -186,38 +198,32 @@
     <main>
         <section id="inventory-search">
             <h2>在庫検索</h2>
-           <div class="search-container">
-		    <div>
-					 <label for="product-id">商品ID:</label>
-			        <select id="product-id" onchange="updateTable()">
-			            <option value="">すべてを選択</option>
-			        </select>
-			    </div>
-			    <div>
-			        <label for="category1">カテゴリ1:</label>
-			        <select id="category1" onchange="updateTable()">
-			            <option value="">すべてを選択</option>
-			        </select>
-			    </div>
-			    <div>
-			        <label for="category2">カテゴリ2:</label>
-			        <select id="category2" onchange="updateTable()">
-			            <option value="">すべてを選択</option>
-			        </select>
-			    </div>
-			    <div>
-			        <label for="product-name">商品名:</label>
-			        <select id="product-name" onchange="updateTable()">
-			            <option value="">すべてを選択</option>
-			        </select>
-			    </div>
-			    <div>
-				    <label for="color">種類（色）:</label>
-				    <select id="color" onchange="updateTable()">
-				        <option value="">すべてを選択</option>
-				    </select>
-				</div>
-			</div>
+            <div class="search-container">
+                <div>
+                    <label for="category1">カテゴリ1:</label>
+                    <select id="category1" onchange="updateTable()">
+                        <option value="">和洋裁素材</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="category2">カテゴリ2:</label>
+                    <select id="category2" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="product-name">商品名:</label>
+                    <select id="product-name" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="color">種類（色）:</label>
+                    <select id="color" onchange="updateTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
+            </div>
             <table>
                 <thead>
                     <tr>

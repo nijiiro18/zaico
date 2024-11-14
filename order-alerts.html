@@ -32,34 +32,40 @@
         }
 
         function populateFilters() {
-            const category1Set = new Set(alertData.map(item => item.category1));
-            const category2Set = new Set(alertData.map(item => item.category2));
-            const productIdSet = new Set(alertData.map(item => item.id));
-            const productNameSet = new Set(alertData.map(item => item.name));
-            const colorSet = new Set(alertData.map(item => item.color));
+    const category1Set = new Set(alertData.map(item => item.category1));
+    const category2Set = new Set(alertData.map(item => item.category2));
+    const productNameSet = new Set(alertData.map(item => item.name));
+    const colorSet = new Set(alertData.map(item => item.color));
 
-            populateDropdown('category1', category1Set);
-            populateDropdown('category2', category2Set);
-            populateDropdown('product-id', productIdSet);
-            populateDropdown('product-name', productNameSet);
-            populateDropdown('color', colorSet);
-        }
+    const category1Select = document.getElementById('category1');
+    const category2Select = document.getElementById('category2');
+    const productNameSelect = document.getElementById('product-name');
+    const colorSelect = document.getElementById('color');
 
-        function populateDropdown(elementId, valuesSet) {
-            const selectElement = document.getElementById(elementId);
-            selectElement.innerHTML = '<option value="">すべてを選択</option>';
-            valuesSet.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                selectElement.appendChild(option);
-            });
-        }
+    // 初期化
+    category1Select.innerHTML = '<option value="和洋裁素材" selected disabled>和洋裁素材</option>'; // 和洋裁素材をデフォルト選択し、disabledにする
+    category2Select.innerHTML = '<option value="">すべて</option>';
+    productNameSelect.innerHTML = '<option value="">すべて</option>';
+    colorSelect.innerHTML = '<option value="">すべて</option>';
+    
+    // category1を無効化（グレーアウト）
+    category1Select.disabled = true; // これで「和洋裁素材」のみ選択できないように
+
+    // 他の選択肢を追加（和洋裁素材以外）
+    category2Set.forEach(category => {
+        category2Select.innerHTML += `<option value="${category}">${category}</option>`;
+    });
+    productNameSet.forEach(name => {
+        productNameSelect.innerHTML += `<option value="${name}">${name}</option>`;
+    });
+    colorSet.forEach(color => {
+        colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
+    });
+}
 
         function updateTable() {
             const category1 = document.getElementById('category1').value;
             const category2 = document.getElementById('category2').value;
-            const productId = document.getElementById('product-id').value;
             const productName = document.getElementById('product-name').value.toLowerCase();
             const color = document.getElementById('color').value;
             const tableBody = document.getElementById('alert-table-body');
@@ -67,7 +73,6 @@
             const filteredData = alertData.filter(item => {
                 return (category1 === "" || item.category1 === category1) &&
                        (category2 === "" || item.category2 === category2) &&
-                       (productId === "" || item.id === productId) &&
                        (productName === "" || item.name.toLowerCase().includes(productName)) &&
                        (color === "" || item.color === color);
             });
@@ -139,10 +144,6 @@
                 <button onclick="registerEmail()">メールアドレス登録</button>
             </div>
             <div class="search-container">
-                <div>
-                    <label for="product-id">商品ID:</label>
-                    <select id="product-id" onchange="updateTable()"></select>
-                </div>
                 <div>
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1" onchange="updateTable()"></select>

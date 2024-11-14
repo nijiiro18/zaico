@@ -123,7 +123,6 @@ tbody tr:hover {
 }
 
 /* ステータス列のスタイル */
-/* CSSで各ステータスの色を定義 */
 .status-out { background-color: #ffcccc; }  /* 欠品: 赤 */
 .status-low { background-color: #fffacd; }  /* 在庫少: 黄色 */
 
@@ -154,11 +153,7 @@ footer {
     flex: 1;
     min-width: 200px;
 }
-#cart-image {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
+
 .search-container label {
     font-weight: bold;
     margin-bottom: 5px;
@@ -243,15 +238,6 @@ form select {
     margin-top: 10px;
 }
 
-
-button:hover {
-    background-color: #1976d2;
-}
-
-#add-button {
-    margin-top: 15px;
-}
-
 /* テーブル編集セクションのスタイル */
 #edit-section {
     display: none;
@@ -290,4 +276,9 @@ table th {
     padding: 8px;
     text-align: left;
     border: 1px solid #ddd;
+}
+
+/* disabled状態のときにカーソルを禁止マークに変更 */
+#category1:disabled {
+    color: #999 !important;  /* 文字色を薄いグレーに設定 */
 }

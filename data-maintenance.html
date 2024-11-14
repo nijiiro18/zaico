@@ -11,7 +11,7 @@
             display: flex;
             gap: 10px;
         }
-        .form-section, .data-section {
+        .form-section, .data-section, .edit-section {
             display: none;
             margin-top: 20px;
         }
@@ -28,7 +28,6 @@
         }
     </style>
     <script>
-        // ヘッダーを読み込む関数
         async function loadHeader() {
             try {
                 const response = await fetch('header.html');
@@ -57,9 +56,11 @@
         };
 
         let currentData = 'stock';
+        let editingIndex = null;
 
         function switchData(type) {
             currentData = type;
+            editingIndex = null;
             document.querySelectorAll('.form-section').forEach(section => section.style.display = 'none');
             document.querySelector(`#${type}-section`).style.display = 'block';
             renderTable();
@@ -87,7 +88,7 @@
         function addItem() {
             const newItem = {};
             document.querySelectorAll(`#${currentData}-section .form-group input`).forEach(input => {
-                newItem[input.id.replace('new-', '')] = input.value;
+                newItem[input.name] = input.value;
             });
             newItem.lastUpdatedAt = new Date().toLocaleString();
             dataStorage[currentData].push(newItem);
@@ -96,21 +97,24 @@
         }
 
         function editItem(index) {
+            editingIndex = index;
             const item = dataStorage[currentData][index];
-            document.querySelectorAll(`#${currentData}-section .form-group input`).forEach(input => {
-                input.value = item[input.id.replace('edit-', '')];
+            document.querySelectorAll(`#${currentData}-section .edit-section .form-group input`).forEach(input => {
+                input.value = item[input.name];
             });
             document.getElementById(`${currentData}-edit-section`).style.display = 'block';
         }
 
-        function updateItem(index) {
-            document.querySelectorAll(`#${currentData}-section .form-group input`).forEach(input => {
-                dataStorage[currentData][index][input.id.replace('edit-', '')] = input.value;
+        function updateItem() {
+            if (editingIndex === null) return;
+            document.querySelectorAll(`#${currentData}-section .edit-section .form-group input`).forEach(input => {
+                dataStorage[currentData][editingIndex][input.name] = input.value;
             });
-            dataStorage[currentData][index].lastUpdatedAt = new Date().toLocaleString();
+            dataStorage[currentData][editingIndex].lastUpdatedAt = new Date().toLocaleString();
             renderTable();
             clearForm('edit');
             document.getElementById(`${currentData}-edit-section`).style.display = 'none';
+            editingIndex = null;
         }
 
         function deleteItem(index) {
@@ -121,7 +125,8 @@
         function clearForm(type) {
             document.querySelectorAll(`#${currentData}-${type}-section .form-group input`).forEach(input => input.value = '');
         }
-         function checkLogin() {
+
+        function checkLogin() {
             const loggedInUser = sessionStorage.getItem('loggedInUser');
             if (!loggedInUser) {
                 window.location.href = 'login.html';
@@ -143,7 +148,7 @@
     </script>
 </head>
 <body>
-    <div id="header"></div> <!-- ヘッダー読み込み場所 -->
+    <div id="header"></div>
     <main>
         <section id="data-menu">
             <button onclick="switchData('stock')">在庫データ</button>
@@ -167,6 +172,15 @@
                 </thead>
                 <tbody id="stock-table-body"></tbody>
             </table>
+            <!-- 編集フォーム -->
+            <div id="stock-edit-section" class="edit-section">
+                <h3>編集</h3>
+                <div class="form-group"><label>商品CD:</label><input type="text" name="productCode" disabled></div>
+                <div class="form-group"><label>在庫数:</label><input type="number" name="stockCount"></div>
+                <div class="form-group"><label>最終更新者:</label><input type="text" name="lastUpdatedBy"></div>
+                <button onclick="updateItem()">更新</button>
+                <button onclick="clearForm('edit')">キャンセル</button>
+            </div>
         </section>
 
         <!-- 入庫データセクション -->
@@ -186,6 +200,16 @@
                 </thead>
                 <tbody id="stockIn-table-body"></tbody>
             </table>
+            <!-- 編集フォーム -->
+            <div id="stockIn-edit-section" class="edit-section">
+                <h3>編集</h3>
+                <div class="form-group"><label>商品CD:</label><input type="text" name="productCode" disabled></div>
+                <div class="form-group"><label>入庫数:</label><input type="number" name="stockInCount"></div>
+                <div class="form-group"><label>入庫区分:</label><input type="text" name="stockInType"></div>
+                <div class="form-group"><label>入庫日:</label><input type="date" name="stockInDate"></div>
+                <button onclick="updateItem()">更新</button>
+                <button onclick="clearForm('edit')">キャンセル</button>
+            </div>
         </section>
 
         <!-- 出庫データセクション -->
@@ -205,6 +229,16 @@
                 </thead>
                 <tbody id="stockOut-table-body"></tbody>
             </table>
+            <!-- 編集フォーム -->
+            <div id="stockOut-edit-section" class="edit-section">
+                <h3>編集</h3>
+                <div class="form-group"><label>商品CD:</label><input type="text" name="productCode" disabled></div>
+                <div class="form-group"><label>出庫数:</label><input type="number" name="stockOutCount"></div>
+                <div class="form-group"><label>出庫区分:</label><input type="text" name="stockOutType"></div>
+                <div class="form-group"><label>出庫日:</label><input type="date" name="stockOutDate"></div>
+                <button onclick="updateItem()">更新</button>
+                <button onclick="clearForm('edit')">キャンセル</button>
+            </div>
         </section>
 
         <!-- 棚卸データセクション -->
@@ -213,9 +247,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>商品ID</th>
-                        <th>商品数</th>
-                        <th>棚卸前商品数</th>
+                        <th>商品CD</th>
+                        <th>棚卸数</th>
+                        <th>棚卸前在庫数</th>
                         <th>棚卸日</th>
                         <th>最終更新者</th>
                         <th>最終更新日</th>
@@ -224,10 +258,17 @@
                 </thead>
                 <tbody id="inventory-table-body"></tbody>
             </table>
+            <!-- 編集フォーム -->
+            <div id="inventory-edit-section" class="edit-section">
+                <h3>編集</h3>
+                <div class="form-group"><label>商品CD:</label><input type="text" name="productCode" disabled></div>
+                <div class="form-group"><label>棚卸数:</label><input type="number" name="productCount"></div>
+                <div class="form-group"><label>棚卸前在庫数:</label><input type="number" name="preInventoryCount"></div>
+                <div class="form-group"><label>棚卸日:</label><input type="date" name="inventoryDate"></div>
+                <button onclick="updateItem()">更新</button>
+                <button onclick="clearForm('edit')">キャンセル</button>
+            </div>
         </section>
     </main>
-    <footer>
-        <p>&copy; 2024 にじいろ市場</p>
-    </footer>
 </body>
 </html>

@@ -31,89 +31,84 @@
         }
 
         function populateFilters() {
-    const category1Set = new Set(inventoryData.map(item => item.category1));
-    const category2Set = new Set(inventoryData.map(item => item.category2));
-    const productIdSet = new Set(inventoryData.map(item => item.id));
-    const productNameSet = new Set(inventoryData.map(item => item.name));
-    const colorSet = new Set(inventoryData.map(item => item.color));
+            const category1Set = new Set(inventoryData.map(item => item.category1));
+            const category2Set = new Set(inventoryData.map(item => item.category2));
+            const productNameSet = new Set(inventoryData.map(item => item.name));
+            const colorSet = new Set(inventoryData.map(item => item.color));
 
-    const category1Select = document.getElementById('category1');
-    const category2Select = document.getElementById('category2');
-    const productIdSelect = document.getElementById('product-id');
-    const productNameSelect = document.getElementById('product-name');
-    const colorSelect = document.getElementById('color');
+            const category1Select = document.getElementById('category1');
+            const category2Select = document.getElementById('category2');
+            const productNameSelect = document.getElementById('product-name');
+            const colorSelect = document.getElementById('color');
 
-    // 初期化
-    category1Select.innerHTML = '<option value="">すべて</option>';
-    category2Select.innerHTML = '<option value="">すべて</option>';
-    productIdSelect.innerHTML = '<option value="">すべて</option>';
-    productNameSelect.innerHTML = '<option value="">すべて</option>';
-    colorSelect.innerHTML = '<option value="">すべて</option>'; // ← 修正ポイント
+            // 初期化
+            category1Select.innerHTML = '<option value="和洋裁素材" selected disabled>和洋裁素材</option>'; // 和洋裁素材をデフォルト選択し、disabledにする
+            category2Select.innerHTML = '<option value="">すべて</option>';
+            productNameSelect.innerHTML = '<option value="">すべて</option>';
+            colorSelect.innerHTML = '<option value="">すべて</option>';
+            
+            // category1を無効化（グレーアウト）
+    		category1Select.disabled = true; // この行で無効化します
 
-    // オプション追加
-    category1Set.forEach(category => {
-        category1Select.innerHTML += `<option value="${category}">${category}</option>`;
-    });
-    category2Set.forEach(category => {
-        category2Select.innerHTML += `<option value="${category}">${category}</option>`;
-    });
-    productIdSet.forEach(id => {
-        productIdSelect.innerHTML += `<option value="${id}">${id}</option>`;
-    });
-    productNameSet.forEach(name => {
-        productNameSelect.innerHTML += `<option value="${name}">${name}</option>`;
-    });
-    colorSet.forEach(color => { // 色のオプション追加
-        colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
-    });
-}
-function renderTable() {
-    const category1Filter = document.getElementById('category1').value;
-    const category2Filter = document.getElementById('category2').value;
-    const productIdFilter = document.getElementById('product-id').value;
-    const productNameFilter = document.getElementById('product-name').value;
-    const colorFilter = document.getElementById('color').value.toLowerCase();
-    const statusFilter = document.querySelector('input[name="status-filter"]:checked').value;
-    const tableBody = document.getElementById('low-stock-table-body');
+            // オプション追加
+            category1Set.forEach(category => {
+                if (category !== '和洋裁素材') { // 和洋裁素材以外
+                    category1Select.innerHTML += `<option value="${category}">${category}</option>`;
+                }
+            });
+            category2Set.forEach(category => {
+                category2Select.innerHTML += `<option value="${category}">${category}</option>`;
+            });
+            productNameSet.forEach(name => {
+                productNameSelect.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+            colorSet.forEach(color => {
+                colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
+            });
+        }
 
-    const filteredData = inventoryData.filter(item => {
-        const matchesCategory1 = !category1Filter || item.category1 === category1Filter;
-        const matchesCategory2 = !category2Filter || item.category2 === category2Filter;
-        const matchesProductId = !productIdFilter || item.id === productIdFilter;
-        const matchesProductName = !productNameFilter || item.name === productNameFilter;
-        const matchesColor = !colorFilter || item.color.toLowerCase().includes(colorFilter);
-        const matchesStatus = statusFilter === "すべて" || item.status === statusFilter;
+        function renderTable() {
+            const category1Filter = document.getElementById('category1').value;
+            const category2Filter = document.getElementById('category2').value;
+            const productNameFilter = document.getElementById('product-name').value;
+            const colorFilter = document.getElementById('color').value.toLowerCase();
+            const statusFilter = document.querySelector('input[name="status-filter"]:checked').value;
+            const tableBody = document.getElementById('low-stock-table-body');
 
-        return matchesCategory1 && matchesCategory2 && matchesProductId &&
-               matchesProductName && matchesColor && matchesStatus;
-    }).sort((a, b) => a.quantity - b.quantity);
+            const filteredData = inventoryData.filter(item => {
+                const matchesCategory1 = !category1Filter || item.category1 === category1Filter;
+                const matchesCategory2 = !category2Filter || item.category2 === category2Filter;
+                const matchesProductName = !productNameFilter || item.name === productNameFilter;
+                const matchesColor = !colorFilter || item.color.toLowerCase().includes(colorFilter);
+                const matchesStatus = statusFilter === "すべて" || item.status === statusFilter;
 
-    tableBody.innerHTML = '';
-    filteredData.forEach(item => {
-        const statusClass = item.status === '欠品' ? 'status-out' :
-                            item.status === '在庫少' ? 'status-low' : 'status-normal';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.category1}</td>
-            <td>${item.category2}</td>
-            <td>${item.name}</td>
-            <td>${item.color}</td>
-            <td>${item.quantity}</td>
-            <td class="${statusClass}">${item.status}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
+                return matchesCategory1 && matchesCategory2 && matchesProductName &&
+                    matchesColor && matchesStatus;
+            }).sort((a, b) => a.quantity - b.quantity);
 
-       
+            tableBody.innerHTML = '';
+            filteredData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                    item.status === '在庫少' ? 'status-low' : 'status-normal';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td class="${statusClass}">${item.status}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
 
-        window.onload = function() {
+        window.onload = function () {
             loadHeader();
             loadInventoryData();
             document.getElementById('category1').addEventListener('change', renderTable);
             document.getElementById('category2').addEventListener('change', renderTable);
-            document.getElementById('product-id').addEventListener('change', renderTable);
             document.getElementById('product-name').addEventListener('change', renderTable);
             document.querySelectorAll('input[name="status-filter"]').forEach(radio => {
                 radio.addEventListener('change', renderTable);
@@ -144,15 +139,9 @@ function renderTable() {
             <h2>在庫少の商品検索</h2>
             <div class="search-container">
                 <div>
-                    <label for="product-id">商品ID:</label>
-                    <select id="product-id">
-                        <option value="">すべてを選択</option>
-                    </select>
-                </div>
-                <div>
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1">
-                        <option value="">すべてを選択</option>
+                        <!-- 和洋裁素材をデフォルトで表示してdisabled -->
                     </select>
                 </div>
                 <div>
@@ -161,18 +150,18 @@ function renderTable() {
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
-                 <div>
+                <div>
                     <label for="product-name">商品名:</label>
                     <select id="product-name">
                         <option value="">すべてを選択</option>
                     </select>
                 </div>
                 <div>
-				    <label for="color">種類（色）:</label>
-				    <select id="color" onchange="renderTable()">
-				        <option value="">すべてを選択</option>
-				    </select>
-				</div>
+                    <label for="color">種類（色）:</label>
+                    <select id="color" onchange="renderTable()">
+                        <option value="">すべてを選択</option>
+                    </select>
+                </div>
             </div>
             <div class="filter-group">
                 <label><input type="radio" name="status-filter" value="すべて" checked> すべて</label>
@@ -185,7 +174,7 @@ function renderTable() {
             <table>
                 <thead>
                     <tr>
-                       	<th>商品ID</th>
+                        <th>商品ID</th>
                         <th>カテゴリ1</th>
                         <th>カテゴリ2</th>
                         <th>商品名</th>

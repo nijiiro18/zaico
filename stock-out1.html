@@ -34,124 +34,123 @@
             }
         }
 
-        function populateFilters() {
-            const category1Set = new Set(inventoryData.map(item => item.category1));
-            const category2Set = new Set(inventoryData.map(item => item.category2));
-            const productIdSet = new Set(inventoryData.map(item => item.id));
-            const productNameSet = new Set(inventoryData.map(item => item.name));
-            const colorSet = new Set(inventoryData.map(item => item.color));
+      function populateFilters() {
+    const category1Set = new Set(inventoryData.map(item => item.category1));
+    const category2Set = new Set(inventoryData.map(item => item.category2));
+    const productNameSet = new Set(inventoryData.map(item => item.name));
+    const colorSet = new Set(inventoryData.map(item => item.color));
 
-            populateDropdown('category1', category1Set);
-            populateDropdown('category2', category2Set);
-            populateDropdown('product-id', productIdSet);
-            populateDropdown('product-name', productNameSet);
-            populateDropdown('color', colorSet);
-        }
+    populateDropdown('category1', category1Set, '和洋裁素材');
+    populateDropdown('category2', category2Set);
+    populateDropdown('product-name', productNameSet);
+    populateDropdown('color', colorSet);
 
-        function populateDropdown(elementId, valuesSet) {
-            const selectElement = document.getElementById(elementId);
-            if (!selectElement) return;
-            selectElement.innerHTML = '<option value="">すべてを選択</option>';
-            valuesSet.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                selectElement.appendChild(option);
+    // Disable the category1 select dropdown (graying it out)
+    const category1Select = document.getElementById('category1');
+    if (category1Select) {
+        category1Select.disabled = true; // This line disables the dropdown
+    }
+}
+
+function populateFilters() {
+    const category1Set = new Set(inventoryData.map(item => item.category1));
+    const category2Set = new Set(inventoryData.map(item => item.category2));
+    const productNameSet = new Set(inventoryData.map(item => item.name));
+    const colorSet = new Set(inventoryData.map(item => item.color));
+
+    populateDropdown('category1', category1Set, '和洋裁素材');
+    populateDropdown('category2', category2Set);
+    populateDropdown('product-name', productNameSet);
+    populateDropdown('color', colorSet);
+
+    // Disable the category1 select dropdown (graying it out)
+    const category1Select = document.getElementById('category1');
+    if (category1Select) {
+        category1Select.disabled = true; // This line disables the dropdown
+    }
+}
+
+function populateDropdown(elementId, valuesSet, defaultValue = '') {
+    const selectElement = document.getElementById(elementId);
+    if (!selectElement) return;
+
+    // Set the first option to a placeholder or a default value
+    selectElement.innerHTML = `<option value="">${defaultValue || "すべてを選択"}</option>`;
+    
+    // Add the values from the Set to the dropdown
+    valuesSet.forEach(value => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        selectElement.appendChild(option);
+    });
+
+    // If a default value is provided, ensure it is selected by default
+    if (defaultValue && !valuesSet.has(defaultValue)) {
+        const defaultOption = document.createElement('option');
+        defaultOption.value = defaultValue;
+        defaultOption.textContent = defaultValue;
+        selectElement.prepend(defaultOption); // Prepend to make it the first option
+        selectElement.value = defaultValue; // Set the value of the dropdown to the default
+    }
+}
+
+
+        function updateTable() {
+            const category1 = document.getElementById('category1').value;
+            const category2 = document.getElementById('category2').value;
+            const productName = document.getElementById('product-name').value.toLowerCase();
+            const selectedColor = document.getElementById('color').value;
+            const tableBody = document.getElementById('stock-out-table-body');
+
+            const filteredData = inventoryData.filter(item => {
+                return (!category1 || item.category1 === category1) &&
+                    (!category2 || item.category2 === category2) &&
+                    (!productName || item.name.toLowerCase().includes(productName)) &&
+                    (!selectedColor || item.color === selectedColor);
+            });
+
+            tableBody.innerHTML = "";
+            filteredData.forEach(item => {
+                const statusClass = item.status === '欠品' ? 'status-out' :
+                    item.status === '在庫少' ? 'status-low' : 'status-normal';
+                const row = document.createElement('tr');
+                row.innerHTML = ` 
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td class="${statusClass}">${item.status}</td>
+                    <td>
+                        <button data-id="${item.id}" onclick="addToCart('${item.id}', this)">選択</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
             });
         }
 
-        function updateTable() {
-    const category1 = document.getElementById('category1').value;
-    const category2 = document.getElementById('category2').value;
-    const productId = document.getElementById('product-id').value;
-    const productName = document.getElementById('product-name').value.toLowerCase();
-    const selectedColor = document.getElementById('color').value;
-    const tableBody = document.getElementById('stock-out-table-body');
+        function addToCart(itemId, buttonElement) {
+            const item = inventoryData.find(i => i.id === itemId);
+            if (!selectedItems.some(i => i.id === itemId)) {
+                selectedItems.push({ ...item, quantityToRemove: 1 });
+                updateCart();
+                playSound(); // サウンド再生
+            }
+        }
 
-    const filteredData = inventoryData.filter(item => {
-        return (!category1 || item.category1 === category1) &&
-               (!category2 || item.category2 === category2) &&
-               (!productId || item.id === productId) &&
-               (!productName || item.name.toLowerCase().includes(productName)) &&
-               (!selectedColor || item.color === selectedColor);
-    });
-
-    tableBody.innerHTML = "";
-    filteredData.forEach(item => {
-        const statusClass = item.status === '欠品' ? 'status-out' :
-                            item.status === '在庫少' ? 'status-low' : 'status-normal';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.category1}</td>
-            <td>${item.category2}</td>
-            <td>${item.name}</td>
-            <td>${item.color}</td>
-            <td>${item.quantity}</td>
-            <td class="${statusClass}">${item.status}</td>
-            <td>
-                <button data-id="${item.id}" onclick="addToCart('${item.id}', this)">選択</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-function addToCart(itemId, buttonElement) {
-    const item = inventoryData.find(i => i.id === itemId);
-    if (!selectedItems.some(i => i.id === itemId)) {
-        selectedItems.push({ ...item, quantityToRemove: 1 });
-        updateCart();
-        showCartImage(buttonElement); // ボタン要素を渡してカート画像を表示
-    }
-}
-
-
-function showCartImage(buttonElement) {
-    // カート画像が存在しない場合は作成
-    let cartImage = document.getElementById("cart-image");
-
-    if (!cartImage) {
-        cartImage = document.createElement("img");
-        cartImage.id = "cart-image";
-        cartImage.src = "cart.png";
-        cartImage.alt = "カート";
-        cartImage.style.position = "absolute";
-        cartImage.style.width = "24px";
-        cartImage.style.height = "24px";
-        cartImage.style.transition = "opacity 0.5s ease";
-        document.body.appendChild(cartImage);
-    }
-
-    // 選択ボタンの位置を取得してカート画像を配置
-    const rect = buttonElement.getBoundingClientRect();
-    const offsetX = 10; // ボタンから右に10pxずらす
-    const offsetY = -10; // ボタンの高さと少し上に配置
-
-    // カート画像の位置を設定
-    cartImage.style.left = `${rect.right + offsetX + window.scrollX}px`;
-    cartImage.style.top = `${rect.top + offsetY + window.scrollY}px`;
-    cartImage.style.display = "block";
-    cartImage.style.opacity = "1";
-
-    // 3秒後にフェードアウトして非表示にする
-    setTimeout(() => {
-        cartImage.style.opacity = "0";
-        setTimeout(() => {
-            cartImage.style.display = "none";
-        }, 500);
-    }, 3000);
-}
-
-
-
+        function playSound() {
+            const audio = new Audio('金額表示.mp3');
+            audio.play(); // 音を再生
+        }
 
         function updateCart() {
             const cartTableBody = document.getElementById('cart-table-body');
             cartTableBody.innerHTML = "";
             selectedItems.forEach((item, index) => {
                 const row = document.createElement('tr');
-                row.innerHTML = `
+                row.innerHTML = ` 
                     <td>${item.id}</td>
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
@@ -178,50 +177,30 @@ function showCartImage(buttonElement) {
             sessionStorage.setItem('selectedStockOutItems', JSON.stringify(selectedItems));
             window.location.href = 'stock-out-confirm.html';
         }
+        
 
-        window.onload = function() {
-            loadHeader();
-            loadInventoryData();
-        };
-			        function addToCart(itemId) {
-			    const item = inventoryData.find(i => i.id === itemId);
-			    if (!selectedItems.some(i => i.id === itemId)) {
-			        selectedItems.push({ ...item, quantityToRemove: 1 });
-			        updateCart();
-			        showCartImage(); // カート画像を表示
-			    }
-			}
+       window.onload = function() {
+    loadHeader();
+    loadInventoryData();
 
-			// カート画像を表示する関数
-			function showCartImage() {
-			    const cartImage = document.getElementById("cart-image");
+    // Disable the category1 select dropdown (graying it out)
+    const category1Select = document.getElementById('category1');
+    if (category1Select) {
+        category1Select.disabled = true;
+    }
+};
 
-			    // カート画像を表示してフェードイン
-			    cartImage.style.display = "block";
-			    cartImage.style.opacity = "1";
+        
 
-			    // 3秒後にフェードアウトして非表示にする
-			    setTimeout(() => {
-			        cartImage.style.opacity = "0";
-			        // アニメーションが完了したら非表示にする
-			        setTimeout(() => {
-			            cartImage.style.display = "none";
-			        }, 500);
-			    }, 3000);
-			}
     </script>
 </head>
 <body>
     <div id="header"></div>
-	
-	<!-- カート画像の追加 -->
-<img id="cart-image" src="cart.png" alt="カート" style="width: 80px; height: 80px; position: fixed; top: 20px; right: 20px; display: none; opacity: 0; transition: opacity 0.5s ease;">
 
     <main>
         <section id="stock-out">
             <h2>出庫する商品を選択</h2>
             <div class="search-container">
-                <div><label for="product-id">商品ID:</label><select id="product-id" onchange="updateTable()"></select></div>
                 <div><label for="category1">カテゴリ1:</label><select id="category1" onchange="updateTable()"></select></div>
                 <div><label for="category2">カテゴリ2:</label><select id="category2" onchange="updateTable()"></select></div>
                 <div><label for="product-name">商品名:</label><select id="product-name" onchange="updateTable()"></select></div>
