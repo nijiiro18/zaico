@@ -9,7 +9,7 @@ body {
 
 /* ヘッダーのスタイル */
 header {
-    background-color: #2196f3;
+    background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
     color: white;
     padding: 15px 20px;
     display: flex;
