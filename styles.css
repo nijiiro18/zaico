@@ -18,6 +18,15 @@ header {
     position: relative;
 }
 
+/* 全体の基本スタイル */
+body {
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
 /* ログインユーザー名のスタイル */
 #logged-in-user {
     color: #fff;
@@ -36,6 +45,8 @@ header {
 button {
     background-color: #1976d2;
     color: white;
+    font-family: 'Times New Roman', Times, serif;
+    /* 他のスタイルはそのまま */
     border: none;
     padding: 10px 20px; /* 横幅を狭める */
     border-radius: 5px;
