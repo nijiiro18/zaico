@@ -4,9 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>にじいろ市場 - ログイン</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 全体のスタイル */
+        body {
+            margin: 0;
+            font-family: 'Times New Roman', Times, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        /* ヘッダーのスタイル */
+        header {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        header img {
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        /* ログインフォームのコンテナ */
+        .login-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        /* 入力フィールドのスタイル */
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* うぐいす色のログインボタン */
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #2196f3;
+        }
+
+        /* エラーメッセージ */
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
+    <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
+    <div style="display: flex; align-items: center;">
+        <img src="logo.png" alt="Logo" style="height: 50px; margin-right: 20px;">
+</div>
+</header>
+
     <div class="login-container">
         <h2>ログイン</h2>
         <div class="error" id="error-message"></div>
@@ -16,23 +90,51 @@
     </div>
 
     <script>
-        function login() {
+        // 既にログインしている場合、リダイレクト
+        if (sessionStorage.getItem('loggedInUser')) {
+            window.location.href = 'inventory-search.html';
+        }
+
+        async function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const errorMessageElement = document.getElementById('error-message');
+            errorMessageElement.textContent = '';  // エラーメッセージを初期化
 
-            // 簡易的なIDとパスワードのチェック
-            if (username === 'admin' && password === '1234') {
-                // ログイン成功時にセッションストレージに保存
-                sessionStorage.setItem('loggedInUser', username);
-                window.location.href = 'inventory-search.html'; // ログイン成功後のリダイレクト先
-            } else {
-                document.getElementById('error-message').textContent = 'IDまたはパスワードが正しくありません';
+            // 入力が空の場合、エラーメッセージを表示
+            if (!username || !password) {
+                errorMessageElement.textContent = 'ユーザーIDとパスワードを入力してください。';
+                return;
+            }
+
+            try {
+                const hashedPassword = await hashPassword(password);
+                
+                // 事前に保存した管理者のハッシュ化されたパスワード（ここではSHA-256）
+                const storedHashedPassword = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // '1234' のSHA-256ハッシュ
+                
+                if (username === 'admin' && hashedPassword === storedHashedPassword) {
+                    // ログイン成功時にセッションストレージに保存
+                    sessionStorage.setItem('loggedInUser', username);
+                    window.location.href = 'inventory-search.html'; // ログイン後にリダイレクト
+                } else {
+                    errorMessageElement.textContent = 'ユーザーIDまたはパスワードが間違っています。';
+                }
+            } catch (error) {
+                console.error('ログインエラー:', error);
+                errorMessageElement.textContent = 'ログイン中にエラーが発生しました。';
             }
         }
 
-        // ログイン状態をチェックして、既にログインしている場合はリダイレクト
-        if (sessionStorage.getItem('loggedInUser')) {
-            window.location.href = 'inventory-search.html';
+        // ハッシュ化関数 (SHA-256を使用)
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+            console.log(hashHex);
+            return hashHex;
         }
     </script>
 </body>
