@@ -1,0 +1,92 @@
+[
+    {
+        "id": "47701139",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "name": "玉付きゴールド25cm",
+        "color": "アクアブルー 544",
+        "quantity": 20,
+        "threshold": 25,
+        "alertDate": "2024-11-14"
+    },
+    {
+        "id": "36038370",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "name": "玉付きゴールド25cm",
+        "color": "エンジ 520",
+        "quantity": 31,
+        "threshold": 35,
+        "alertDate": "2024-11-13"
+    },
+    {
+        "id": "36038442",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "name": "玉付きゴールド25cm",
+        "color": "ブラック 580",
+        "quantity": -47,
+        "threshold": 0,
+        "alertDate": "2024-11-12"
+    },
+    {
+        "id": "47701163",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "name": "玉付きゴールド25cm",
+        "color": "マゼンタ 817",
+        "quantity": 20,
+        "threshold": 30,
+        "alertDate": "2024-11-11"
+    },
+    {
+        "id": "36038545",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "name": "玉付きゴールド30cm",
+        "color": "インディゴ 558",
+        "quantity": 13,
+        "threshold": 15,
+        "alertDate": "2024-11-10"
+    },
+    {
+        "id": "56384187",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "name": "バイアステープ両折れ",
+        "color": "オレンジ 727",
+        "quantity": 70,
+        "threshold": 80,
+        "alertDate": "2024-11-09"
+    },
+    {
+        "id": "56384208",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "name": "バイアステープ両折れ",
+        "color": "スカイブルー 746",
+        "quantity": 110,
+        "threshold": 120,
+        "alertDate": "2024-11-08"
+    },
+    {
+        "id": "56384196",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "name": "バイアステープ両折れ",
+        "color": "パープル 852",
+        "quantity": 60,
+        "threshold": 70,
+        "alertDate": "2024-11-07"
+    },
+    {
+        "id": "36038358",
+        "category1": "和洋裁素材",
+        "category2": "ファスナー",
+        "name": "玉付きゴールド25cm",
+        "color": "ピンク 513",
+        "quantity": 12,
+        "threshold": 20,
+        "alertDate": "2024-11-06"
+    }
+]

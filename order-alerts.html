@@ -6,6 +6,8 @@
     <title>にじいろ市場 - 発注アラート</title>
     <link rel="stylesheet" href="styles.css">
     <script>
+        let alertData = [];
+
         async function loadHeader() {
             try {
                 const response = await fetch('header.html');
@@ -17,8 +19,6 @@
                 console.error('ヘッダーの読み込みに失敗しました:', error);
             }
         }
-
-        let alertData = [];
 
         async function loadAlertData() {
             try {
@@ -32,36 +32,45 @@
         }
 
         function populateFilters() {
-    const category1Set = new Set(alertData.map(item => item.category1));
-    const category2Set = new Set(alertData.map(item => item.category2));
-    const productNameSet = new Set(alertData.map(item => item.name));
-    const colorSet = new Set(alertData.map(item => item.color));
+            const category1Set = new Set(alertData.map(item => item.category1));
+            const category2Set = new Set(alertData.map(item => item.category2));
+            const productNameSet = new Set(alertData.map(item => item.name));
+            const colorSet = new Set(alertData.map(item => item.color));
 
-    const category1Select = document.getElementById('category1');
-    const category2Select = document.getElementById('category2');
-    const productNameSelect = document.getElementById('product-name');
-    const colorSelect = document.getElementById('color');
+            const category1Select = document.getElementById('category1');
+            const category2Select = document.getElementById('category2');
+            const productNameSelect = document.getElementById('product-name');
+            const colorSelect = document.getElementById('color');
 
-    // 初期化
-    category1Select.innerHTML = '<option value="和洋裁素材" selected disabled>和洋裁素材</option>'; // 和洋裁素材をデフォルト選択し、disabledにする
-    category2Select.innerHTML = '<option value="">すべて</option>';
-    productNameSelect.innerHTML = '<option value="">すべて</option>';
-    colorSelect.innerHTML = '<option value="">すべて</option>';
-    
-    // category1を無効化（グレーアウト）
-    category1Select.disabled = true; // これで「和洋裁素材」のみ選択できないように
+            // 初期化
+            category1Select.innerHTML = '<option value="">和洋裁素材</option>';
+            category2Select.innerHTML = '<option value="">すべて</option>';
+            productNameSelect.innerHTML = '<option value="">すべて</option>';
+            colorSelect.innerHTML = '<option value="">すべて</option>';
+            
+            // category1を無効化（グレーアウト）
+    		category1Select.disabled = true; // この行で無効化します
 
-    // 他の選択肢を追加（和洋裁素材以外）
-    category2Set.forEach(category => {
-        category2Select.innerHTML += `<option value="${category}">${category}</option>`;
-    });
-    productNameSet.forEach(name => {
-        productNameSelect.innerHTML += `<option value="${name}">${name}</option>`;
-    });
-    colorSet.forEach(color => {
-        colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
-    });
-}
+            // カテゴリ1のオプションを追加
+            category1Set.forEach(category => {
+                category1Select.innerHTML += `<option value="${category}">${category}</option>`;
+            });
+
+            // カテゴリ2のオプションを追加
+            category2Set.forEach(category => {
+                category2Select.innerHTML += `<option value="${category}">${category}</option>`;
+            });
+
+            // 商品名のオプションを追加
+            productNameSet.forEach(name => {
+                productNameSelect.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+
+            // 色のオプションを追加
+            colorSet.forEach(color => {
+                colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
+            });
+        }
 
         function updateTable() {
             const category1 = document.getElementById('category1').value;
@@ -127,6 +136,10 @@
             window.location.href = 'login.html';
         }
 
+        function navigateToTriggeredAlerts() {
+            window.location.href = 'triggeredAlerts.html';
+        }
+
         window.onload = async function() {
             await loadHeader();
             await loadAlertData();
@@ -144,22 +157,16 @@
                 <button onclick="registerEmail()">メールアドレス登録</button>
             </div>
             <div class="search-container">
-                <div>
                     <label for="category1">カテゴリ1:</label>
                     <select id="category1" onchange="updateTable()"></select>
-                </div>
-                <div>
-                    <label for="category2">カテゴリ2:</label>
-                    <select id="category2" onchange="updateTable()"></select>
-                </div>
-                <div>
-                    <label for="product-name">商品名:</label>
-                    <select id="product-name" onchange="updateTable()"></select>
-                </div>
-                <div>
-                    <label for="color">種類（色）:</label>
-                    <select id="color" onchange="updateTable()"></select>
-                </div>
+                <label for="category2">カテゴリ2:</label>
+                <select id="category2" onchange="updateTable()"></select>
+
+                <label for="product-name">商品名:</label>
+                <select id="product-name" onchange="updateTable()"></select>
+
+                <label for="color">種類（色）:</label>
+                <select id="color" onchange="updateTable()"></select>
             </div>
             <table>
                 <thead>
@@ -175,6 +182,7 @@
                 </thead>
                 <tbody id="alert-table-body"></tbody>
             </table>
+            <button onclick="navigateToTriggeredAlerts()">発注アラート商品一覧を見る</button>
         </section>
     </main>
     <footer>

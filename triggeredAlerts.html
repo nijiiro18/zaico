@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>発注アラート商品一覧</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        let alertTriggeredItems = [];
+
+        async function loadHeader() {
+            try {
+                const response = await fetch('header.html');
+                const headerContent = await response.text();
+                document.getElementById('header').innerHTML = headerContent;
+                document.getElementById('logout-button').onclick = logout;
+                checkLogin();
+            } catch (error) {
+                console.error('ヘッダーの読み込みに失敗しました:', error);
+            }
+        }
+
+        async function loadTriggeredAlerts() {
+            try {
+                const response = await fetch('triggeredAlerts.json');
+                alertTriggeredItems = await response.json();
+                displayTriggeredAlerts();
+            } catch (error) {
+                console.error('発注アラート商品の読み込みに失敗しました:', error);
+            }
+        }
+
+        function displayTriggeredAlerts() {
+            const tableBody = document.getElementById('triggered-alerts-table-body');
+
+            tableBody.innerHTML = "";
+            alertTriggeredItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.category1}</td>
+                    <td>${item.category2}</td>
+                    <td>${item.name}</td>
+                    <td>${item.color}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.threshold}</td>
+                    <td>${item.alertDate}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function checkLogin() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                window.location.href = 'login.html';
+            } else {
+                const userElement = document.getElementById('logged-in-user');
+                if (userElement) userElement.textContent = `ログイン中: ${loggedInUser}`;
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        }
+
+        window.onload = async function() {
+            await loadHeader();
+            await loadTriggeredAlerts();
+        };
+    </script>
+</head>
+<body>
+    <div id="header"></div>
+    <main>
+        <h2>発注アラート商品一覧</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>商品ID</th>
+                    <th>カテゴリ1</th>
+                    <th>カテゴリ2</th>
+                    <th>商品名</th>
+                    <th>種類（色）</th>
+                    <th>在庫数</th>
+                    <th>閾値</th>
+                    <th>アラート発生日</th>
+                </tr>
+            </thead>
+            <tbody id="triggered-alerts-table-body"></tbody>
+        </table>
+        <button onclick="window.location.href='order-alerts.html'">発注アラート設定に戻る</button>
+    </main>
+    <footer>
+        <p>&copy; 2024 にじいろ市場</p>
+    </footer>
+</body>
+</html>
