@@ -1,0 +1,66 @@
+{
+  "stock": [
+    {
+      "productCode": "999996",
+      "stockCount": 50,
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-01 12:00"
+    },
+{
+      "productCode": "999997",
+      "stockCount": 30,
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-01 12:00"
+    },
+{
+      "productCode": "999998",
+      "stockCount": 20,
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-01 12:00"
+    },
+{
+      "productCode": "999999",
+      "stockCount": 10,
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-01 12:00"
+    }
+  ],
+  "stockIn": [
+    {
+      "productCode": "999999",
+      "stockInCount": 20,
+      "stockInType": "1",
+      "stockInDate": "2024-10-01",
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-01 12:00"
+    },
+{
+      "productCode": "999998",
+      "stockInCount": 10,
+      "stockInType": "1",
+      "stockInDate": "2024-10-01",
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-01 12:00"
+    }
+  ],
+  "stockOut": [
+    {
+      "productCode": "999999",
+      "stockOutCount": 10,
+      "stockOutType": "2",
+      "stockOutDate": "2024-10-02",
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-02 14:00"
+    }
+  ],
+  "inventory": [
+    {
+      "productCode": "999999",
+      "productCount": 90,
+      "preInventoryCount": 100,
+      "inventoryDate": "2024-10-03",
+      "lastUpdatedBy": "admin",
+      "lastUpdatedAt": "2024-10-03 09:00"
+    }
+  ]
+}

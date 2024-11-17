@@ -1,42 +1,129 @@
 <header style="display: flex; align-items: center; justify-content: space-between; padding: 10px;">
     <div style="display: flex; align-items: center;">
-    <a href="inventory-search.html">
-        <img src="logo.png" alt="Logo" style="height: 50px; margin-right: 20px;">
-    </a>
-</div>
+        <a href="inventory-search.html">
+            <img src="logo.png" alt="Logo" style="height: 50px; margin-right: 20px;">
+        </a>
+    </div>
     <div class="logout-container">
         <span id="logged-in-user" style="margin-right: 15px; font-weight: bold;"></span>
         <a href="logout.html" id="logout-button" style="padding: 5px 10px; text-decoration: none; background-color: #f8f8f8; border-radius: 5px;">ログアウト</a>
     </div>
 </header>
 
-<nav style="padding: 10px; background-color: #f8f8f8;">
+<!-- お知らせセクション -->
+<div class="announcement-container" style="background-color: #f1f1f1; padding: 5px; text-align: center; margin-top: 10px; width: 100%; box-sizing: border-box; overflow: hidden;">
+    <span id="announcement-text" class="marquee">システムメンテナンスのお知らせ：本日17時よりメンテナンスを実施します。</span>
+</div>
+<nav style="padding: 10px; background-color: #f8f8f8; display: flex; justify-content: center; align-items: center;">
     <ul style="list-style: none; display: flex; gap: 15px; padding: 0; margin: 0;">
-        <li><a href="inventory-search.html">在庫検索</a></li>
-        <li><a href="low-stock-search.html">在庫少検索</a></li>
-        <li><a href="stock-in.html">入庫</a></li>
-        <li><a href="stock-out1.html">出庫</a></li>
-        <li><a href="inventory-check.html">棚卸</a></li>
-        <li><a href="best-sellers.html">売れ筋表示</a></li>
-        <li><a href="export-import.html">エクスポート・インポート</a></li>
-        <li><a href="order-alerts.html">発注アラート</a></li>
-        <li><a href="master-maintenance.html">マスタメンテ</a></li>
-        <li><a href="data-maintenance.html">データメンテ</a></li>
+        <li>
+            <a href="inventory-search.html" style="display: flex; align-items: center;">
+                <img src="serch.png" alt="Search Icon" style="width: 30px; height: 30px;">
+                在庫検索
+            </a>
+        </li>
+        <li>
+            <a href="low-stock-search.html" style="display: flex; align-items: center;">
+                <img src="serch2.png" alt="Search Icon" style="width: 30px; height: 30px;">
+                在庫少検索
+            </a>
+        </li>
+        <li>
+            <a href="stock-in.html" style="display: flex; align-items: center;">
+                <img src="in.png" alt="In Icon" style="width: 30px; height: 30px;">
+                入庫
+            </a>
+        </li>
+        <li>
+            <a href="stock-out1.html" style="display: flex; align-items: center;">
+                <img src="out.png" alt="Out Icon" style="width: 30px; height: 30px;">
+                出庫
+            </a>
+        </li>
+        <li>
+            <a href="inventory-check.html" style="display: flex; align-items: center;">
+                <img src="check.png" alt="Check Icon" style="width: 30px; height: 30px;">
+                棚卸
+            </a>
+        </li>
+        <li>
+            <a href="best-sellers.html" style="display: flex; align-items: center;">
+                <img src="best.png" alt="Best Icon" style="width: 30px; height: 30px;">
+                売れ筋表示
+            </a>
+        </li>
+        <li>
+            <a href="export-import.html" style="display: flex; align-items: center;">
+                <img src="ex.png" alt="Export Icon" style="width: 30px; height: 30px;">
+                エクスポート・インポート
+            </a>
+        </li>
+        <li>
+            <a href="order-alerts.html" style="display: flex; align-items: center;">
+                <img src="art.png" alt="Alert Icon" style="width: 30px; height: 30px;">
+                発注アラート
+            </a>
+        </li>
+        <li>
+            <a href="master-maintenance.html" style="display: flex; align-items: center;">
+                <img src="mente.png" alt="Mente Icon" style="width: 30px; height: 30px;">
+                マスタメンテ
+            </a>
+        </li>
+        <li>
+            <a href="data-maintenance.html" style="display: flex; align-items: center;">
+                <img src="mente.png" alt="Mente Icon" style="width: 30px; height: 30px;">
+                データメンテ
+            </a>
+        </li>
     </ul>
 </nav>
 
-<script>
-    // ユーザーのログイン状態を確認
-    document.addEventListener("DOMContentLoaded", function() {
-        const loggedInUser = sessionStorage.getItem("loggedInUser");
-        
-        console.log("Logged in user:", loggedInUser);  // デバッグ用メッセージ
 
-        if (loggedInUser) {
-            document.getElementById("logged-in-user").textContent = `ログイン中: ${loggedInUser}`;
-        } else {
-            // 未ログインの場合、ログイン画面にリダイレクト
-            window.location.href = "login.html";
-        }
-    });
+<style>
+  .marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 30s linear infinite;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(100vw); /* 画面の右外側から開始 */
+    }
+    100% {
+      transform: translateX(-100vw); /* 画面の左外側まで移動 */
+    }
+  }
+</style>
+<body>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded. Fetching JSON...');
+    fetch('/announcement.json')
+        .then(response => {
+            console.log('Response status:', response.status);  // ステータスコードをログに出力
+            if (!response.ok) {
+                throw new Error(HTTP error! status: ${response.status});
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Loaded JSON:', data);  // JSONデータをログに出力
+            const announcementElement = document.getElementById('announcement-text');
+            if (announcementElement) {
+                announcementElement.textContent = data.announcement;
+                console.log('Announcement updated.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching announcement:', error);
+            const announcementElement = document.getElementById('announcement-text');
+            if (announcementElement) {
+                announcementElement.textContent = 'お知らせの読み込みに失敗しました。';
+            }
+        });
+});
+
 </script>
+</body>

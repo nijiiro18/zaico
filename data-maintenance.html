@@ -40,20 +40,17 @@
             }
         }
 
-        const dataStorage = {
-            stock: [
-                { productCode: "P00001", stockCount: 100, lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
-            ],
-            stockIn: [
-                { productCode: "P00001", stockInCount: 20, stockInType: "1", stockInDate: "2024-10-01", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
-            ],
-            stockOut: [
-                { productCode: "P00001", stockOutCount: 10, stockOutType: "2", stockOutDate: "2024-10-02", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-02 14:00" }
-            ],
-            inventory: [
-                { productCode: "P00001", productCount: 90, preInventoryCount: 100, inventoryDate: "2024-10-03", lastUpdatedBy: "user", lastUpdatedAt: "2024-10-03 09:00" }
-            ]
-        };
+        let dataStorage = {};
+
+		async function loadData() {
+		    try {
+		        const response = await fetch('data-maintenance.json'); // JSONファイルを指定
+		        dataStorage = await response.json();
+		        renderTable();
+		    } catch (error) {
+		        console.error('データの読み込みに失敗しました:', error);
+		    }
+		}
 
         let currentData = 'stock';
         let editingIndex = null;
@@ -143,6 +140,7 @@
 
         window.onload = async function() {
             await loadHeader();
+            await loadData(); // データをロード
             switchData(currentData);
         };
     </script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>にじいろ市場 - 棚卸結果</title>
+    <title>にじいろ市場在庫システム - 棚卸結果</title>
     <link rel="stylesheet" href="styles.css">
     <script>
         function displayResults() {
@@ -21,16 +21,22 @@
             const tableBody = document.getElementById('results-table-body');
             tableBody.innerHTML = ""; // クリア
 
+            const today = new Date().toISOString().split('T')[0]; // 本日の日付（YYYY-MM-DD形式）
+
             results.forEach(item => {
                 const row = document.createElement('tr');
+
+                // 棚卸し実施日が本日以外の場合、網掛けを追加
+                const inventoryDateCell = item.inventoryDate !== today 
+                    ? `<td style="background-color: yellow;">${item.inventoryDate}</td>`
+                    : `<td>${item.inventoryDate}</td>`;
+
                 row.innerHTML = `
                     <td>${item.category1}</td>
                     <td>${item.category2}</td>
                     <td>${item.name}</td>
                     <td>${item.color}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.actualQuantity || ''}</td>
-                    <td>${item.actualQuantity !== null ? item.actualQuantity - item.quantity : ''}</td>
+                    ${inventoryDateCell}
                 `;
                 tableBody.appendChild(row);
             });
@@ -45,7 +51,7 @@
 </head>
 <body>
     <header>
-        <h1>にじいろ市場 - 棚卸結果</h1>
+        <h1>にじいろ市場在庫システム - 棚卸結果</h1>
     </header>
     <main>
         <section>
@@ -57,9 +63,7 @@
                         <th>カテゴリ2</th>
                         <th>商品名</th>
                         <th>種類（色）</th>
-                        <th>登録されている在庫数</th>
-                        <th>実際の在庫数</th>
-                        <th>差異</th>
+                        <th>棚卸し実施日</th> <!-- 棚卸し実施日列を追加 -->
                     </tr>
                 </thead>
                 <tbody id="results-table-body">

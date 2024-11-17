@@ -1,0 +1,53 @@
+{
+    "product": [
+        { 
+            "productCode": "999999", 
+            "productName": "玉付きゴールド25cm", 
+            "productTypeDivision": "A",  
+            "productTypeCode": "T01",   
+            "category1Code": "C01", 
+            "category2Code": "C02", 
+            "alertCount1": 5, 
+            "alertCount2": 2, 
+            "lastUpdatedBy": "admin", 
+            "lastUpdatedAt": "2024-10-01 12:00" 
+        }
+    ],
+    "category": [
+        { 
+            "categoryCode": "C01", 
+            "categoryName": "和洋裁素材", 
+            "categoryDivision": "1", 
+            "lastUpdatedBy": "admin", 
+            "lastUpdatedAt": "2024-10-01 12:00" 
+        }
+    ],
+    "user": [
+        { 
+            "userId": "U001", 
+            "userName": "管理者1", 
+            "password": "1234", 
+            "userLevel": "1", 
+            "lastUpdatedBy": "admin", 
+            "lastUpdatedAt": "2024-10-01 08:00" 
+        },
+	{ 
+            "userId": "U002", 
+            "userName": "山田 太郎", 
+            "password": "Test1", 
+            "userLevel": "1", 
+            "lastUpdatedBy": "admin", 
+            "lastUpdatedAt": "2024-10-01 08:00" 
+        },
+	{ 
+            "userId": "U003", 
+            "userName": "三本 花子", 
+            "password": "Test2", 
+            "userLevel": "2", 
+            "lastUpdatedBy": "admin", 
+            "lastUpdatedAt": "2024-10-01 08:00" 
+        }
+
+
+    ]
+}

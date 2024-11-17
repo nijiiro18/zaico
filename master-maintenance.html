@@ -41,31 +41,25 @@
             }
         }
 
-        const masterData = {
-            product: [
-                { 
-                    productCode: "P00001", 
-                    productName: "商品1", 
-                    productTypeDivision: "A",  
-                    productTypeCode: "T01",   
-                    category1Code: "C01", 
-                    category2Code: "C02", 
-                    alertCount1: 5, 
-                    alertCount2: 2, 
-                    lastUpdatedBy: "admin", 
-                    lastUpdatedAt: "2024-10-01 12:00" 
-                }
-            ],
-            category: [
-                { categoryCode: "C01", categoryName: "カテゴリ1", categoryDivision: "1", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 12:00" }
-            ],
-            user: [
-                { userId: "U001", userName: "管理者1", password: "password1", userLevel: "1", lastUpdatedBy: "admin", lastUpdatedAt: "2024-10-01 08:00" }
-            ]
+        
+        let masterData = {
+            product: [],
+            category: [],
+            user: []
         };
-
         let currentMaster = 'product';
         let editingIndex = null;
+
+        // 初期ロード
+        async function loadData() {
+		    try {
+		        const response = await fetch('master-maintenance.json');
+		        masterData = await response.json();
+		        renderSection(); 
+		    } catch (error) {
+		        console.error('JSONデータの読み込みに失敗しました:', error);
+		    }
+		}
 
         function switchMaster(master) {
             currentMaster = master;
@@ -155,6 +149,7 @@
 
         window.onload = async function() {
             await loadHeader();
+            await loadData();
             switchMaster(currentMaster);
         };
     </script>

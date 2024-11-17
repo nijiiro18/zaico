@@ -6,7 +6,8 @@
         "category2": "ファスナー",
         "color": "アクアブルー 544",
         "quantity": 20,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-17"
     },
     {
         "id": "47701152",
@@ -15,7 +16,8 @@
         "category2": "ファスナー",
         "color": "イエロー 131",
         "quantity": 21,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-16"
     },
     {
         "id": "36038409",
@@ -24,7 +26,8 @@
         "category2": "ファスナー",
         "color": "インディゴ 558",
         "quantity": 14,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-15"
     },
     {
         "id": "36038370",
@@ -33,7 +36,8 @@
         "category2": "ファスナー",
         "color": "エンジ 520",
         "quantity": 31,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-14"
     },
     {
         "id": "36038353",
@@ -42,7 +46,8 @@
         "category2": "ファスナー",
         "color": "オレンジ 849",
         "quantity": 27,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-13"
     },
     {
         "id": "36038426",
@@ -51,7 +56,8 @@
         "category2": "ファスナー",
         "color": "カフェオレ 508",
         "quantity": 20,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-12"
     },
     {
         "id": "36038333",
@@ -60,7 +66,8 @@
         "category2": "ファスナー",
         "color": "キナリ 801",
         "quantity": 84,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-17"
     },
     {
         "id": "36038442",
@@ -69,7 +76,8 @@
         "category2": "ファスナー",
         "color": "ブラック 580",
         "quantity": -47,
-        "status": "欠品"
+        "status": "欠品",
+        "inventoryDate": "2024-11-10"
     },
     {
         "id": "36038400",
@@ -78,7 +86,8 @@
         "category2": "ファスナー",
         "color": "スカイブルー 542",
         "quantity": 17,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-09"
     },
     {
         "id": "36038358",
@@ -87,7 +96,8 @@
         "category2": "ファスナー",
         "color": "ピンク 513",
         "quantity": 12,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-08"
     },
     {
         "id": "36038327",
@@ -96,7 +106,8 @@
         "category2": "ファスナー",
         "color": "ホワイト 501",
         "quantity": 19,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-07"
     },
     {
         "id": "47701163",
@@ -105,7 +116,8 @@
         "category2": "ファスナー",
         "color": "マゼンタ 817",
         "quantity": 20,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-06"
     },
     {
         "id": "47701103",
@@ -114,7 +126,8 @@
         "category2": "ファスナー",
         "color": "ロイヤルパープル 285",
         "quantity": 23,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-05"
     },
     {
         "id": "47701141",
@@ -123,7 +136,8 @@
         "category2": "ファスナー",
         "color": "アクアブルー 544",
         "quantity": 21,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-17"
     },
     {
         "id": "47701154",
@@ -132,7 +146,8 @@
         "category2": "ファスナー",
         "color": "イエロー 131",
         "quantity": 26,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-16"
     },
     {
         "id": "36038545",
@@ -141,7 +156,8 @@
         "category2": "ファスナー",
         "color": "インディゴ 558",
         "quantity": 13,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-15"
     },
     {
         "id": "36038521",
@@ -150,7 +166,8 @@
         "category2": "ファスナー",
         "color": "エンジ 520",
         "quantity": 28,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-14"
     },
     {
         "id": "36038476",
@@ -159,7 +176,8 @@
         "category2": "ファスナー",
         "color": "オレンジ 849",
         "quantity": 18,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-13"
     },
     {
         "id": "36038560",
@@ -168,7 +186,8 @@
         "category2": "ファスナー",
         "color": "カーキ 566",
         "quantity": 19,
-        "status": "在庫少"
+        "status": "在庫少",
+        "inventoryDate": "2024-11-12"
     },
     {
         "id": "36038465",
@@ -177,7 +196,8 @@
         "category2": "ファスナー",
         "color": "キナリ 801",
         "quantity": 52,
-        "status": ""
+        "status": "",
+        "inventoryDate": "2024-11-11"
     },
     {
         "id": "36038547",
@@ -186,7 +206,8 @@
         "category2": "ファスナー",
         "color": "ネイビー 560",
         "quantity": 3,
-        "status": "欠品"
+        "status": "欠品",
+        "inventoryDate": "2024-11-10"
     },
     {
         "id": "36038481",
@@ -195,7 +216,8 @@
         "category2": "ファスナー",
         "color": "ピンク 513",
         "quantity": 2,
-        "status": "欠品"
+        "status": "欠品",
+        "inventoryDate": "2024-11-09"
     },
     {
         "id": "36038569",
@@ -204,25 +226,18 @@
         "category2": "ファスナー",
         "color": "ブラウン 568",
         "quantity": 9,
-        "status": "欠品"
+        "status": "欠品",
+        "inventoryDate": "2024-11-08"
     },
     {
         "id": "36038557",
         "name": "玉付きゴールド30cm",
         "category1": "和洋裁素材",
         "category2": "ファスナー",
-        "color": "パープル 218",
-        "quantity": 26,
-        "status": ""
-    },
-    {
-        "id": "47701088",
-        "name": "玉付きゴールド30cm",
-        "category1": "和洋裁素材",
-        "category2": "ファスナー",
-        "color": "フォグブルー 104",
-        "quantity": 16,
-        "status": "在庫少"
+        "color": "ホワイト 501",
+        "quantity": 20,
+        "status": "欠品",
+        "inventoryDate": "2024-11-07"
     },
     {
     "id": "56384209",
@@ -232,149 +247,176 @@
     "color": "アクアブルー 758",
     "quantity": 45,
     "status": ""
+
 },
 {
-    "id": "56384184",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "イエロー 732",
-    "quantity": 60,
-    "status": ""
-},
-{
-    "id": "56384199",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "ウグイス 148",
-    "quantity": 78,
-    "status": ""
-},
-{
-    "id": "56384194",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "エンジ 702",
-    "quantity": 70,
-    "status": ""
-},
-{
-    "id": "56384187",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "オレンジ 727",
-    "quantity": 70,
-    "status": ""
-},
-{
-    "id": "56384200",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "カーキ 820",
-    "quantity": 50,
-    "status": ""
-},
-{
-    "id": "56384186",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "キャロットオレンジ 147",
-    "quantity": 80,
-    "status": ""
-},
-{
-    "id": "56384183",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "クリーム 140",
-    "quantity": 58,
-    "status": ""
-},
-{
-    "id": "56384198",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "グリーン 741",
-    "quantity": 100,
-    "status": ""
-},
-{
-    "id": "56384206",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "クレイブラウン 719",
-    "quantity": 80,
-    "status": ""
-},
-{
-    "id": "56384188",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "サクラ 712",
-    "quantity": 68,
-    "status": ""
-},
-{
-    "id": "56384208",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "スカイブルー 746",
-    "quantity": 110,
-    "status": ""
-},
-{
-    "id": "56384192",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "チェリーピンク 708",
-    "quantity": 80,
-    "status": ""
-},
-{
-    "id": "56384214",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "ディープグレー 12",
-    "quantity": 70,
-    "status": ""
-},
-{
-    "id": "56384211",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "ネイビー 750",
-    "quantity": 70,
-    "status": ""
-},
-{
-    "id": "56384196",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "パープル 852",
-    "quantity": 60,
-    "status": ""
-},
-{
-    "id": "56384191",
-    "name": "バイアステープ両折れ",
-    "category1": "和洋裁素材",
-    "category2": "バイアステープ",
-    "color": "パッションピンク 705",
-    "quantity": 80,
-    "status": ""
-}
+        "id": "56384209",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "アクアブルー 758",
+        "quantity": 45,
+        "status": "",
+        "inventoryDate": "2024-11-17"
+    },
+    {
+        "id": "56384184",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "イエロー 732",
+        "quantity": 60,
+        "status": "",
+        "inventoryDate": "2024-11-16"
+    },
+    {
+        "id": "56384199",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "ウグイス 148",
+        "quantity": 78,
+        "status": "",
+        "inventoryDate": "2024-11-15"
+    },
+    {
+        "id": "56384194",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "エンジ 702",
+        "quantity": 70,
+        "status": "",
+        "inventoryDate": "2024-11-14"
+    },
+    {
+        "id": "56384187",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "オレンジ 727",
+        "quantity": 70,
+        "status": "",
+        "inventoryDate": "2024-11-13"
+    },
+    {
+        "id": "56384200",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "カーキ 820",
+        "quantity": 50,
+        "status": "",
+        "inventoryDate": "2024-11-12"
+    },
+    {
+        "id": "56384186",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "キャロットオレンジ 147",
+        "quantity": 80,
+        "status": "",
+        "inventoryDate": "2024-11-11"
+    },
+    {
+        "id": "56384183",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "クリーム 140",
+        "quantity": 58,
+        "status": "",
+        "inventoryDate": "2024-11-10"
+    },
+    {
+        "id": "56384198",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "グリーン 741",
+        "quantity": 100,
+        "status": "",
+        "inventoryDate": "2024-11-09"
+    },
+    {
+        "id": "56384206",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "クレイブラウン 719",
+        "quantity": 80,
+        "status": "",
+        "inventoryDate": "2024-11-08"
+    },
+    {
+        "id": "56384188",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "サクラ 712",
+        "quantity": 68,
+        "status": "",
+        "inventoryDate": "2024-11-07"
+    },
+    {
+        "id": "56384208",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "スカイブルー 746",
+        "quantity": 110,
+        "status": "",
+        "inventoryDate": "2024-11-06"
+    },
+    {
+        "id": "56384192",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "チェリーピンク 708",
+        "quantity": 80,
+        "status": "",
+        "inventoryDate": "2024-11-05"
+    },
+    {
+        "id": "56384214",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "ディープグレー 12",
+        "quantity": 70,
+        "status": "",
+        "inventoryDate": "2024-11-04"
+    },
+    {
+        "id": "56384211",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "ネイビー 750",
+        "quantity": 70,
+        "status": "",
+        "inventoryDate": "2024-11-03"
+    },
+    {
+        "id": "56384196",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "パープル 852",
+        "quantity": 60,
+        "status": "",
+        "inventoryDate": "2024-11-02"
+    },
+    {
+        "id": "56384191",
+        "name": "バイアステープ両折れ",
+        "category1": "和洋裁素材",
+        "category2": "バイアステープ",
+        "color": "パッションピンク 705",
+        "quantity": 80,
+        "status": "",
+        "inventoryDate": "2024-11-01"
+    }
 ]

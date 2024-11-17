@@ -288,7 +288,6 @@ table th {
     text-align: left;
     border: 1px solid #ddd;
 }
-
 /* disabled状態のときにカーソルを禁止マークに変更 */
 #category1:disabled {
     color: #999 !important;  /* 文字色を薄いグレーに設定 */
