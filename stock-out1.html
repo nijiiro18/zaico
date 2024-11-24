@@ -27,7 +27,6 @@
                 inventoryData = await response.json();
                 populateFilters();
                 createBulkDropdown(); // 一括追加用のプルダウン生成
-                updateTable();
             } catch (error) {
                 console.error('在庫データの読み込みに失敗しました:', error);
             }
@@ -79,6 +78,7 @@
             const productName = document.getElementById('product-name').value.toLowerCase();
             const selectedColor = document.getElementById('color').value;
             const tableBody = document.getElementById('stock-out-table-body');
+            const stockOutTable = document.getElementById('stock-out-table');
 
             const filteredData = inventoryData.filter(item => {
                 return (!category1 || item.category1 === category1) &&
@@ -88,6 +88,10 @@
             });
 
             tableBody.innerHTML = "";
+
+            // 初回は非表示
+            stockOutTable.style.display = filteredData.length > 0 ? "table" : "none";
+
             filteredData.forEach(item => {
                 const statusClass = item.status === '欠品' ? 'status-out' :
                     item.status === '在庫少' ? 'status-low' : 'status-normal';
@@ -149,15 +153,9 @@
             window.location.href = 'stock-out-confirm.html';
         }
 
-        // 追記: プルダウンと一括追加ボタン
+        // 一括追加プルダウン
         function createBulkDropdown() {
-            const bulkContainer = document.createElement('div');
-            bulkContainer.classList.add('bulk-dropdown-container');
-
-            const label = document.createElement('label');
-            label.textContent = "商品名で一括追加:";
-            bulkContainer.appendChild(label);
-
+            const bulkContainer = document.getElementById('bulk-container');
             const dropdown = document.createElement('select');
             dropdown.id = 'bulk-product-dropdown';
 
@@ -180,8 +178,6 @@
             button.textContent = "一括追加";
             button.onclick = addSelectedToCart;
             bulkContainer.appendChild(button);
-
-            document.getElementById('stock-out').prepend(bulkContainer);
         }
 
         function addSelectedToCart() {
@@ -216,9 +212,10 @@
                 <div><label for="category2">カテゴリ2:</label><select id="category2" onchange="updateTable()"></select></div>
                 <div><label for="product-name">商品名:</label><select id="product-name" onchange="updateTable()"></select></div>
                 <div><label for="color">種類（色）:</label><select id="color" onchange="updateTable()"></select></div>
+                <div id="bulk-container"></div>
             </div>
 
-            <table>
+            <table id="stock-out-table" style="display: none;">
                 <thead>
                     <tr>
                         <th>商品ID</th><th>カテゴリ1</th><th>カテゴリ2</th><th>商品名</th><th>種類（色）</th><th>数量</th><th>ステータス</th><th>操作</th>
