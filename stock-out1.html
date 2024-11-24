@@ -8,8 +8,6 @@
     <script>
         let inventoryData = [];
         let selectedItems = [];
-        let currentPage = 1;
-        const itemsPerPage = 10;
 
         async function loadHeader() {
             try {
@@ -28,6 +26,7 @@
                 const response = await fetch('inventoryData.json');
                 inventoryData = await response.json();
                 populateFilters();
+                createBulkDropdown(); // 一括追加用のプルダウン生成
                 updateTable();
             } catch (error) {
                 console.error('在庫データの読み込みに失敗しました:', error);
@@ -59,11 +58,6 @@
             populateDropdown('category2', category2Set);
             populateDropdown('product-name', productNameSet);
             populateDropdown('color', colorSet);
-
-            const category1Select = document.getElementById('category1');
-            if (category1Select) {
-                category1Select.disabled = true;
-            }
         }
 
         function populateDropdown(elementId, valuesSet, defaultValue = '') {
@@ -77,14 +71,6 @@
                 option.textContent = value;
                 selectElement.appendChild(option);
             });
-
-            if (defaultValue && !valuesSet.has(defaultValue)) {
-                const defaultOption = document.createElement('option');
-                defaultOption.value = defaultValue;
-                defaultOption.textContent = defaultValue;
-                selectElement.prepend(defaultOption);
-                selectElement.value = defaultValue;
-            }
         }
 
         function updateTable() {
@@ -115,25 +101,19 @@
                     <td>${item.quantity}</td>
                     <td class="${statusClass}">${item.status}</td>
                     <td>
-                        <button data-id="${item.id}" onclick="addToCart('${item.id}', this)">選択</button>
+                        <button data-id="${item.id}" onclick="addToCart('${item.id}')">選択</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
             });
         }
 
-        function addToCart(itemId, buttonElement) {
+        function addToCart(itemId) {
             const item = inventoryData.find(i => i.id === itemId);
             if (!selectedItems.some(i => i.id === itemId)) {
                 selectedItems.push({ ...item, quantityToRemove: 1 });
                 updateCart();
-                playSound();
             }
-        }
-
-        function playSound() {
-            const audio = new Audio('金額表示.mp3');
-            audio.play();
         }
 
         function updateCart() {
@@ -169,25 +149,60 @@
             window.location.href = 'stock-out-confirm.html';
         }
 
-        function addGold25cmToCart() {
-            const itemsToAdd = inventoryData.filter(item => item.name === "玉付きゴールド25cm");
+        // 追記: プルダウンと一括追加ボタン
+        function createBulkDropdown() {
+            const bulkContainer = document.createElement('div');
+            bulkContainer.classList.add('bulk-dropdown-container');
+
+            const label = document.createElement('label');
+            label.textContent = "商品名で一括追加:";
+            bulkContainer.appendChild(label);
+
+            const dropdown = document.createElement('select');
+            dropdown.id = 'bulk-product-dropdown';
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "商品を選択してください";
+            dropdown.appendChild(defaultOption);
+
+            const productNames = Array.from(new Set(inventoryData.map(item => item.name)));
+            productNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                dropdown.appendChild(option);
+            });
+
+            bulkContainer.appendChild(dropdown);
+
+            const button = document.createElement('button');
+            button.textContent = "一括追加";
+            button.onclick = addSelectedToCart;
+            bulkContainer.appendChild(button);
+
+            document.getElementById('stock-out').prepend(bulkContainer);
+        }
+
+        function addSelectedToCart() {
+            const selectedName = document.getElementById('bulk-product-dropdown').value;
+            if (!selectedName) {
+                alert("商品を選択してください。");
+                return;
+            }
+
+            const itemsToAdd = inventoryData.filter(item => item.name === selectedName);
             itemsToAdd.forEach(item => {
                 if (!selectedItems.some(i => i.id === item.id)) {
                     selectedItems.push({ ...item, quantityToRemove: 1 });
                 }
             });
             updateCart();
-            playSound();
         }
 
         window.onload = function() {
             loadHeader();
             loadInventoryData();
-
-            const category1Select = document.getElementById('category1');
-            if (category1Select) {
-                category1Select.disabled = true;
-            }
         };
     </script>
 </head>
@@ -202,8 +217,6 @@
                 <div><label for="product-name">商品名:</label><select id="product-name" onchange="updateTable()"></select></div>
                 <div><label for="color">種類（色）:</label><select id="color" onchange="updateTable()"></select></div>
             </div>
-
-            <button id="add-gold-25cm" onclick="addGold25cmToCart()">玉付きゴールド25cmをすべて追加</button>
 
             <table>
                 <thead>
